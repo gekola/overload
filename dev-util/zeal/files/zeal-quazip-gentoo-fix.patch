@@ -1,0 +1,12 @@
+--- a/zeal/quazip/ioapi.h
++++ b/zeal/quazip/ioapi.h
+@@ -33,4 +33,9 @@
+ #endif
+ #endif
++
++/* Gentoo removed OF from their copy of zconf.h (https://bugs.gentoo.org/show_bug.cgi?id=383179) */
++#ifndef OF
++#define OF(args) args
++#endif
+ 
+ #ifdef __cplusplus
