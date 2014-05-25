@@ -14,6 +14,8 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
+IUSE="emacs"
+
 DEPEND="
 		dev-qt/qtconcurrent:5
 		dev-qt/qtcore:5
@@ -23,6 +25,7 @@ DEPEND="
 		dev-qt/qtxml:5
 		x11-libs/xcb-util-keysyms
 "
+PDEPEND="emacs? ( app-emacs/zeal-at-point )"
 
 DOCS="README.md"
 
