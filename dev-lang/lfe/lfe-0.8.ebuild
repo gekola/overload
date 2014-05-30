@@ -14,7 +14,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-IUSE="emacs doc"
+IUSE="emacs"
 
 RDEPEND="dev-lang/erlang"
 DEPEND="${RDEPEND}"
@@ -32,9 +32,6 @@ src_compile() {
 }
 
 src_install() {
-	# export ERL_LIBS="${D}/usr/$(get_libdir)/erlang/lib/"
-	# make install DESTDIR="${D}"
-
 	for dir in bin ebin include ; do
 		insinto /usr/$(get_libdir)/erlang/lib/${P}/$dir
 		doins $dir/*
