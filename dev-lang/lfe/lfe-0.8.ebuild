@@ -32,8 +32,11 @@ src_compile() {
 }
 
 src_install() {
-	for dir in bin ebin include ; do
-		insinto /usr/$(get_libdir)/erlang/lib/${P}/$dir
+	exeinto /usr/$(get_libdir)/erlang/lib/${PN}/bin
+	doexe bin/*
+
+	for dir in ebin include ; do
+		insinto /usr/$(get_libdir)/erlang/lib/${PN}/$dir
 		doins $dir/*
 	done
 
@@ -43,6 +46,6 @@ src_install() {
 	fi
 
 	for ex in $(ls bin) ; do
-		dosym /usr/$(get_libdir)/erlang/lib/${P}/bin/$ex /usr/bin/$ex
+		dosym /usr/$(get_libdir)/erlang/lib/${PN}/bin/$ex /usr/bin/$ex
 	done
 }
