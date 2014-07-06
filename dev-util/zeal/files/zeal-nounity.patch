@@ -1,0 +1,51 @@
+--- a/zeal/mainwindow.h
++++ b/zeal/mainwindow.h
+@@ -14,4 +14,4 @@
+
+-#ifdef LINUX
++#if defined(LINUX) && defined(UNITY)
+ #include <libappindicator/app-indicator.h>
+ #undef signals
+@@ -55,2 +55,2 @@
+-#ifdef LINUX
++#if defined(LINUX) && defined(UNITY)
+     AppIndicator *indicator; //for Unity
+--- a/zeal/mainwindow.cpp
++++ b/zeal/mainwindow.cpp
+@@ -34,3 +34,5 @@
+ #include "xcb_keysym.h"
++#undef signals
+ #include <gtk/gtk.h>
++#define signals public
+ #endif
+@@ -47,3 +49,3 @@
+-#ifdef LINUX
++#if defined(LINUX) && defined(UNITY)
+     indicator = nullptr;
+ #endif
+@@ -95,3 +97,3 @@
+         } else {
+-#ifdef LINUX
++#if defined(LINUX) && defined(UNITY)
+             if(trayIcon || indicator) {
+@@ -280,3 +282,3 @@
+ {
+-#ifdef LINUX
++#if defined(LINUX) && defined(UNITY)
+     if(trayIcon || indicator) return;
+@@ -292,3 +294,3 @@
+
+-#ifdef LINUX
++#if defined(LINUX) && defined(UNITY)
+     if(isUnity) //Application Indicators for Unity
+@@ -326,3 +328,3 @@
+-#ifdef LINUX
++#if defined(LINUX) && defined(UNITY)
+     }
+ #endif
+--- a/zeal/zeal.pro
++++ b/zeal/zeal.pro
+@@ -71,2 +71,2 @@
+-unix:!macx: LIBS += -lxcb -lxcb-keysyms -lappindicator
++unix:!macx: LIBS += -lxcb -lxcb-keysyms
+ unix:!macx: SOURCES += xcb_keysym.cpp

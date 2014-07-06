@@ -31,12 +31,13 @@ DOCS="README.md"
 
 src_prepare() {
 	epatch "${FILESDIR}/${PN}-quazip-gentoo-fix.patch"
+	epatch "${FILESDIR}/${PN}-nounity.patch"
 }
 
 src_compile() {
 	cd zeal
 	/usr/lib/qt5/bin/qmake
-	make
+	emake || die 'make failed'
 }
 
 src_install() {
