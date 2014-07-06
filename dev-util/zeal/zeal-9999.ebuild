@@ -4,7 +4,7 @@
 
 EAPI=2
 
-inherit git-2
+inherit git-2 qmake-utils
 
 DESCRIPTION="Zeal is a simple offline API documentation browser inspired by Dash (OS X app), available for Linux and Windows."
 HMEPAGE="http://zealdocs.org/"
@@ -34,9 +34,13 @@ src_prepare() {
 	epatch "${FILESDIR}/${PN}-nounity.patch"
 }
 
+src_configure() {
+	cd zeal
+	eqmake5
+}
+
 src_compile() {
 	cd zeal
-	/usr/lib/qt5/bin/qmake
 	emake || die 'make failed'
 }
 
