@@ -7,7 +7,7 @@ EAPI=4
 inherit elisp git-2
 
 DESCRIPTION="Search the word at point with Zeal."
-HMEPAGE="https://github.com/jinzhu/zeal-at-point"
+HOMEPAGE="https://github.com/jinzhu/zeal-at-point"
 EGIT_REPO_URI="git://github.com/jinzhu/${PN}"
 
 LICENSE="MIT"

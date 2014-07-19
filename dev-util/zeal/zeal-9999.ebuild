@@ -7,7 +7,7 @@ EAPI=2
 inherit git-2 qmake-utils
 
 DESCRIPTION="Zeal is a simple offline API documentation browser inspired by Dash (OS X app), available for Linux and Windows."
-HMEPAGE="http://zealdocs.org/"
+HOMEPAGE="http://zealdocs.org/"
 EGIT_REPO_URI="git://github.com/jkozera/${PN}"
 
 LICENSE="GPL-3"

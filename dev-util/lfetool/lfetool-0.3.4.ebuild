@@ -7,7 +7,7 @@ EAPI=2
 inherit bash-completion-r1
 
 DESCRIPTION="An Erlang Lisper's Tool for Admin Tasks, Project Creation, and Infrastructure."
-HMEPAGE="https://github.com/lfe/lfetool"
+HOMEPAGE="https://github.com/lfe/lfetool"
 SRC_URI="https://github.com/lfe/${PN}/archive/${PV}.tar.gz"
 
 LICENSE="Apache-2.0"

@@ -7,7 +7,7 @@ EAPI=2
 inherit multilib elisp
 
 DESCRIPTION="Lisp-flavoured Erlang"
-HMEPAGE="http://lfe.github.io/"
+HOMEPAGE="http://lfe.github.io/"
 SRC_URI="https://github.com/rvirding/${PN}/archive/v${PV}.tar.gz"
 
 LICENSE="Apache-2.0"
