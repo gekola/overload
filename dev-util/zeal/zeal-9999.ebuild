@@ -14,7 +14,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-IUSE="emacs"
+IUSE="emacs libappindicator"
 
 DEPEND="
 		dev-qt/qtconcurrent:5
@@ -24,6 +24,7 @@ DEPEND="
 		dev-qt/qtwebkit:5[widgets]
 		dev-qt/qtxml:5
 		x11-libs/xcb-util-keysyms
+		libappindicator? ( dev-libs/libappindicator )
 "
 PDEPEND="emacs? ( app-emacs/zeal-at-point )"
 
@@ -31,12 +32,17 @@ DOCS="README.md"
 
 src_prepare() {
 	epatch "${FILESDIR}/${PN}-quazip-gentoo-fix.patch"
-	epatch "${FILESDIR}/${PN}-nounity.patch"
 }
 
 src_configure() {
+	local conf
+
+	if ! use libappindicator; then
+		zealconf="${zealconf} CONFIG+=no_libappindicator"
+	fi
+
 	cd zeal
-	eqmake5
+	eqmake5 ${zealconf}
 }
 
 src_compile() {
