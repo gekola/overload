@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=5
-inherit cmake-utils
+inherit cmake-multilib
 
 DESCRIPTION="PulseAudio emulation for ALSA"
 HOMEPAGE="https://github.com/i-rinat/apulse"
@@ -14,7 +14,21 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="media-libs/alsa-lib"
+DEPEND="media-libs/alsa-lib dev-libs/glib:2"
 RDEPEND="${DEPEND}"
 
+multilib_src_test() {
+	emake check
+}
 
+multilib_src_install() {
+	if use amd64 && [ "${ABI}" == "x86" ]; then
+		sed -e "s:/lib/apulse:/lib32/apulse:" -i apulse || die
+		exeinto /usr/bin
+		newexe apulse apulse32
+		insinto "/usr/$(get_libdir)/apulse"
+		doins *.so *.so.*
+	else
+		cmake-utils_src_install "${_cmake_args[@]}"
+	fi
+}
