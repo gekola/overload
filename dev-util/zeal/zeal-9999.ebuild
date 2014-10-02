@@ -19,7 +19,7 @@ IUSE="emacs libappindicator"
 DEPEND="
 		dev-qt/qtconcurrent:5
 		dev-qt/qtcore:5
-		dev-qt/qtgui:5
+		dev-qt/qtgui:5[-gles2]
 		dev-qt/qtsql:5[sqlite]
 		dev-qt/qtwebkit:5[widgets]
 		dev-qt/qtxml:5
