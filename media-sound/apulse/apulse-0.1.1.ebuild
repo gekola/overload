@@ -14,21 +14,27 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="media-libs/alsa-lib dev-libs/glib:2"
+DEPEND="media-libs/alsa-lib
+		dev-libs/glib:2
+		!media-sound/pulseaudio
+"
 RDEPEND="${DEPEND}"
+
+MULTILIB_CHOST_TOOLS=( /usr/bin/apulse )
+
+multilib_src_configure() {
+	local mycmakeargs=(-DAPULSEPATH="${EPREFIX}/usr/$(get_libdir)/apulse")
+	cmake-utils_src_configure
+}
 
 multilib_src_test() {
 	emake check
 }
 
 multilib_src_install() {
+	cmake-utils_src_install "${_cmake_args[@]}"
+	dodir "/usr/$(get_libdir)/apulse"
 	if use amd64 && [ "${ABI}" == "x86" ]; then
-		sed -e "s:/lib/apulse:/lib32/apulse:" -i apulse || die
-		exeinto /usr/bin
-		newexe apulse apulse32
-		insinto "/usr/$(get_libdir)/apulse"
-		doins *.so *.so.*
-	else
-		cmake-utils_src_install "${_cmake_args[@]}"
+		dosym "${CBUILD}-apulse" /usr/bin/apulse32
 	fi
 }
