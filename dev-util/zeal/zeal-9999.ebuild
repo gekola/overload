@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI=4
 
 inherit git-2 qmake-utils
 
@@ -21,7 +21,7 @@ DEPEND="
 		dev-qt/qtcore:5
 		dev-qt/qtgui:5[-gles2]
 		dev-qt/qtsql:5[sqlite]
-		dev-qt/qtwebkit:5[widgets]
+		dev-qt/qtwebkit:5[widgets(+)]
 		dev-qt/qtxml:5
 		x11-libs/xcb-util-keysyms
 		libappindicator? ( dev-libs/libappindicator )
