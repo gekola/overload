@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI=4
 
 inherit git-2 qmake-utils
 
@@ -34,7 +34,7 @@ DOCS="README.md"
 src_configure() {
 	local conf
 
-	if ! use libappindicator; then
+	if ! use appindicator; then
 		zealconf="${zealconf} CONFIG+=no_libappindicator"
 	fi
 
