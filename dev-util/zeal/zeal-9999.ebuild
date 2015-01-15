@@ -38,22 +38,20 @@ src_configure() {
 		zealconf="${zealconf} CONFIG+=no_libappindicator"
 	fi
 
-	cd zeal
 	eqmake5 ${zealconf}
 }
 
 src_compile() {
-	cd zeal
 	emake || die 'make failed'
 }
 
 src_install() {
 	exeinto /usr/bin
-	doexe zeal/zeal
+	doexe src/zeal
 
 	insinto /usr/share/pixmaps/zeal
-	doins zeal/icons/*.png
+	doins src/icons/*.png
 
 	insinto /usr/share/applications
-	doins zeal/zeal.desktop
+	doins src/zeal.desktop
 }
