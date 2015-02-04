@@ -41,16 +41,8 @@ src_configure() {
 	eqmake5 ${zealconf}
 }
 
-src_compile() {
-	emake || die 'make failed'
-}
-
 src_install() {
-	exeinto /usr/bin
-	doexe src/zeal
-
-	insinto /usr/share/pixmaps/zeal
-	doins src/icons/*.png
+	emake INSTALL_ROOT="${D}" install
 
 	insinto /usr/share/applications
 	doins src/zeal.desktop
