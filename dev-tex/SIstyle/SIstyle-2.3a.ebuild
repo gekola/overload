@@ -20,20 +20,17 @@ S="${WORKDIR}/${PN}"
 
 src_unpack() {
 	unpack ${A}
-	cd "${S}/source/latex/SIstyle/figs"
+	cd "${S}/figs"
 	unpack ./graphs_scr.zip
 }
 
 src_install() {
-	cd "${S}/tex/latex/SIstyle"
 	latex-package_src_install
-	cd "${S}/doc/latex/SIstyle"
 	latex-package_src_install
 
-	cd "${S}/source/latex/SIstyle"
-	insinto "${TEXMF}/source/latex/SIstyle"
+	insinto "${TEXMF}/SIstyle"
 	doins sistyle.dtx sistyle.ins figs/fig{1,2}.*ps || die
-	cd figs/graphs_scr
-	insinto "${TEXMF}/source/latex/SIstyle/graphs_src"
+	cd "${S}/figs/graphs_scr"
+	insinto "${TEXMF}/SIstyle/graphs_src"
 	doins *.mp MPfig.bat readme_figs.txt *.m || die
 }
