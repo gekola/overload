@@ -16,7 +16,7 @@ HOMEPAGE="http://github.com/carld/tidy"
 
 LICENSE="HTML-Tidy"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86"
 IUSE=""
 
 all_ruby_prepare() {
