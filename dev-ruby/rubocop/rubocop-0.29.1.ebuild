@@ -20,8 +20,9 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test"
 
-ruby_add_rdepend virtual/rubygems
-ruby_add_rdepend dev-ruby/rainbow
+ruby_add_bdepend "test? ( dev-ruby/rspec:3 )"
+
+ruby_add_rdepend dev-ruby/rainbow:2
 ruby_add_rdepend dev-ruby/parser
 ruby_add_rdepend dev-ruby/powerpack
 ruby_add_rdepend dev-ruby/astrolabe

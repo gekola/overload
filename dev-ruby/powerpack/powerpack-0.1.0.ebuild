@@ -20,4 +20,4 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test"
 
-ruby_add_bdepend "test? ( <dev-ruby/rspec-3 )"
+ruby_add_bdepend "test? ( dev-ruby/rspec:2 )"
