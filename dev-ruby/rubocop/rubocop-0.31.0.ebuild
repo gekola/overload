@@ -5,10 +5,10 @@
 EAPI=5
 USE_RUBY="ruby19 ruby20 ruby21 ruby22"
 
-RUBY_FAKEGEM_RECIPE_TEST="rspec"
-
+RUBY_FAKEGEM_GEMSPEC="rubocop.gemspec"
 RUBY_FAKEGEM_TASK_DOC=""
 RUBY_FAKEGEM_EXTRADOC="README.md CHANGELOG.md"
+RUBY_FAKEGEM_EXTRAINSTALL="assets config"
 
 inherit ruby-fakegem
 
@@ -18,9 +18,6 @@ HOMEPAGE="http://github.com/bbatsov/rubocop"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="test"
-
-ruby_add_bdepend "test? ( dev-ruby/rspec:3 )"
 
 ruby_add_rdepend dev-ruby/rainbow:2
 ruby_add_rdepend dev-ruby/parser
