@@ -46,6 +46,7 @@ RDEPEND="
 		dbus? (
 			dev-qt/qtdbus:5
 		)
+		dev-qt/linguist-tools:5
 	)
 "
 DEPEND="${RDEPEND}
