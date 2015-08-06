@@ -1,0 +1,8 @@
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -16,3 +16,5 @@
+           CC="$(CC)" PLATFORM=$(TARGET_OS) AR="$(AR)" $(LEVELDB_TARGET_FLAGS) \
+           OPT="$(CXXFLAGS) $(CPPFLAGS)"
++else
++LEVELDB_CPPFLAGS += -I/usr/include/leveldb/helpers
+ endif
