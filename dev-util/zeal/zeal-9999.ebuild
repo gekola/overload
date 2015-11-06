@@ -23,6 +23,7 @@ DEPEND="
 		dev-qt/qtgui:5[-gles2]
 		dev-qt/qtsql:5[sqlite]
 		dev-qt/qtwebkit:5[widgets(+)]
+		dev-qt/qtx11extras:5
 		dev-qt/qtxml:5
 		x11-libs/xcb-util-keysyms
 		appindicator? ( dev-libs/libappindicator )
