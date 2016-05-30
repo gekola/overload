@@ -32,6 +32,7 @@ DEPEND="
 		!>=dev-python/websocket-client-1.0
 		=dev-python/docker-py-1.1*
 		=dev-python/dockerpty-0.3*
+		>=dev-python/sematic_version-2.4.0
 "
 
 src_prepare() {
