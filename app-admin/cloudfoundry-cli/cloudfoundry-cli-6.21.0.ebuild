@@ -28,6 +28,7 @@ src_prepare() {
 
 src_compile() {
 	cd "src/${EGO_SRC}"
+	bin/replace-sha
 	env GOPATH="${WORKDIR}/${P}:$(get_golibdir_gopath)" "bin/build" || die
 }
 
