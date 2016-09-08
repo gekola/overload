@@ -30,9 +30,9 @@ DEPEND="
 		=dev-python/texttable-0.8*
 		>=dev-python/websocket-client-0.11.0
 		!>=dev-python/websocket-client-1.0
-		=dev-python/docker-py-1.1*
-		=dev-python/dockerpty-0.3*
-		>=dev-python/sematic_version-2.4.0
+		>=dev-python/docker-py-1.1.0
+		>=dev-python/dockerpty-0.3.2
+		>=dev-python/semantic_version-2.4.0
 "
 
 src_prepare() {
