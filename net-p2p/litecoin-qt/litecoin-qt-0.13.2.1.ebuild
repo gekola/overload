@@ -106,6 +106,7 @@ src_configure() {
 		--disable-ccache \
 		--disable-static \
 		--disable-tests \
+		--disable-bench \
 		--with-system-leveldb \
 		--with-system-libsecp256k1  \
 		--without-libs \
