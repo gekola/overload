@@ -44,7 +44,7 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
-	epatch "${FILESDIR}/fix-leveldb-memenv.patch"
+	epatch "${FILESDIR}/litecoind-0.13.2.1-memenv_h.patch"
 	eautoreconf
 	rm -r src/leveldb
 }
