@@ -1,12 +1,11 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-p2p/litecoin-qt/litecoin-qt-0.10.2.2.ebuild,v 1.3 2015/07/12 17:16:03 blueness Exp $
 
 EAPI=5
 
 DB_VER="4.8"
 
-LANGS="ach af_ZA ar be_BY bg bs ca_ES ca ca@valencia cmn cs cy da de el_GR en eo es_CL es_DO es_MX es es_UY et eu_ES fa_IR fa fi fr_CA fr gl gu_IN he hi_IN hr hu id_ID it ja ka kk_KZ ko_KR ky la lt lv_LV mn ms_MY nb nl pam pl pt_BR pt_PT ro_RO ru sah sk sl_SI sq sr sv th_TH tr uk ur_PK uz@Cyrl vi vi_VN zh_CN zh_HK zh_TW"
+LANGS="af af_ZA ar be_BY bg bg_BG ca_ES ca ca@valencia cs cs_CZ cy da de el_GR en en_GB eo es_AR es_CL es_CO es_DO es_ES es_MX es es_UY es_VE et eu_ES el fa_IR fa fi fr_CA fr fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 
 inherit autotools db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2
 
@@ -24,7 +23,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="dbus kde +qrcode qt5 upnp"
 
 RDEPEND="
-	dev-libs/boost[threads(+)]
+	dev-libs/boost:=[threads(+)]
 	dev-libs/openssl:0[-bindist]
 	dev-libs/protobuf:=
 	qrcode? (
@@ -34,32 +33,36 @@ RDEPEND="
 		net-libs/miniupnpc
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
-	virtual/bitcoin-leveldb
+	>=dev-libs/leveldb-1.18-r1
 	!qt5? (
+		dev-qt/qtcore:4[ssl]
 		dev-qt/qtgui:4
 		dbus? (
 			dev-qt/qtdbus:4
 		)
 	)
 	qt5? (
+		dev-qt/qtnetwork:5[ssl]
 		dev-qt/qtgui:5
+		dev-qt/qtwidgets:5
 		dbus? (
 			dev-qt/qtdbus:5
 		)
-		dev-qt/linguist-tools:5
 	)
 "
 DEPEND="${RDEPEND}
+	qt5? ( dev-qt/linguist-tools:5 )
 	>=app-shells/bash-4.1
 "
 
-DOCS="doc/README.md doc/release-notes.md"
+DOCS="doc/README.md doc/release-notes-litecoin.md"
 
 S="${WORKDIR}/${MyP}"
 
 src_prepare() {
-	epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
-	epatch "${FILESDIR}/fix-leveldb-memenv.patch"
+	epatch "${FILESDIR}"/0.9.0-sys_leveldb.patch
+	epatch "${FILESDIR}"/litecoind-0.13.2.1-memenv_h.patch
+	epatch "${FILESDIR}"/litecoin-0.10.2.2-fix-litecoin-qt_protocol.patch
 	eautoreconf
 	rm -r src/leveldb
 
@@ -108,9 +111,9 @@ src_configure() {
 		--without-libs \
 		--without-utils \
 		--without-daemon  \
-        --with-gui=$(usex qt5 qt5 qt4) \
-        $(use_with dbus qtdbus)  \
-        $(use_with qrcode qrencode)  \
+		--with-gui=$(usex qt5 qt5 qt4) \
+		$(use_with dbus qtdbus)  \
+		$(use_with qrcode qrencode)  \
 		${my_econf}
 }
 
