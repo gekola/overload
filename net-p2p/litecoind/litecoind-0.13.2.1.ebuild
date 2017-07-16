@@ -88,7 +88,7 @@ src_install() {
 	fowners litecoin:litecoin /var/lib/litecoin/.litecoin
 	dosym /etc/litecoin/litecoin.conf /var/lib/litecoin/.litecoin/litecoin.conf
 
-	dodoc doc/README.md doc/release-notes.md
+	dodoc doc/README.md
 	newman contrib/debian/manpages/bitcoind.1 litecoind.1
 	newman contrib/debian/manpages/bitcoin.conf.5 litecoin.conf.5
 
