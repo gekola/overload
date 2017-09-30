@@ -5,10 +5,10 @@ EAPI=6
 
 RESTRICT="test"
 
-inherit eutils multilib pax-utils toolchain-funcs
+inherit eutils multilib pax-utils toolchain-funcs llvm
 
 DESCRIPTION="High-performance programming language for technical computing"
-HOMEPAGE="http://julialang.org/"
+HOMEPAGE="https://julialang.org/"
 SRC_URI="
 	https://github.com/JuliaLang/${PN}/releases/download/v${PV}/${P}.tar.gz
 	https://dev.gentoo.org/~tamiko/distfiles/${P}-bundled.tar.gz
@@ -35,16 +35,20 @@ RDEPEND="
 	>=dev-libs/libpcre2-10.23:0=[jit]
 	sci-libs/umfpack:0=
 	sci-mathematics/glpk:0=
-	>=sys-devel/llvm-3.9:=
+	sys-devel/llvm:4=
 	>=sys-libs/libunwind-1.1:7=
+	<sys-libs/libunwind-1.2.1
 	sys-libs/readline:0=
 	sys-libs/zlib:0=
 	>=virtual/blas-3.6
 	virtual/lapack"
 
 DEPEND="${RDEPEND}
+	dev-vcs/git
 	dev-util/patchelf
 	virtual/pkgconfig"
+
+LLVM_MAX_SLOT=4
 
 PATCHES=(
 	"${FILESDIR}"/${P}-fix_build_system.patch
@@ -102,6 +106,9 @@ src_prepare() {
 	sed -i \
 		-e "s|ar -rcs|$(tc-getAR) -rcs|g" \
 		src/Makefile || die
+
+	# disable doc install starting  git fetching
+	sed -i -e 's~install: $(build_depsbindir)/stringreplace $(BUILDROOT)/doc/_build/html/en/index.html~install: $(build_depsbindir)/stringreplace~' Makefile || die
 }
 
 src_configure() {
@@ -160,7 +167,10 @@ src_install() {
 		# Julia is special. It tries to find a valid git repository (that would
 		# normally be cloned during compilation/installation). Just make it
 		# happy...
-		git init && git commit -a --allow-empty -m "initial" || die "git failed"
+		git init && \
+			git config --local user.email "whatyoudoing@example.com" && \
+			git config --local user.name "Whyyyyyy" && \
+			git commit -a --allow-empty -m "initial" || die "git failed"
 	fi
 
 	emake install \
