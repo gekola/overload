@@ -90,8 +90,7 @@ src_install() {
 	dosym /etc/litecoin/litecoin.conf /var/lib/litecoin/.litecoin/litecoin.conf
 
 	dodoc doc/README.md
-	newman contrib/debian/manpages/bitcoind.1 litecoind.1
-	newman contrib/debian/manpages/bitcoin.conf.5 litecoin.conf.5
+	newman doc/man/litecoind.1 litecoind.1
 
 	if use logrotate; then
 		insinto /etc/logrotate.d

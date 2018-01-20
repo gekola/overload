@@ -5,7 +5,7 @@ EAPI=5
 
 DB_VER="4.8"
 
-LANGS="af af_ZA ar be_BY bg bg_BG ca_ES ca ca@valencia cs cs_CZ cy da de el_GR en en_GB eo es_AR es_CL es_CO es_DO es_ES es_MX es es_UY es_VE et eu_ES el fa_IR fa fi fr_CA fr fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
+LANGS="af af_ZA ar be_BY bg bg_BG ca_ES ca ca@valencia cs cy da de el_GR en en_GB eo es_AR es_CL es_CO es_DO es_ES es_MX es es_UY es_VE et et_EE eu_ES el fa_IR fa fi fr_CA fr fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 
 inherit autotools db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2
 
@@ -21,6 +21,9 @@ LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="dbus kde +qrcode qt5 upnp"
+for l in $LANGS; do
+  IUSE+=" l10n_$l"
+done
 
 RDEPEND="
 	dev-libs/boost:=[threads(+)]
@@ -80,7 +83,7 @@ src_prepare() {
 	do
 		x="${ts/*bitcoin_/}"
 		x="${x/.ts/}"
-		if ! use "linguas_$x"; then
+		if ! use "l10n_$x"; then
 			nolang="$nolang $x"
 			#rm "$ts"
 			filt="$filt\\|$x"
@@ -126,7 +129,7 @@ src_install() {
 
 	make_desktop_entry "${PN} %u" "Litecoin-Qt" "/usr/share/pixmaps/${PN}.ico" "Qt;Network;P2P;Office;Finance;" "MimeType=x-scheme-handler/litecoin;\nTerminal=false"
 
-	newman contrib/debian/manpages/bitcoin-qt.1 ${PN}.1
+	newman doc/man/litecoin-qt.1 ${PN}.1
 
 	if use kde; then
 		insinto /usr/share/kde4/services
