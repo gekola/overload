@@ -1,0 +1,21 @@
+--- a/dbms/src/Dictionaries/MongoDBDictionarySource.cpp	2018-03-28 17:27:42.439765801 +0300
++++ b/dbms/src/Dictionaries/MongoDBDictionarySource.cpp	2018-03-28 17:29:42.969764461 +0300
+@@ -11,6 +11,8 @@
+     #include <Poco/MongoDB/ObjectId.h>
+ #pragma GCC diagnostic pop
+ 
++#include <Poco/DigestEngine.h>
++#include <Poco/MD5Engine.h>
+ #include <Poco/Version.h>
+ 
+ // only after poco
+--- a/libs/libcommon/src/DateLUT.cpp	2018-03-28 17:30:04.249764224 +0300
++++ b/libs/libcommon/src/DateLUT.cpp	2018-03-28 17:30:35.739763874 +0300
+@@ -3,6 +3,7 @@
+ #include <boost/filesystem.hpp>
+ #include <Poco/Exception.h>
+ #include <Poco/SHA1Engine.h>
++#include <Poco/DigestEngine.h>
+ #include <Poco/DigestStream.h>
+ #include <fstream>
+ 
