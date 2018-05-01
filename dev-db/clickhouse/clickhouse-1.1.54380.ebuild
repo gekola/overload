@@ -13,11 +13,10 @@ declare -A contrib_versions=(
 	["googletest"]="d175c8b"
 	["librdkafka"]="c3d50eb"
 	["lz4"]="c10863b"
-	["poco"]="8238852"
+	["poco"]="2d5a158"
 	["re2"]="7cf8b88"
 	["ssl"]="6fbe1c6"
-	["zookeeper"]="438afae"
-	["zstd"]="f4340f4"
+	["zstd"]="2555975"
 )
 
 contrib_file() {
@@ -51,13 +50,12 @@ https://github.com/google/cctz/archive/$(contrib_mapping cctz)
 !system-poco? ( https://github.com/ClickHouse-Extras/poco/archive/$(contrib_mapping poco) )
 !system-re2? ( https://github.com/google/re2/archive/$(contrib_mapping re2) )
 !system-ssl? ( https://github.com/ClickHouse-Extras/ssl/archive/$(contrib_mapping ssl) )
-!system-zookeeper? ( https://github.com/ClickHouse-Extras/zookeeper/archive/$(contrib_mapping zookeeper) )
 !system-zstd? ( https://github.com/facebook/zstd/archive/$(contrib_mapping zstd) )"
 	S="${WORKDIR}/${MY_PN}-${PV}-${TYPE}"
 fi
 
 SLOT="0/${TYPE}"
-IUSE="+server +client mongodb static +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zookeeper +system-zstd cpu_flags_x86_sse4_2"
+IUSE="+server +client mongodb static +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd cpu_flags_x86_sse4_2"
 KEYWORDS="~amd64"
 
 REQUIRED_USE="
@@ -112,7 +110,7 @@ src_unpack() {
 	default_src_unpack
 	[[ ${PV} == 9999 ]] && return 0
 	cd "${S}/contrib"
-	mkdir -p cctz double-conversion googletest librdkafka lz4 re2 zookeeper zstd
+	mkdir -p cctz double-conversion googletest librdkafka lz4 re2 zstd
 	tar --strip-components=1 -C cctz -xf "${DISTDIR}/cctz-4f9776a.tar.gz"
 	use system-double-conversion || tar --strip-components=1 -C double-conversion -xf "${DISTDIR}/$(contrib_file double-conversion y)"
 	use system-gtest || tar --strip-components=1 -C googletest -xf "${DISTDIR}/$(contrib_file googletest y)"
@@ -121,7 +119,6 @@ src_unpack() {
 	use system-poco || tar --strip-components=1 -C poco -xf "${DISTDIR}/$(contrib_file poco y)"
 	use system-re2 || tar --strip-components=1 -C re2 -xf "${DISTDIR}/$(contrib_file re2 y)"
 	use system-ssl || tar --strip-components=1 -C ssl -xf "${DISTDIR}/$(contrib_file ssl y)"
-	use system-zookeeper || tar --strip-components=1 -C zookeeper -xf "${DISTDIR}/$(contrib_file zookeeper y)"
 	use system-zstd || tar --strip-components=1 -C zstd -xf "${DISTDIR}/$(contrib_file zstd y)"
 }
 
@@ -157,7 +154,6 @@ src_configure() {
 		-DUSE_INTERNAL_RE2_LIBRARY=$(usex system-re2 0 1)
 		-DUSE_INTERNAL_SSL_LIBRARY=$(usex system-ssl 0 1)
 		-DUSE_INTERNAL_UNWIND_LIBRARY=$(usex system-libunwind 0 1)
-		-DUSE_INTERNAL_ZOOKEEPER_LIBRARY=$(usex system-zookeeper 0 1)
 		-DUSE_INTERNAL_ZSTD_LIBRARY=$(usex system-zstd 0 1)
 		-DUSE_INTERNAL_BOOST_LIBRARY=0
 		-DUSE_INTERNAL_ZLIB_LIBRARY=0
@@ -179,9 +175,13 @@ src_install() {
 	dosym libclickhouse.so.${PV} /usr/$(get_libdir)/libclickhouse.so.1
 	dosym libclickhouse.so.${PV} /usr/$(get_libdir)/libclickhouse.so
 
+	if use server || use client; then
+		exeinto /usr/$(get_libdir)/clickhouse/bin
+		newexe dbms/src/Server/clickhouse clickhouse
+	fi
+
 	if use server; then
-		exeinto /usr/sbin
-		newexe dbms/src/Server/clickhouse clickhouse-server
+		dosym /usr/$(get_libdir)/clickhouse/bin/clickhouse /usr/sbin/clickhouse-server
 		newinitd "${FILESDIR}"/clickhouse-server.initd clickhouse
 
 		insinto /etc/clickhouse-server
@@ -200,8 +200,7 @@ src_install() {
 	fi
 
 	if use client; then
-		exeinto /usr/bin
-		newexe dbms/src/Server/clickhouse clickhouse-client
+		dosym /usr/$(get_libdir)/clickhouse/bin/clickhouse /usr/bin/clickhouse-client
 
 		insinto /etc/clickhouse-client
 		newins "${S}"/dbms/src/Server/clickhouse-client.xml config.xml
