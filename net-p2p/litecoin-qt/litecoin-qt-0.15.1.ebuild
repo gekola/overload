@@ -5,9 +5,9 @@ EAPI=5
 
 DB_VER="4.8"
 
-LANGS="af af_ZA ar be_BY bg bg_BG ca_ES ca ca@valencia cs cy da de el_GR en en_GB eo es_AR es_CL es_CO es_DO es_ES es_MX es es_UY es_VE et et_EE eu_ES el fa_IR fa fi fr_CA fr fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
+LANGS="af af_ZA ar be_BY bg bg_BG bn bs ca ca_ES ca@valencia cs cy da de de_DE el el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he he_IL hi_IN hr hu id id_ID it it_IT ja ja_JP ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY my nb nb_NO ne nl nl_NL pam pl pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sq sr sr@latin sv ta te th th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 
-inherit autotools db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2
+inherit autotools db-use eutils fdo-mime gnome2-utils qt4-r2
 
 MyPV="${PV/_/-}"
 MyPN="litecoin"
