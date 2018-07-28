@@ -190,6 +190,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
 		-DUSE_MYSQL="$(usex mysql)"
+		-DENABLE_RDKAFKA="$(usex kafka)"
 		-DENABLE_TESTS="$(usex test)"
 		-DENABLE_CLICKHOUSE_SERVER="$(usex server)"
 		-DENABLE_CLICKHOUSE_CLIENT="$(usex client)"
