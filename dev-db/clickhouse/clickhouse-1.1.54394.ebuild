@@ -4,16 +4,18 @@
 
 EAPI=6
 
+CMAKE_MAKEFILE_GENERATOR="ninja"
+
 inherit cmake-utils user check-reqs versionator flag-o-matic systemd
 
 declare -A contrib_versions=(
-	["capnproto"]="c949a18"
+	["capnproto"]="7173ab6"
 	["cctz"]="4f9776a"
 	["double-conversion"]="cf2f0f3"
 	["googletest"]="d175c8b"
-	["librdkafka"]="c3d50eb"
+	["librdkafka"]="7478b5e"
 	["lz4"]="c10863b"
-	["poco"]="2d5a158"
+	["poco"]="3a2d0a8"
 	["re2"]="7cf8b88"
 	["ssl"]="6fbe1c6"
 	["zstd"]="2555975"
@@ -75,7 +77,7 @@ RDEPEND="
 		system-double-conversion? ( dev-libs/double-conversion )
 		system-lz4? ( app-arch/lz4 )
 		system-zstd? ( app-arch/zstd )
-		system-librdkafka? ( dev-libs/librdkafka )
+		kafka? ( system-librdkafka? ( dev-libs/librdkafka:= ) )
 		system-libunwind? ( sys-libs/libunwind:7 )
 		system-ssl? ( dev-libs/openssl:0= )
 
@@ -88,7 +90,7 @@ RDEPEND="
 		)
 		dev-libs/icu:=
 		dev-libs/glib
-		dev-libs/boost:=
+		>=dev-libs/boost-1.65.0:=
 		dev-libs/zookeeper-c
 		mysql? ( virtual/libmysqlclient )
 	)
@@ -107,7 +109,7 @@ DEPEND="${RDEPEND}
 		system-double-conversion? ( dev-libs/double-conversion[static-libs] )
 		system-lz4? ( app-arch/lz4[static-libs] )
 		system-zstd? ( app-arch/zstd[static-libs] )
-		system-librdkafka? ( dev-libs/librdkafka[static-libs] )
+		kafka? ( system-librdkafka? ( dev-libs/librdkafka[static-libs] ) )
 		system-libunwind? ( sys-libs/libunwind:7[static-libs] )
 		system-ssl? ( dev-libs/openssl[static-libs] )
 
@@ -120,11 +122,12 @@ DEPEND="${RDEPEND}
 		)
 		dev-libs/icu[static-libs]
 		dev-libs/glib[static-libs]
-		dev-libs/boost[static-libs]
+		>=dev-libs/boost-1.65.0[static-libs]
 		dev-libs/zookeeper-c[static-libs]
 		virtual/libmysqlclient[static-libs]
 	)
 	dev-util/patchelf
+	>=sys-devel/lld-6.0.0
 	sys-libs/libtermcap-compat
 	|| (
 		>=sys-devel/gcc-7.0
@@ -151,12 +154,14 @@ src_unpack() {
 	mkdir -p cctz double-conversion googletest librdkafka lz4 re2 zstd
 	tar --strip-components=1 -C cctz -xf "${DISTDIR}/cctz-4f9776a.tar.gz"
 	use system-double-conversion || tar --strip-components=1 -C double-conversion -xf "${DISTDIR}/$(contrib_file double-conversion y)"
-	use system-librdkafka || tar --strip-components=1 -C librdkafka -xf "${DISTDIR}/$(contrib_file librdkafka y)"
 	use system-lz4 || tar --strip-components=1 -C lz4 -xf "${DISTDIR}/$(contrib_file lz4 y)"
 	use system-poco || tar --strip-components=1 -C poco -xf "${DISTDIR}/$(contrib_file poco y)"
 	use system-re2 || tar --strip-components=1 -C re2 -xf "${DISTDIR}/$(contrib_file re2 y)"
 	use system-ssl || tar --strip-components=1 -C ssl -xf "${DISTDIR}/$(contrib_file ssl y)"
 	use system-zstd || tar --strip-components=1 -C zstd -xf "${DISTDIR}/$(contrib_file zstd y)"
+	if use kafka; then
+		use system-librdkafka || tar --strip-components=1 -C librdkafka -xf "${DISTDIR}/$(contrib_file librdkafka y)"
+	fi
 	if use test; then
 		use system-gtest || tar --strip-components=1 -C googletest -xf "${DISTDIR}/$(contrib_file googletest y)"
 	fi
@@ -168,9 +173,6 @@ src_prepare() {
 	#	contrib/libpoco/CMakeLists.txt || die "Cannot patch poco"
 	if use system-poco; then
 		epatch "${FILESDIR}/system-poco.patch" || die "Cannot patch sources for usage with system Poco"
-	fi
-	if use doc; then
-		epatch "${FILESDIR}/clickhouse-concatenate-python3.patch" || die "Cannot patch doc generation scripts for python3 compatibility"
 	fi
 	if $(tc-getCC) -no-pie -v 2>&1 | grep -q unrecognized; then
 		sed -i -e 's:--no-pie::' -i CMakeLists.txt || die "Cannot patch CMakeLists.txt"
@@ -194,8 +196,11 @@ src_configure() {
 		-DENABLE_CLICKHOUSE_LOCAL="$(usex tools)"
 		-DENABLE_CLICKHOUSE_BENCHMARK="$(usex tools)"
 		-DENABLE_CLICKHOUSE_PERFORMANCE="$(usex tools)"
-		-DENABLE_CLICKHOUSE_TOOLS="$(usex tools)"
 		-DENABLE_CLICKHOUSE_COPIER="$(usex tools)"
+		-DENABLE_CLICKHOUSE_EXTRACT_FROM_CONFIG="$(usex tools)"
+		-DENABLE_CLICKHOUSE_COMPRESSOR="$(usex tools)"
+		-DENABLE_CLICKHOUSE_FORMAT="$(usex tools)"
+		-DENABLE_CLICKHOUSE_OBFUSCATOR="$(usex tools)"
 		-DENABLE_CLICKHOUSE_ALL=OFF
 		-DUNBUNDLED=ON
 		-DUSE_INTERNAL_CITYHASH_LIBRARY=ON # Clickhouse explicitly requires bundled patched cityhash
@@ -233,13 +238,12 @@ src_install() {
 	fi
 
 	if use doc; then
-		pushd "${S}/docs" || die "Failed to enter docs build directory"
-		./build.sh || die "Failed to build docs"
+		pushd "${S}/docs/tools" || die "Failed to enter docs build directory"
+		./build.py || die "Failed to build docs"
 		popd || die "Failed to exit docs build directory"
 
-		dodoc -r "${S}/docs/build/docs"
+		dodoc -r "${S}/docs/build"
 	fi
-
 
 	if use server; then
 		newinitd "${FILESDIR}"/clickhouse-server.initd clickhouse-server
