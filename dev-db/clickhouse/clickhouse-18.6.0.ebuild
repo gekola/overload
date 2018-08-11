@@ -181,7 +181,6 @@ src_prepare() {
 		sed -i -e 's:--no-pie:-no-pie:' -i CMakeLists.txt || die "Cannot patch CMakeLists.txt"
 	fi
 
-	sed -i -- "s/VERSION_REVISION .*)/VERSION_REVISION ${PV##*.})/g" dbms/cmake/version.cmake || die "Cannot patch version.cmake"
 	sed -i -- "s/VERSION_DESCRIBE .*)/VERSION_DESCRIBE v${PV}-${TYPE})/g" dbms/cmake/version.cmake || die "Cannot patch version.cmake"
 }
 
