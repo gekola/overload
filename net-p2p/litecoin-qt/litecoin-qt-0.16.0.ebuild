@@ -5,9 +5,9 @@ EAPI=5
 
 DB_VER="4.8"
 
-LANGS="af af_ZA ar be_BY bg bg_BG bn bs ca ca_ES ca@valencia cs cy da de de_DE el el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he he_IL hi_IN hr hu id id_ID it it_IT ja ja_JP ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY my nb nb_NO ne nl nl_NL pam pl pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sq sr sr@latin sv ta te th th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
+LANGS="af af_ZA am ar be_BY bg bg_BG bn bs ca ca_ES ca@valencia cs cs_CZ cy da de de_DE el el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he he_IL hi_IN hr hu hu_HU id id_ID is it it_IT ja ja_JP ka kk_KZ km_KH ko ko_KR ku_IQ ky la lt lv_LV mk_MK ml mn mr_IN ms ms_MY my nb nb_NO ne nl nl_NL pam pl pl_PL pt pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sn sq sr sr@latin sv ta ta_IN te th th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh-Hans zh_CN zh_HK zh_TW"
 
-inherit autotools db-use eutils fdo-mime gnome2-utils qt4-r2
+inherit autotools db-use eutils fdo-mime gnome2-utils
 
 MyPV="${PV/_/-}"
 MyPN="litecoin"
@@ -20,7 +20,7 @@ SRC_URI="https://github.com/${MyPN}-project/${MyPN}/archive/v${MyPV}.tar.gz -> $
 LICENSE="MIT ISC GPL-3 LGPL-2.1 public-domain || ( CC-BY-SA-3.0 LGPL-2.1 )"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="dbus kde +qrcode qt5 upnp"
+IUSE="dbus kde +qrcode upnp"
 for l in $LANGS; do
   IUSE+=" l10n_$l"
 done
@@ -37,24 +37,15 @@ RDEPEND="
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
 	>=dev-libs/leveldb-1.18-r1
-	!qt5? (
-		dev-qt/qtcore:4[ssl]
-		dev-qt/qtgui:4
-		dbus? (
-			dev-qt/qtdbus:4
-		)
-	)
-	qt5? (
-		dev-qt/qtnetwork:5[ssl]
-		dev-qt/qtgui:5
-		dev-qt/qtwidgets:5
-		dbus? (
-			dev-qt/qtdbus:5
-		)
+	dev-qt/qtnetwork:5[ssl]
+	dev-qt/qtgui:5
+	dev-qt/qtwidgets:5
+	dbus? (
+		dev-qt/qtdbus:5
 	)
 "
 DEPEND="${RDEPEND}
-	qt5? ( dev-qt/linguist-tools:5 )
+	dev-qt/linguist-tools:5
 	>=app-shells/bash-4.1
 "
 
@@ -115,7 +106,7 @@ src_configure() {
 		--without-libs \
 		--without-utils \
 		--without-daemon  \
-		--with-gui=$(usex qt5 qt5 qt4) \
+		--with-gui=qt5 \
 		$(use_with dbus qtdbus)  \
 		$(use_with qrcode qrencode)  \
 		${my_econf}
