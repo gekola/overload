@@ -15,9 +15,9 @@ declare -A contrib_versions=(
 	["googletest"]="d175c8b"
 	["librdkafka"]="7478b5e"
 	["lz4"]="c10863b"
-	["poco"]="3a2d0a8"
+	["poco"]="3df9473"
 	["re2"]="7cf8b88"
-	["ssl"]="6fbe1c6"
+	["ssl"]="de02224"
 	["zstd"]="2555975"
 )
 
@@ -99,7 +99,7 @@ RDEPEND="
 "
 
 DEPEND="${RDEPEND}
-	doc? ( >=dev-python/mkdocs-0.17.3 )
+	doc? ( >=dev-python/mkdocs-1.0.1 )
 	test? ( system-gtest? ( dev-cpp/gtest ) )
 	static? (
 		client? (
