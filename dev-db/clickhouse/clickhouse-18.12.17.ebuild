@@ -15,7 +15,7 @@ declare -A contrib_versions=(
 	["googletest"]="d175c8b"
 	["librdkafka"]="7478b5e"
 	["lz4"]="c10863b"
-	["poco"]="3df9473"
+	["poco"]="d7a4383"
 	["re2"]="7cf8b88"
 	["ssl"]="de02224"
 	["zstd"]="2555975"
@@ -214,6 +214,9 @@ src_configure() {
 		-DUSE_INTERNAL_ZSTD_LIBRARY="$(usex !system-zstd)"
 		-DUSE_STATIC_LIBRARIES="$(usex static)"
 		-DMAKE_STATIC_LIBRARIES="$(usex static)"
+		# build fails w/o odbc
+		-DENABLE_ODBC=True
+		-DENABLE_CLICKHOUSE_ODBC_BRIDGE=True
 	)
 
 	if use test; then
