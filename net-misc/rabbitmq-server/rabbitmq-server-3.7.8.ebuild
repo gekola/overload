@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 RESTRICT="test"
 
-RDEPEND=">=dev-lang/erlang-19.3[ssl,smp]"
+RDEPEND=" || ( ( >=dev-lang/erlang-19.3[ssl,smp] <dev-lang/erlang-21.1[ssl,smp] ) >=dev-lang/erlang-21.1[ssl] )"
 DEPEND="${RDEPEND}
 	app-arch/zip
 	app-arch/unzip
