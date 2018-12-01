@@ -9,7 +9,7 @@ CMAKE_MAKEFILE_GENERATOR="ninja"
 inherit cmake-utils user check-reqs versionator flag-o-matic systemd
 
 declare -A contrib_versions=(
-	["capnproto"]="7173ab6"
+	["capnproto"]="a00ccd9"
 	["cctz"]="4f9776a"
 	["double-conversion"]="cf2f0f3"
 	["googletest"]="d175c8b"
@@ -17,7 +17,7 @@ declare -A contrib_versions=(
 	["lz4"]="c10863b"
 	["poco"]="d7a4383"
 	["re2"]="7cf8b88"
-	["ssl"]="de02224"
+	["ssl"]="919f6f1"
 	["zstd"]="2555975"
 )
 
@@ -46,6 +46,7 @@ else
 	SRC_URI="
 		https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.tar.gz -> ${P}.tar.gz
 		https://github.com/google/cctz/archive/$(contrib_mapping cctz)
+		!system-capnproto? ( https://github.com/capnproto/capnproto/archive/$(contrib_mapping capnproto) )
 		!system-double-conversion? ( https://github.com/google/double-conversion/archive/$(contrib_mapping double-conversion) )
 		test? ( !system-gtest? ( https://github.com/google/googletest/archive/$(contrib_mapping googletest) ) )
 		!system-librdkafka? ( https://github.com/edenhill/librdkafka/archive/$(contrib_mapping librdkafka) )
@@ -59,7 +60,7 @@ else
 fi
 
 SLOT="0/${TYPE}"
-IUSE=" +client doc kafka mongodb mysql +server static +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools cpu_flags_x86_sse4_2"
+IUSE=" +client doc kafka mongodb mysql +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools cpu_flags_x86_sse4_2"
 KEYWORDS="~amd64"
 
 REQUIRED_USE="
@@ -74,6 +75,7 @@ RDEPEND="
 			sys-libs/ncurses:0
 			sys-libs/readline:0
 		)
+		system-capnproto? ( >=dev-libs/capnproto-0.7.0 )
 		system-double-conversion? ( dev-libs/double-conversion )
 		system-lz4? ( app-arch/lz4 )
 		system-zstd? ( app-arch/zstd )
@@ -81,7 +83,6 @@ RDEPEND="
 		system-libunwind? ( sys-libs/libunwind:7 )
 		system-ssl? ( dev-libs/openssl:0= )
 
-		dev-libs/capnproto
 		dev-libs/libltdl:0
 		sys-libs/zlib
 		|| (
@@ -96,6 +97,7 @@ RDEPEND="
 	)
 	dev-libs/libpcre
 	system-poco? ( >=dev-libs/poco-1.9.0 )
+	<sys-devel/llvm-7
 "
 
 DEPEND="${RDEPEND}
@@ -113,7 +115,7 @@ DEPEND="${RDEPEND}
 		system-libunwind? ( sys-libs/libunwind:7[static-libs] )
 		system-ssl? ( dev-libs/openssl[static-libs] )
 
-		dev-libs/capnproto[static-libs]
+		system-capnproto? ( dev-libs/capnproto[static-libs] )
 		dev-libs/libltdl[static-libs]
 		sys-libs/zlib[static-libs]
 		|| (
@@ -153,6 +155,7 @@ src_unpack() {
 	cd "${S}/contrib"
 	mkdir -p cctz double-conversion googletest librdkafka lz4 re2 zstd
 	tar --strip-components=1 -C cctz -xf "${DISTDIR}/cctz-4f9776a.tar.gz"
+	use system-capnproto || tar --strip-components=1 -C capnproto -xf "${DISTDIR}/$(contrib_file capnproto y)"
 	use system-double-conversion || tar --strip-components=1 -C double-conversion -xf "${DISTDIR}/$(contrib_file double-conversion y)"
 	use system-lz4 || tar --strip-components=1 -C lz4 -xf "${DISTDIR}/$(contrib_file lz4 y)"
 	use system-poco || tar --strip-components=1 -C poco -xf "${DISTDIR}/$(contrib_file poco y)"
@@ -204,6 +207,7 @@ src_configure() {
 		-DENABLE_CLICKHOUSE_ALL=OFF
 		-DUNBUNDLED=ON
 		-DUSE_INTERNAL_CITYHASH_LIBRARY=ON # Clickhouse explicitly requires bundled patched cityhash
+		-DUSE_INTERNAL_CAPNP_LIBRARY="$(usex !system-capnproto)"
 		-DUSE_INTERNAL_DOUBLE_CONVERSION_LIBRARY="$(usex !system-double-conversion)"
 		-DUSE_INTERNAL_RDKAFKA_LIBRARY="$(usex !system-librdkafka)"
 		-DUSE_INTERNAL_LZ4_LIBRARY="$(usex !system-lz4)"
@@ -214,9 +218,12 @@ src_configure() {
 		-DUSE_INTERNAL_ZSTD_LIBRARY="$(usex !system-zstd)"
 		-DUSE_STATIC_LIBRARIES="$(usex static)"
 		-DMAKE_STATIC_LIBRARIES="$(usex static)"
+		-DENABLE_EMBEDDED_COMPILER=OFF
 		# build fails w/o odbc
 		-DENABLE_ODBC=True
 		-DENABLE_CLICKHOUSE_ODBC_BRIDGE=True
+		# Let portage handle ccache, otherwise sandbox fails when FEATURES=-ccache
+		-DCCACHE_FOUND=0
 	)
 
 	if use test; then
