@@ -1,11 +1,11 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit eutils python-any-r1 systemd user
+inherit python-any-r1 systemd user
 
 DESCRIPTION="RabbitMQ is a high-performance AMQP-compliant message broker written in Erlang"
 HOMEPAGE="http://www.rabbitmq.com/"
@@ -75,7 +75,7 @@ src_install() {
 
 	# create the mnesia directory
 	diropts -m 0770 -o rabbitmq -g rabbitmq
-	dodir /var/lib/rabbitmq{,/mnesia}
+	keepdir /var/lib/rabbitmq{,/mnesia}
 }
 
 pkg_preinst() {
