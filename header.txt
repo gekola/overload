@@ -1,3 +1,3 @@
-# Copyrght 2014 Nick Herman
+# Copyrght 2014-2019 Nick H
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
