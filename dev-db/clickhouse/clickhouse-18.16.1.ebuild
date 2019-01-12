@@ -15,9 +15,9 @@ declare -A contrib_versions=(
 	["googletest"]="d175c8b"
 	["librdkafka"]="7478b5e"
 	["lz4"]="c10863b"
-	["poco"]="d7a4383"
+	["poco"]="fe5505e"
 	["re2"]="7cf8b88"
-	["ssl"]="919f6f1"
+	["ssl"]="dbbbcdb"
 	["zstd"]="2555975"
 )
 
