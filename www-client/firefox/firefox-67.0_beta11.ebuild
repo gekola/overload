@@ -531,13 +531,13 @@ src_configure() {
 	# Enable/Disable eme support
 	use eme-free && mozconfig_annotate '+eme-free' --disable-eme
 
-	# Setup api key for location services and safebrowsing, https://bugzilla.mozilla.org/show_bug.cgi?id=1531176#c34
-	echo -n "${_google_api_key}" > "${S}"/google-api-key
 	if use google-services ; then
+		# Setup api key for location services and safebrowsing, https://bugzilla.mozilla.org/show_bug.cgi?id=1531176#c34
+		echo -n "${_google_api_key}" > "${S}"/google-api-key
 		mozconfig_annotate '+google-services' --with-google-location-service-api-keyfile="${S}/google-api-key"
 		mozconfig_annotate '+google-services' --with-google-safebrowsing-api-keyfile="${S}/google-api-key"
 	else
-	    mozconfig_annotate '-google-services' --without-google-location-service-api-keyfile
+		mozconfig_annotate '-google-services' --without-google-location-service-api-keyfile
 		mozconfig_annotate '-google-services' --without-google-safebrowsing-api-keyfile
 	fi
 
@@ -692,7 +692,7 @@ PROFILE_EOF
 	# Install a 48x48 icon into /usr/share/pixmaps for legacy DEs
 	newicon "${icon_path}/default48.png" "${icon}.png"
 	newmenu "${FILESDIR}/icon/${PN}.desktop" "${P}.desktop"
-	sed -i -e "s:@NAME@:${name}:" -e "s:@ICON@:${icon}:" -e "s/firefox/${P}/g" \
+	sed -i -e "s:@NAME@:${name}:" -e "s:@ICON@:${icon}:" -e "s:@EXE@:${P}:" \
 		"${ED}/usr/share/applications/${P}.desktop" || die
 
 	# Add StartupNotify=true bug 237317
