@@ -105,7 +105,7 @@ CDEPEND="
 	system-libevent? ( >=dev-libs/libevent-2.0:0=[threads] )
 	system-libvpx? (
 		>=media-libs/libvpx-1.7.0:0=[postproc]
-		<media-libs/libvpx-1.8:0=[postproc]
+		webrtc? ( <media-libs/libvpx-1.8:0=[postproc] )
 	)
 	system-sqlite? ( >=dev-db/sqlite-3.26:3[secure-delete,debug=] )
 	system-webp? ( >=media-libs/libwebp-1.0.2:0= )
