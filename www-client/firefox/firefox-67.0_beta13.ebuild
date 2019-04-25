@@ -27,7 +27,7 @@ if [[ ${MOZ_ESR} == 1 ]] ; then
 fi
 
 # Patch version
-PATCH="${PN}-67.0-patches-02"
+PATCH="${PN}-67.0-patches-03"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
 MOZ_SRC_URI="${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz"
@@ -493,7 +493,11 @@ src_configure() {
 
 	# use the gtk3 toolkit (the only one supported at this point)
 	# TODO: Will this result in automagic dependency on x11-libs/gtk+[wayland]?
-	mozconfig_annotate '' --enable-default-toolkit=cairo-gtk3
+	if use wayland ; then
+		mozconfig_annotate '' --enable-default-toolkit-cairo-gtk-wayland
+	else
+		mozconfig_annotate '' --enable-default-toolkit=cairo-gtk3
+	fi
 
 	mozconfig_use_enable startup-notification
 	mozconfig_use_enable system-sqlite
