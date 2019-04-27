@@ -39,7 +39,7 @@ KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 x86 ~amd64-linux ~x86-linux
 
 SLOT="${PV}"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="bindist eme-free +gmp-autoupdate google-services hardened hwaccel jack pgo rust selinux test webrtc"
+IUSE="bindist eme-free +gmp-autoupdate google-services hardened hwaccel jack pgo rust selinux symlink test webrtc"
 RESTRICT="!bindist? ( bindist )"
 
 PATCH_URIS=( https://dev.gentoo.org/~{anarchy,axs,polynomial-c}/mozilla/patchsets/${PATCH}.tar.xz )
@@ -53,7 +53,8 @@ RDEPEND="
 	jack? ( virtual/jack )
 	>=dev-libs/nss-3.28.3
 	>=dev-libs/nspr-4.13.1
-	selinux? ( sec-policy/selinux-mozilla )"
+	selinux? ( sec-policy/selinux-mozilla )
+	symlink? ( app-eselect/eselect-firefox )"
 
 DEPEND="${RDEPEND}
 	pgo? ( >=sys-devel/gcc-4.5 )
@@ -369,6 +370,10 @@ PROFILE_EOF
 			|| die
 	fi
 
+	# firefox and firefox-bin are identical
+	rm "${ED%/}"${MOZILLA_FIVE_HOME}/firefox-bin || die
+	dosym firefox ${MOZILLA_FIVE_HOME}/firefox-bin
+
 	# Required in order to use plugins and even run firefox on hardened.
 	pax-mark m "${ED}"${MOZILLA_FIVE_HOME}/{firefox,firefox-bin,plugin-container}
 	rm "${ED%/}/usr/bin/firefox"
@@ -413,8 +418,11 @@ pkg_postinst() {
 		elog "used for sound.  If you wish to use pulseaudio instead please unmerge"
 		elog "media-sound/apulse."
 	fi
+
+	use symlink && eselect firefox update --if-unset
 }
 
 pkg_postrm() {
 	gnome2_icon_cache_update
+	use symlink && eselect firefox cleanup
 }

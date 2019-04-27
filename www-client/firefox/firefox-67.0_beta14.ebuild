@@ -27,7 +27,7 @@ if [[ ${MOZ_ESR} == 1 ]] ; then
 fi
 
 # Patch version
-PATCH="${PN}-67.0-patches-03"
+PATCH="${PN}-67.0-patches-04"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
 MOZ_SRC_URI="${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz"
@@ -53,7 +53,7 @@ SLOT="${PV}"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="bindist clang cpu_flags_x86_avx2 dbus debug eme-free geckodriver
 	google-services	+gmp-autoupdate hardened hwaccel jack lto neon pgo
-	pulseaudio +screenshot selinux startup-notification +system-av1
+	pulseaudio +screenshot selinux startup-notification symlink +system-av1
 	+system-harfbuzz +system-icu +system-jpeg +system-libevent
 	+system-sqlite +system-libvpx +system-webp test wayland wifi webrtc"
 RESTRICT="!bindist? ( bindist )"
@@ -66,7 +66,6 @@ SRC_URI="${SRC_URI}
 CDEPEND="
 	>=dev-libs/nss-3.43
 	>=dev-libs/nspr-4.21
-	>=app-text/hunspell-1.5.4:*
 	dev-libs/atk
 	dev-libs/expat
 	>=x11-libs/cairo-1.10[X]
@@ -119,7 +118,8 @@ RDEPEND="${CDEPEND}
 	jack? ( virtual/jack )
 	pulseaudio? ( || ( media-sound/pulseaudio
 		>=media-sound/apulse-0.1.9 ) )
-	selinux? ( sec-policy/selinux-mozilla )"
+	selinux? ( sec-policy/selinux-mozilla )
+	symlink? ( app-eselect/eselect-firefox )"
 
 DEPEND="${CDEPEND}
 	app-arch/zip
@@ -759,9 +759,12 @@ pkg_postinst() {
 		elog "media-sound/apulse."
 		elog
 	fi
+
+	use symlink && eselect firefox update --if-unset
 }
 
 pkg_postrm() {
 	gnome2_icon_cache_update
 	xdg_desktop_database_update
+	use symlink && eselect firefox cleanup
 }
