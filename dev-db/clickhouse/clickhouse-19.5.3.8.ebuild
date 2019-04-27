@@ -13,11 +13,11 @@ declare -A contrib_versions=(
 	["cctz"]="4f9776a"
 	["double-conversion"]="cf2f0f3"
 	["googletest"]="d175c8b"
-	["librdkafka"]="7478b5e"
+	["librdkafka"]="8695b9d"
 	["lz4"]="c10863b"
 	["poco"]="fe5505e"
 	["re2"]="7cf8b88"
-	["ssl"]="dbbbcdb"
+	["ssl"]="ba8de79"
 	["zstd"]="2555975"
 )
 
