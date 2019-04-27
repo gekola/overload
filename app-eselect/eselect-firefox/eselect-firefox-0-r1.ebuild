@@ -7,7 +7,7 @@ DESCRIPTION="Firefox eselect module"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 x86 ~amd64-linux ~x86-linux"
 IUSE=""
 
 DEPEND="app-admin/eselect
