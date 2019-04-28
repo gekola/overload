@@ -97,7 +97,7 @@ RDEPEND="
 	)
 	dev-libs/libpcre
 	system-poco? ( >=dev-libs/poco-1.9.0 )
-	<sys-devel/llvm-7
+	<sys-devel/llvm-9
 "
 
 DEPEND="${RDEPEND}
