@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python2_7 )
 inherit python-any-r1 systemd user
 
 DESCRIPTION="RabbitMQ is a high-performance AMQP-compliant message broker written in Erlang"
-HOMEPAGE="http://www.rabbitmq.com/"
+HOMEPAGE="https://www.rabbitmq.com/"
 SRC_URI="https://github.com/rabbitmq/rabbitmq-server/releases/download/v${PV}/rabbitmq-server-${PV}.tar.xz"
 
 LICENSE="GPL-2 MPL-1.1"
@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 RESTRICT="test"
 
-RDEPEND=" || ( ( >=dev-lang/erlang-19.3[ssl,smp] <dev-lang/erlang-21.1[ssl,smp] ) >=dev-lang/erlang-21.1[ssl] )"
+RDEPEND=" || ( ( >=dev-lang/erlang-20.3[ssl,smp] <dev-lang/erlang-21.1[ssl,smp] ) >=dev-lang/erlang-21.1[ssl] )"
 DEPEND="${RDEPEND}
 	app-arch/zip
 	app-arch/unzip
