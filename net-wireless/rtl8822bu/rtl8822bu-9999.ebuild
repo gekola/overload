@@ -16,3 +16,8 @@ IUSE=""
 
 MODULE_NAMES="88x2bu(net/wireless:)"
 BUILD_TARGETS="modules"
+
+src_compile() {
+	BUILD_PARAMS="KSRC=${KV_DIR} KVERS=${KV_FULL}"
+	linux-mod_src_compile
+}
