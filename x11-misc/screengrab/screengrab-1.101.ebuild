@@ -12,14 +12,14 @@ SRC_URI="https://downloads.lxqt.org/downloads/${PN}/${PV}/${P}.tar.xz"
 LICENSE="GPL-2+ LGPL-2.1+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
-IUSE="+kwindowsystem +upload"
+IUSE="+edit +kwindowsystem +upload"
 PATCHES=(
 	"${FILESDIR}/${PN}-optional-kwindowsystem.patch"
 )
 
 BDEPEND="dev-qt/linguist-tools:5"
 DEPEND="
-	>=dev-libs/libqtxdg-3.3.1
+	edit? ( >=dev-libs/libqtxdg-3.3.1 )
 	dev-qt/qtcore:5
 	dev-qt/qtdbus:5
 	dev-qt/qtgui:5
@@ -34,6 +34,7 @@ RDEPEND="${DEPEND}"
 
 src_configure() {
 		local mycmakeargs=(
+			-DSG_EXT_EDIT="$(usex edit)"
 			-DSG_EXT_UPLOADS="$(usex upload)"
 			-DSG_USE_SYSTEM_KF5="$(usex kwindowsystem)"
 		)

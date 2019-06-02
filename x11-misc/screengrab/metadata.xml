@@ -9,6 +9,7 @@
 		<remote-id type="github">lxqt/screengrab</remote-id>
 	</upstream>
 	<use>
+        <flag name="edit">Open the screenshot in image editor (requires libqtxdg).</flag>
         <flag name="kwindowsystem">Use KWindowSystem library for active window detection.</flag>
         <flag name="upload">Enable upload screenshots to Imgur.</flag>
 	</use>
