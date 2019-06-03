@@ -15,6 +15,7 @@ KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="+edit +kwindowsystem +upload"
 PATCHES=(
 	"${FILESDIR}/${PN}-optional-kwindowsystem.patch"
+	"${FILESDIR}/${PN}-fix-no-upload.patch"
 )
 
 BDEPEND="dev-qt/linguist-tools:5"
