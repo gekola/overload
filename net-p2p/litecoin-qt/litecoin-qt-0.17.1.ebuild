@@ -5,7 +5,7 @@ EAPI=5
 
 DB_VER="4.8"
 
-LANGS="af af_ZA am ar be_BY bg bg_BG bn bs ca ca_ES ca@valencia cs cs_CZ cy da de de_DE el el_GR en en_AU en_GB en_US eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he he_IL hi_IN hr hu hu_HU id id_ID is it it_IT ja ja_JP ka kk_KZ km_KH ko ko_KR ku_IQ ky la lt lv_LV mk_MK ml mn mr_IN ms ms_MY my nb nb_NO ne nl nl_NL pam pl pl_PL pt pt_BR pt_PT ro ro_RO ru ru_RU si sk sl_SI sn sq sr sr@latin sv ta ta_IN te th th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh-Hans zh_CN zh_HK zh_TW"
+LANGS="af af_ZA ar be_BY bg bg_BG ca ca_ES ca@valencia cs cy da de el el_GR en en_GB eo es es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 
 inherit autotools db-use eutils fdo-mime gnome2-utils
 
@@ -56,7 +56,6 @@ S="${WORKDIR}/${MyP}"
 src_prepare() {
 	epatch "${FILESDIR}"/0.9.0-sys_leveldb.patch
 	epatch "${FILESDIR}"/litecoind-0.13.2.1-memenv_h.patch
-	epatch "${FILESDIR}"/litecoin-0.10.2.2-fix-litecoin-qt_protocol.patch
 	eautoreconf
 	rm -r src/leveldb
 

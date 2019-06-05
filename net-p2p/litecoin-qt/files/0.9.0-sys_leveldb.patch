@@ -8,9 +8,9 @@ diff --git a/configure.ac b/configure.ac
 index 3ed4549..5a5852d 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -332,10 +332,22 @@ AC_TRY_COMPILE([#include <sys/socket.h>],
-  [ AC_MSG_RESULT(no)]
- )
+@@ -854,10 +854,22 @@ AC_TRY_COMPILE([#include <sys/socket.h>],
+   [AC_MSG_ERROR([Cannot set default symbol visibility. Use --disable-reduce-exports.])])
+ fi
  
 +dnl Check for leveldb, only if explicitly requested
  LEVELDB_CPPFLAGS=
