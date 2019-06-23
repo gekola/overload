@@ -92,7 +92,6 @@ RDEPEND="
 		dev-libs/icu:=
 		dev-libs/glib
 		>=dev-libs/boost-1.65.0:=
-		dev-libs/zookeeper-c
 		mysql? ( virtual/libmysqlclient )
 	)
 	dev-libs/libpcre
@@ -125,7 +124,6 @@ DEPEND="${RDEPEND}
 		dev-libs/icu[static-libs]
 		dev-libs/glib[static-libs]
 		>=dev-libs/boost-1.65.0[static-libs]
-		dev-libs/zookeeper-c[static-libs]
 		virtual/libmysqlclient[static-libs]
 	)
 	dev-util/patchelf
