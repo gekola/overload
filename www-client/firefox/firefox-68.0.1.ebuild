@@ -12,7 +12,7 @@ PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 # This list can be updated with scripts/get_langs.sh from the mozilla overlay
 MOZ_LANGS=(ach af an ar ast az be bg bn br bs ca cak cs cy da de dsb el en en-CA
 en-GB en-US eo es-AR es-CL es-ES es-MX et eu fa ff fi fr fy-NL ga-IE gd gl gn gu-IN
-he hi-IN hr hsb hu hy-AM id is it ja ka kab kk km kn ko lij lt lv mk mr ms my
+he hi-IN hr hsb hu hy-AM ia id is it ja ka kab kk km kn ko lij lt lv mk mr ms my
 nb-NO nl nn-NO oc pa-IN pl pt-BR pt-PT rm ro ru si sk sl son sq sr sv-SE ta te
 th tr uk ur uz vi xh zh-CN zh-TW )
 
@@ -27,7 +27,7 @@ if [[ ${MOZ_ESR} == 1 ]] ; then
 fi
 
 # Patch version
-PATCH="${PN}-68.0-patches-07"
+PATCH="${PN}-68.0-patches-08"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
 MOZ_SRC_URI="${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz"
@@ -158,12 +158,12 @@ DEPEND="${CDEPEND}
 		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
-	>=virtual/cargo-1.31.0
-	>=virtual/rust-1.31.0
+	>=virtual/cargo-1.34.0
+	>=virtual/rust-1.34.0
 	wayland? ( >=x11-libs/gtk+-3.11:3[wayland] )
 	amd64? ( >=dev-lang/yasm-1.1 virtual/opengl )
 	x86? ( >=dev-lang/yasm-1.1 virtual/opengl )
-	!system-av1? ( dev-lang/nasm )"
+	!system-av1? ( >=dev-lang/nasm-2.13 )"
 
 # Due to a bug in GCC, profile guided optimization will produce
 # AVX2 instructions, bug #677052
