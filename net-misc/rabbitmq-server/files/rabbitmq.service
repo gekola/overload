@@ -1,5 +1,6 @@
 [Unit]
 Description=RabbitMQ daemon
+Wants=epmd.service
 
 [Service]
 Type=simple

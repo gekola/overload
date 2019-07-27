@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
@@ -17,14 +17,14 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 RESTRICT="test"
 
-RDEPEND=" || ( ( >=dev-lang/erlang-20.3[ssl,smp] <dev-lang/erlang-21.1[ssl,smp] ) >=dev-lang/erlang-21.1[ssl] )"
+RDEPEND=" || ( ( >=dev-lang/erlang-21.0[ssl,smp] <dev-lang/erlang-21.1[ssl,smp] ) >=dev-lang/erlang-21.1[ssl] )"
 DEPEND="${RDEPEND}
 	app-arch/zip
 	app-arch/unzip
 	app-text/docbook-xml-dtd:4.5
 	app-text/xmlto
 	>=dev-lang/elixir-1.6.6
-	<dev-lang/elixir-1.9.0
+	<dev-lang/elixir-1.10.0
 	dev-libs/libxslt
 	$(python_gen_any_dep 'dev-python/simplejson[${PYTHON_USEDEP}]')
 "
@@ -60,7 +60,7 @@ src_install() {
 	done
 
 	# install the init script
-	newinitd "${FILESDIR}"/rabbitmq-server.init-r3 rabbitmq
+	newinitd "${FILESDIR}"/rabbitmq-server.init-r4 rabbitmq
 	systemd_dounit "${FILESDIR}/rabbitmq.service"
 
 	# install documentation
@@ -94,12 +94,12 @@ pkg_preinst() {
 		elog
 		elog "Please read release notes before upgrading:"
 		elog
-		elog "http://www.rabbitmq.com/release-notes/README-3.0.0.txt"
+		elog "https://www.rabbitmq.com/release-notes/README-3.0.0.txt"
 	fi
 	if has_version "<net-misc/rabbitmq-server-3.3.0"; then
 		elog
 		elog "This release changes the behaviour of the default guest user:"
 		elog
-		elog "http://www.rabbitmq.com/access-control.html"
+		elog "https://www.rabbitmq.com/access-control.html"
 	fi
 }
