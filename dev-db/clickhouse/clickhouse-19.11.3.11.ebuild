@@ -13,9 +13,9 @@ declare -A contrib_versions=(
 	["cctz"]="4f9776a"
 	["double-conversion"]="cf2f0f3"
 	["googletest"]="d175c8b"
-	["librdkafka"]="8695b9d"
+	["librdkafka"]="6160ec2"
 	["lz4"]="7a4e3b1"
-	["poco"]="29439cf"
+	["poco"]="ece721f"
 	["re2"]="7cf8b88"
 	["ssl"]="ba8de79"
 	["zstd"]="2555975"
@@ -134,10 +134,6 @@ DEPEND="${RDEPEND}
 		>=sys-devel/clang-5.0
 	)
 "
-
-PATCHES=(
-	"${FILESDIR}/${PN}-fix-gcc9.patch"
-)
 
 pkg_pretend() {
 	CHECKREQS_DISK_BUILD="2G"
