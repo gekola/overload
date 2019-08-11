@@ -20,14 +20,15 @@
  
      cflags += [ "-flto=thin" ]
  
-@@ -660,23 +660,24 @@ config("compiler") {
+@@ -660,24 +660,24 @@ config("compiler") {
        # Limit the parallelism to avoid too aggressive competition between
        # linker jobs. This is still suboptimal to a potential dynamic
        # resource allocation scheme, but should be good enough.
 -      if (use_lld) {
 -        ldflags += [ "-Wl,--thinlto-jobs=8" ]
 -
--        # Disable caching on Chrome OS temporarily (crbug.com/889967)
+-        # Caching on Chrome OS materially slows the PFQ down; disable it until
+-        # we can figure out why. (crbug.com/964328)
 -        if (!is_chromeos) {
 -          # Limit the size of the ThinLTO cache to the lesser of 10% of
 -          # available disk space, 10GB and 100000 files.

@@ -178,16 +178,12 @@ For native file dialogs in KDE, install kde-apps/kdialog.
 PATCHES=(
 	"${FILESDIR}/${PN}-compiler-r5.patch"
 	"${FILESDIR}/${PN}-disable-third-party-lzma-sdk-r0.patch"
-	"${FILESDIR}/${PN}-gold-r3.patch"
+	"${FILESDIR}/${PN}-gold-r4.patch"
 	"${FILESDIR}/${PN}-empty-array-r0.patch"
-	"${FILESDIR}/${PN}-fix-atomic-r0.patch"
 	# Gentoo patches
-	"${FILESDIR}/${PN}-fix-gn-gen.patch"
-	"${FILESDIR}/${PN}-llvm8.patch"
 	"${FILESDIR}/${PN}-lss.patch"
-	"${FILESDIR}/${PN}-unique_ptr.patch"
 	# Extra patches taken from openSUSE
-	"${FILESDIR}/${PN}-libusb-interrupt-event-handler-r0.patch"
+	"${FILESDIR}/${PN}-libusb-interrupt-event-handler-r1.patch"
 	"${FILESDIR}/${PN}-system-libusb-r0.patch"
 	"${FILESDIR}/${PN}-system-nspr-r0.patch"
 	"${FILESDIR}/${PN}-system-openjpeg-r0.patch"
@@ -199,7 +195,7 @@ S="${WORKDIR}/chromium-${PV/_*}"
 pre_build_checks() {
 	# Check build requirements (Bug #541816)
 	CHECKREQS_MEMORY="3G"
-	CHECKREQS_DISK_BUILD="5G"
+	CHECKREQS_DISK_BUILD="7G"
 	if use custom-cflags && ( shopt -s extglob; is-flagq '-g?(gdb)?([1-9])' ); then
 		CHECKREQS_DISK_BUILD="25G"
 	fi
@@ -255,6 +251,7 @@ src_prepare() {
 	eend $? || die
 
 	local keeplibs=(
+		base/third_party/cityhash
 		base/third_party/dmg_fp
 		base/third_party/dynamic_annotations
 		base/third_party/icu
@@ -290,6 +287,8 @@ src_prepare() {
 		third_party/blink
 		third_party/boringssl
 		third_party/boringssl/src/third_party/fiat
+		third_party/boringssl/src/third_party/sike
+		third_party/boringssl/linux-x86_64/crypto/third_party/sike
 		third_party/breakpad
 		third_party/breakpad/breakpad/src/third_party/curl
 		third_party/brotli
@@ -353,7 +352,7 @@ src_prepare() {
 		third_party/metrics_proto
 		third_party/modp_b64
 		third_party/nasm
-		third_party/openmax_dl
+		third_party/openscreen
 		third_party/ots
 		third_party/perfetto
 		third_party/pffft
@@ -368,6 +367,7 @@ src_prepare() {
 		third_party/sfntly
 		third_party/simplejson
 		third_party/skia
+		third_party/skia/include/third_party/skcms
 		third_party/skia/include/third_party/vulkan
 		third_party/skia/third_party/gif
 		third_party/skia/third_party/skcms
@@ -400,6 +400,7 @@ src_prepare() {
 		v8/src/third_party/siphash
 		v8/src/third_party/valgrind
 		v8/src/third_party/utf8-decoder
+		v8/third_party/inspector_protocol
 		v8/third_party/v8
 	)
 
