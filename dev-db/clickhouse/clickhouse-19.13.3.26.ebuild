@@ -135,6 +135,10 @@ DEPEND="${RDEPEND}
 	)
 "
 
+PATCHES=(
+       "${FILESDIR}/${PN}-fix-mysql8.patch"
+)
+
 pkg_pretend() {
 	CHECKREQS_DISK_BUILD="2G"
 	# Actually it is 960M on my machine
