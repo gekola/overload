@@ -14,8 +14,10 @@ declare -A contrib_versions=(
 	["double-conversion"]="cf2f0f3"
 	["googletest"]="d175c8b"
 	["librdkafka"]="6160ec2"
+	["libunwind"]="5afe6d8"
 	["lz4"]="7a4e3b1"
-	["poco"]="ea2516b"
+	["orc"]="5981208"
+	["poco"]="6216cc0"
 	["re2"]="7cf8b88"
 	["ssl"]="ba8de79"
 	["zstd"]="2555975"
@@ -46,6 +48,8 @@ else
 	SRC_URI="
 		https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.tar.gz -> ${P}.tar.gz
 		https://github.com/google/cctz/archive/$(contrib_mapping cctz)
+		orc? ( https://github.com/apache/orc/archive/$(contrib_mapping orc) )
+		unwind? ( !system-libunwind? ( https://github.com/ClickHouse-Extras/libunwind/archive/$(contrib_mapping libunwind) ) )
 		!system-capnproto? ( https://github.com/capnproto/capnproto/archive/$(contrib_mapping capnproto) )
 		!system-double-conversion? ( https://github.com/google/double-conversion/archive/$(contrib_mapping double-conversion) )
 		test? ( !system-gtest? ( https://github.com/google/googletest/archive/$(contrib_mapping googletest) ) )
@@ -60,7 +64,7 @@ else
 fi
 
 SLOT="0/${TYPE}"
-IUSE=" +client doc kafka mongodb mysql +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools cpu_flags_x86_sse4_2"
+IUSE=" +client doc kafka mongodb mysql orc +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools unwind cpu_flags_x86_sse4_2"
 KEYWORDS="~amd64"
 
 REQUIRED_USE="
@@ -80,7 +84,7 @@ RDEPEND="
 		system-lz4? ( app-arch/lz4 )
 		system-zstd? ( app-arch/zstd )
 		kafka? ( system-librdkafka? ( dev-libs/librdkafka:= ) )
-		system-libunwind? ( sys-libs/libunwind:7 )
+		unwind? ( system-libunwind? ( sys-libs/libunwind:7 ) )
 		system-ssl? ( dev-libs/openssl:0= )
 
 		dev-libs/libltdl:0
@@ -93,6 +97,7 @@ RDEPEND="
 		dev-libs/glib
 		>=dev-libs/boost-1.65.0:=
 		mysql? ( virtual/libmysqlclient )
+		orc? ( dev-libs/cyrus-sasl:2= )
 	)
 	dev-libs/libpcre
 	system-poco? ( >=dev-libs/poco-1.9.0 )
@@ -111,7 +116,7 @@ DEPEND="${RDEPEND}
 		system-lz4? ( app-arch/lz4[static-libs] )
 		system-zstd? ( app-arch/zstd[static-libs] )
 		kafka? ( system-librdkafka? ( dev-libs/librdkafka[static-libs] ) )
-		system-libunwind? ( sys-libs/libunwind:7[static-libs] )
+		unwind? ( system-libunwind? ( sys-libs/libunwind:7[static-libs] ) )
 		system-ssl? ( dev-libs/openssl[static-libs] )
 
 		system-capnproto? ( dev-libs/capnproto[static-libs] )
@@ -125,18 +130,21 @@ DEPEND="${RDEPEND}
 		dev-libs/glib[static-libs]
 		>=dev-libs/boost-1.65.0[static-libs]
 		virtual/libmysqlclient[static-libs]
+		orc? ( dev-libs/cyrus-sasl:2[static-libs] )
 	)
 	dev-util/patchelf
 	>=sys-devel/lld-6.0.0
 	sys-libs/libtermcap-compat
 	|| (
-		>=sys-devel/gcc-7.0
-		>=sys-devel/clang-5.0
+		>=sys-devel/gcc-8.0
+		>=sys-devel/clang-7.0
 	)
 "
 
 PATCHES=(
-       "${FILESDIR}/${PN}-fix-mysql8.patch"
+		"${FILESDIR}/${PN}-fix-mysql8-r1.patch"
+		"${FILESDIR}/${PN}-allow-no-orc.patch"
+		"${FILESDIR}/${PN}-allow-system-unwind.patch"
 )
 
 pkg_pretend() {
@@ -145,8 +153,8 @@ pkg_pretend() {
 	check-reqs_pkg_pretend
 	if [[ $(tc-getCC) == clang ]]; then
 		:
-	elif [[ $(gcc-major-version) -lt 7 ]]; then
-		eerror "Compilation with gcc older than 7.0 is not supported"
+	elif [[ $(gcc-major-version) -lt 8 ]]; then
+		eerror "Compilation with gcc older than 8.0 is not supported"
 		die "Too old gcc found."
 	fi
 }
@@ -155,20 +163,23 @@ src_unpack() {
 	default_src_unpack
 	[[ ${PV} == 9999 ]] && return 0
 	cd "${S}/contrib"
-	mkdir -p cctz double-conversion googletest librdkafka lz4 re2 zstd
-	tar --strip-components=1 -C cctz -xf "${DISTDIR}/cctz-4f9776a.tar.gz"
-	use system-capnproto || tar --strip-components=1 -C capnproto -xf "${DISTDIR}/$(contrib_file capnproto y)"
-	use system-double-conversion || tar --strip-components=1 -C double-conversion -xf "${DISTDIR}/$(contrib_file double-conversion y)"
-	use system-lz4 || tar --strip-components=1 -C lz4 -xf "${DISTDIR}/$(contrib_file lz4 y)"
-	use system-poco || tar --strip-components=1 -C poco -xf "${DISTDIR}/$(contrib_file poco y)"
-	use system-re2 || tar --strip-components=1 -C re2 -xf "${DISTDIR}/$(contrib_file re2 y)"
-	use system-ssl || tar --strip-components=1 -C ssl -xf "${DISTDIR}/$(contrib_file ssl y)"
-	use system-zstd || tar --strip-components=1 -C zstd -xf "${DISTDIR}/$(contrib_file zstd y)"
+	mkdir -p cctz double-conversion googletest librdkafka lz4 orc re2 zstd
+	tar --strip-components=1 -C cctz -xf "${DISTDIR}/cctz-${contrib_versions[cctz]}.tar.gz" || die
+	if use orc; then
+		tar --strip-components=1 -C orc -xf "${DISTDIR}/orc-${contrib_versions[orc]}.tar.gz" || die
+	fi
+	use system-capnproto || tar --strip-components=1 -C capnproto -xf "${DISTDIR}/$(contrib_file capnproto y)" || die
+	use system-double-conversion || tar --strip-components=1 -C double-conversion -xf "${DISTDIR}/$(contrib_file double-conversion y)" || die
+	use system-lz4 || tar --strip-components=1 -C lz4 -xf "${DISTDIR}/$(contrib_file lz4 y)" || die
+	use system-poco || tar --strip-components=1 -C poco -xf "${DISTDIR}/$(contrib_file poco y)" || die
+	use system-re2 || tar --strip-components=1 -C re2 -xf "${DISTDIR}/$(contrib_file re2 y)" || die
+	use system-ssl || tar --strip-components=1 -C ssl -xf "${DISTDIR}/$(contrib_file ssl y)" || die
+	use system-zstd || tar --strip-components=1 -C zstd -xf "${DISTDIR}/$(contrib_file zstd y)" || die
 	if use kafka; then
-		use system-librdkafka || tar --strip-components=1 -C librdkafka -xf "${DISTDIR}/$(contrib_file librdkafka y)"
+		use system-librdkafka || tar --strip-components=1 -C librdkafka -xf "${DISTDIR}/$(contrib_file librdkafka y)" || die
 	fi
 	if use test; then
-		use system-gtest || tar --strip-components=1 -C googletest -xf "${DISTDIR}/$(contrib_file googletest y)"
+		use system-gtest || tar --strip-components=1 -C googletest -xf "${DISTDIR}/$(contrib_file googletest y)" || die
 	fi
 }
 
@@ -196,11 +207,11 @@ src_configure() {
 		-DUSE_MYSQL="$(usex mysql)"
 		-DENABLE_RDKAFKA="$(usex kafka)"
 		-DENABLE_TESTS="$(usex test)"
+		-DUSE_UNWIND="$(usex unwind)"
 		-DENABLE_CLICKHOUSE_SERVER="$(usex server)"
 		-DENABLE_CLICKHOUSE_CLIENT="$(usex client)"
 		-DENABLE_CLICKHOUSE_LOCAL="$(usex tools)"
 		-DENABLE_CLICKHOUSE_BENCHMARK="$(usex tools)"
-		-DENABLE_CLICKHOUSE_PERFORMANCE="$(usex tools)"
 		-DENABLE_CLICKHOUSE_COPIER="$(usex tools)"
 		-DENABLE_CLICKHOUSE_EXTRACT_FROM_CONFIG="$(usex tools)"
 		-DENABLE_CLICKHOUSE_COMPRESSOR="$(usex tools)"
@@ -213,6 +224,7 @@ src_configure() {
 		-DUSE_INTERNAL_DOUBLE_CONVERSION_LIBRARY="$(usex !system-double-conversion)"
 		-DUSE_INTERNAL_RDKAFKA_LIBRARY="$(usex !system-librdkafka)"
 		-DUSE_INTERNAL_LZ4_LIBRARY="$(usex !system-lz4)"
+		-DUSE_INTERNAL_ORC_LIBRARY="$(usex orc)"
 		-DUSE_INTERNAL_POCO_LIBRARY="$(usex !system-poco)"
 		-DUSE_INTERNAL_RE2_LIBRARY="$(usex !system-re2)"
 		-DUSE_INTERNAL_SSL_LIBRARY="$(usex !system-ssl)"
@@ -239,6 +251,8 @@ src_install() {
 	patchelf --remove-rpath dbms/src/Server/clickhouse
 
 	cmake-utils_src_install
+
+	rm -rf "${ED}/usr/cmake"
 
 	if ! use test; then
 		rm -rf "${ED}/usr/share/clickhouse-test" \

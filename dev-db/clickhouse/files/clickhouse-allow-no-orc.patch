@@ -1,0 +1,14 @@
+--- a/cmake/find_orc.cmake	2019-09-10 23:33:46.749890437 +0300
++++ b/cmake/find_orc.cmake	2019-09-10 23:34:19.219889599 +0300
+@@ -1,8 +1,8 @@
+ ##TODO replace hardcode to find procedure
+ 
+ set(USE_ORC 0)
+-set(USE_INTERNAL_ORC_LIBRARY ON)
++option(USE_INTERNAL_ORC_LIBRARY "Use Apache ORC library" ON)
+ 
+ if (ARROW_LIBRARY)
+     set(USE_ORC 1)
+-endif()
+\ No newline at end of file
++endif()

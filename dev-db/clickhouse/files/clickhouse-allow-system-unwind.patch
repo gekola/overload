@@ -1,0 +1,25 @@
+--- a/cmake/find_unwind.cmake	2019-09-11 01:19:41.509726413 +0300
++++ b/cmake/find_unwind.cmake	2019-09-11 01:22:53.959721446 +0300
+@@ -1,12 +1,20 @@
+ option (USE_UNWIND "Enable libunwind (better stacktraces)" ON)
++option (USE_INTERNAL_UNWIND_LIBRARY "Set to FALSE to use system unwind library instead of bundled" ON)
+ 
+ if (NOT CMAKE_SYSTEM MATCHES "Linux" OR ARCH_ARM OR ARCH_32)
+     set (USE_UNWIND OFF)
+ endif ()
+ 
+ if (USE_UNWIND)
+-    add_subdirectory(contrib/libunwind-cmake)
+-    set (UNWIND_LIBRARIES unwind)
++    if(USE_INTERNAL_UNWIND_LIBRARY)
++        add_subdirectory(contrib/libunwind-cmake)
++        set (UNWIND_LIBRARIES unwind)
++    else()
++        find_library (UNWIND_LIBRARIES unwind)
++        find_path (UNWIND_INCLUDE_DIR NAMES unwind.h PATHS ${UNWIND_INCLUDE_PATHS})
++        set(CMAKE_REQUIRED_INCLUDES ${UNWIND_INCLUDE_DIR})
++        set(CMAKE_REQUIRED_LIBRARIES ${UNWIND_LIBRARIES})
++    endif()
+     set (EXCEPTION_HANDLING_LIBRARY ${UNWIND_LIBRARIES})
+ 
+     message (STATUS "Using libunwind: ${UNWIND_LIBRARIES}")
