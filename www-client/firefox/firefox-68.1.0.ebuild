@@ -4,7 +4,7 @@
 EAPI="6"
 VIRTUALX_REQUIRED="pgo"
 WANT_AUTOCONF="2.1"
-MOZ_ESR=""
+MOZ_ESR="1"
 
 PYTHON_COMPAT=( python3_{5,6,7} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
@@ -27,7 +27,7 @@ if [[ ${MOZ_ESR} == 1 ]] ; then
 fi
 
 # Patch version
-PATCH="${PN}-68.0-patches-09"
+PATCH="${PN}-68.0-patches-11"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
 MOZ_SRC_URI="${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz"
@@ -38,7 +38,7 @@ if [[ "${PV}" == *_rc* ]]; then
 	MOZ_SRC_URI="${MOZ_HTTP_URI}/source/${PN}-${MOZ_PV}.source.tar.xz -> $P.tar.xz"
 fi
 
-LLVM_MAX_SLOT=8
+LLVM_MAX_SLOT=9
 
 inherit check-reqs eapi7-ver flag-o-matic toolchain-funcs eutils \
 		gnome2-utils llvm mozcoreconf-v6 pax-utils xdg-utils \
@@ -70,7 +70,7 @@ CDEPEND="
 	dev-libs/expat
 	>=x11-libs/cairo-1.10[X]
 	>=x11-libs/gtk+-2.18:2
-	>=x11-libs/gtk+-3.4.0:3=[X]
+	>=x11-libs/gtk+-3.4.0:3[X]
 	x11-libs/gdk-pixbuf
 	>=x11-libs/pango-1.22.0
 	>=media-libs/libpng-1.6.35:0=[apng]
@@ -129,6 +129,15 @@ DEPEND="${CDEPEND}
 	>=sys-devel/binutils-2.30
 	sys-apps/findutils
 	|| (
+		(
+			sys-devel/clang:9
+			!clang? ( sys-devel/llvm:9 )
+			clang? (
+				=sys-devel/lld-9*
+				sys-devel/llvm:9[gold]
+				pgo? ( =sys-libs/compiler-rt-sanitizers-9*[profile] )
+			)
+		)
 		(
 			sys-devel/clang:8
 			!clang? ( sys-devel/llvm:8 )
@@ -262,6 +271,7 @@ src_unpack() {
 
 src_prepare() {
 	use !wayland && rm -f "${WORKDIR}/firefox/2019_mozilla-bug1539471.patch"
+	rm -rf "${WORKDIR}"/firefox/2013_avoid_noinline_on_GCC_with_skcms.patch
 	eapply "${WORKDIR}/firefox"
 
 	# Allow user to apply any additional patches without modifing ebuild
