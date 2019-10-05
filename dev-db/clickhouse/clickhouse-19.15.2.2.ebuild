@@ -132,6 +132,7 @@ DEPEND="${RDEPEND}
 		virtual/libmysqlclient[static-libs]
 		orc? ( dev-libs/cyrus-sasl:2[static-libs] )
 	)
+	dev-cpp/sparsehash
 	dev-util/patchelf
 	>=sys-devel/lld-6.0.0
 	sys-libs/libtermcap-compat
@@ -143,8 +144,7 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 		"${FILESDIR}/${PN}-fix-mysql8-r1.patch"
-		"${FILESDIR}/${PN}-allow-no-orc.patch"
-		"${FILESDIR}/${PN}-allow-system-unwind.patch"
+		"${FILESDIR}/${PN}-allow-system-unwind-r1.patch"
 )
 
 pkg_pretend() {
