@@ -27,7 +27,7 @@ if [[ ${MOZ_ESR} == 1 ]] ; then
 fi
 
 # Patch version
-PATCH="${PN}-68.0-patches-11"
+PATCH="${PN}-68.0-patches-12"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
 MOZ_SRC_URI="${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz"
@@ -167,7 +167,6 @@ DEPEND="${CDEPEND}
 		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
-	>=virtual/cargo-1.34.0
 	>=virtual/rust-1.34.0
 	wayland? ( >=x11-libs/gtk+-3.11:3[wayland] )
 	amd64? ( >=dev-lang/yasm-1.1 virtual/opengl )
@@ -253,7 +252,7 @@ pkg_setup() {
 
 pkg_pretend() {
 	# Ensure we have enough disk space to compile
-	if use pgo || use debug || use test ; then
+	if use pgo || use lto || use debug || use test ; then
 		CHECKREQS_DISK_BUILD="8G"
 	else
 		CHECKREQS_DISK_BUILD="4G"
@@ -270,8 +269,8 @@ src_unpack() {
 }
 
 src_prepare() {
-	use !wayland && rm -f "${WORKDIR}/firefox/2019_mozilla-bug1539471.patch"
 	rm -rf "${WORKDIR}"/firefox/2013_avoid_noinline_on_GCC_with_skcms.patch
+	rm "${WORKDIR}"/firefox/2015_fix_cssparser.patch
 	eapply "${WORKDIR}/firefox"
 
 	# Allow user to apply any additional patches without modifing ebuild
@@ -568,9 +567,6 @@ src_configure() {
 	fi
 
 	mozconfig_annotate '' --enable-extensions="${MEXTENSIONS}"
-
-	# disable webrtc for now, bug 667642
-	use arm && mozconfig_annotate 'broken on arm' --disable-webrtc
 
 	# allow elfhack to work in combination with unstripped binaries
 	# when they would normally be larger than 2GiB.
