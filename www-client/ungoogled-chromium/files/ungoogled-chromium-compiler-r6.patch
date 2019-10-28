@@ -7,12 +7,12 @@
 -    ":clang_revision",
      ":compiler_cpu_abi",
      ":compiler_codegen",
-   ]
+     ":compiler_deterministic",
 @@ -765,7 +764,6 @@ config("compiler_cpu_abi") {
      if (current_cpu == "x64") {
        cflags += [
          "-m64",
--        "-march=x86-64",
+-        "-march=$x64_arch",
        ]
        ldflags += [ "-m64" ]
      } else if (current_cpu == "x86") {

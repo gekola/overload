@@ -28,21 +28,22 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="
-	+cfi closure-compile cups custom-cflags gnome gold jumbo-build kerberos libcxx
-	+lld new-tcmalloc optimize-thinlto optimize-webui +pdf +proprietary-codecs
-	pulseaudio selinux +suid +system-ffmpeg system-harfbuzz +system-icu
-	+system-jsoncpp +system-libevent +system-libvpx +system-openh264
+	+cfi +clang closure-compile cups custom-cflags gnome gold jumbo-build kerberos
+	libcxx +lld new-tcmalloc optimize-thinlto optimize-webui +pdf
+	+proprietary-codecs pulseaudio selinux +suid +system-ffmpeg system-harfbuzz
+	+system-icu	+system-jsoncpp +system-libevent +system-libvpx +system-openh264
 	+system-openjpeg +tcmalloc +thinlto vaapi widevine
 "
 REQUIRED_USE="
 	^^ ( gold lld )
 	|| ( $(python_gen_useflags 'python3*') )
 	|| ( $(python_gen_useflags 'python2*') )
-	cfi? ( thinlto )
+	cfi? ( clang thinlto )
 	libcxx? ( new-tcmalloc )
 	new-tcmalloc? ( tcmalloc )
 	optimize-thinlto? ( thinlto )
 	system-openjpeg? ( pdf )
+	thinlto? ( clang )
 	x86? ( !lld !thinlto !widevine )
 "
 RESTRICT="
@@ -101,7 +102,7 @@ CDEPEND="
 	)
 	system-harfbuzz? (
 		media-libs/freetype:=
-		>=media-libs/harfbuzz-2.2.0:0=[icu(-)]
+		>=media-libs/harfbuzz-2.4.0:0=[icu(-)]
 	)
 	system-icu? ( >=dev-libs/icu-64:= )
 	system-jsoncpp? ( dev-libs/jsoncpp )
@@ -116,7 +117,6 @@ RDEPEND="${CDEPEND}
 	virtual/ttf-fonts
 	x11-misc/xdg-utils
 	selinux? ( sec-policy/selinux-chromium )
-	widevine? ( !x86? ( www-plugins/chrome-binary-plugins[widevine(-)] ) )
 	!www-client/chromium
 	!www-client/ungoogled-chromium-bin
 "
@@ -128,18 +128,18 @@ BDEPEND="
 	>=app-arch/gzip-1.7
 	dev-lang/perl
 	dev-lang/yasm
-	<dev-util/gn-0.1583
+	dev-util/gn
 	>=dev-util/gperf-3.0.3
 	>=dev-util/ninja-1.7.2
 	dev-vcs/git
 	sys-apps/hwids[usb(+)]
 	>=sys-devel/bison-2.4.3
-	>=sys-devel/clang-7.0.0
+	clang? ( >=sys-devel/clang-7.0.0 )
 	sys-devel/flex
 	>=sys-devel/llvm-7.0.0[gold?]
 	virtual/libusb:1
 	virtual/pkgconfig
-	cfi? ( >=sys-devel/clang-runtime-7.0.0[sanitize] )
+	cfi? ( clang? ( >=sys-devel/clang-runtime-7.0.0[sanitize] ) )
 	libcxx? (
 		sys-libs/libcxx
 		sys-libs/libcxxabi
@@ -176,8 +176,14 @@ For native file dialogs in KDE, install kde-apps/kdialog.
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-compiler-r5.patch"
+	"${FILESDIR}/${PN}-compiler-r6.patch"
+	"${FILESDIR}/${PN}-disable-swiftshader.patch"
 	"${FILESDIR}/${PN}-disable-third-party-lzma-sdk-r0.patch"
+	"${FILESDIR}/${PN}-disable-tracing.patch"
+	"${FILESDIR}/${PN}-fix-gcc.patch"
+	"${FILESDIR}/${PN}-fix-gn.patch"
+	"${FILESDIR}/${PN}-fix-unique-ptr.patch"
+	"${FILESDIR}/${PN}-fix-numeric-limits.patch"
 	"${FILESDIR}/${PN}-gold-r4.patch"
 	"${FILESDIR}/${PN}-empty-array-r0.patch"
 	# Gentoo patches
@@ -186,8 +192,9 @@ PATCHES=(
 	"${FILESDIR}/${PN}-libusb-interrupt-event-handler-r1.patch"
 	"${FILESDIR}/${PN}-system-libusb-r0.patch"
 	"${FILESDIR}/${PN}-system-nspr-r0.patch"
-	"${FILESDIR}/${PN}-system-openjpeg-r0.patch"
+	"${FILESDIR}/${PN}-system-openjpeg-r1.patch"
 	"${FILESDIR}/${PN}-system-fix-shim-headers-r0.patch"
+	"${FILESDIR}/${PN}-system-zlib.patch"
 )
 
 S="${WORKDIR}/chromium-${PV/_*}"
@@ -224,7 +231,11 @@ src_prepare() {
 	default
 
 	if use "system-jsoncpp" ; then
-		eapply "${FILESDIR}/${PN}-system-jsoncpp-r0.patch" || die
+		eapply "${FILESDIR}/${PN}-system-jsoncpp-r1.patch" || die
+	fi
+
+	if use "system-icu" ; then
+		eapply "${FILESDIR}/${PN}-system-icu.patch" || die
 	fi
 
 	if use optimize-webui; then
@@ -352,7 +363,9 @@ src_prepare() {
 		third_party/metrics_proto
 		third_party/modp_b64
 		third_party/nasm
+		third_party/one_euro_filter
 		third_party/openscreen
+		third_party/openscreen/src/third_party/tinycbor/src/src
 		third_party/ots
 		third_party/perfetto
 		third_party/pffft
@@ -467,9 +480,11 @@ setup_compile_flags() {
 		fi
 	fi
 
-	# 'gcc_s' is still required if 'compiler-rt' is Clang's default rtlib
-	has_version 'sys-devel/clang[default-compiler-rt]' && \
-		append-ldflags "-Wl,-lgcc_s"
+	if use clang; then
+		# 'gcc_s' is still required if 'compiler-rt' is Clang's default rtlib
+		has_version 'sys-devel/clang[default-compiler-rt]' && \
+			append-ldflags "-Wl,-lgcc_s"
+	fi
 
 	if use thinlto; then
 		# We need to change the default value of import-instr-limit in
@@ -516,12 +531,14 @@ src_configure() {
 	# Make sure the build system will use the right tools (Bug #340795)
 	tc-export AR CC CXX NM
 
-	# Force clang
-	CC=${CHOST}-clang
-	CXX=${CHOST}-clang++
-	AR=llvm-ar
-	NM=llvm-nm
-	strip-unsupported-flags
+	if use clang; then
+		# Force clang
+		CC=${CHOST}-clang
+		CXX=${CHOST}-clang++
+		AR=llvm-ar
+		NM=llvm-nm
+		strip-unsupported-flags
+	fi
 
 	local gn_system_libraries=(
 		flac
@@ -551,7 +568,7 @@ src_configure() {
 	local myconf_gn=(
 		# Clang features
 		"is_cfi=$(usetf cfi)" # Implies use_cfi_icall=true
-		"is_clang=true"
+		"is_clang=$(usetf clang)"
 		"clang_use_chrome_plugins=false"
 		"thin_lto_enable_optimizations=$(usetf optimize-thinlto)"
 		"use_lld=$(usetf lld)"
@@ -678,6 +695,12 @@ src_compile() {
 	use suid && eninja -C out/Release chrome_sandbox
 
 	pax-mark m out/Release/chrome
+
+	# Build manpage; bug #684550
+	sed -e 's|@@PACKAGE@@|chromium-browser|g;
+			s|@@MENUNAME@@|Chromium|g;' \
+			chrome/app/resources/manpage.1.in > \
+			out/Release/chromium-browser.1 || die
 }
 
 src_install() {
@@ -725,7 +748,7 @@ src_install() {
 
 	# Install icons and desktop entry
 	local branding size
-	for size in 16 22 24 32 48 64 128 256; do
+	for size in 16 24 32 48 64 128 256; do
 		case ${size} in
 			16|32) branding="chrome/app/theme/default_100_percent/chromium" ;;
 				*) branding="chrome/app/theme/chromium" ;;
@@ -748,6 +771,10 @@ src_install() {
 	# Install GNOME default application entry (Bug #303100)
 	insinto /usr/share/gnome-control-center/default-apps
 	doins "${FILESDIR}/chromium-browser.xml"
+
+	# Install manpage; bug #684550
+	doman out/Release/chromium-browser.1
+	dosym chromium-browser.1 /usr/share/man/man1/chromium.1
 
 	readme.gentoo_create_doc
 }
