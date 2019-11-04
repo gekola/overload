@@ -1,0 +1,30 @@
+--- a/base/strings/string_number_conversions.cc
++++ b/base/strings/string_number_conversions.cc
+@@ -16,7 +16,7 @@
+ #include "base/no_destructor.h"
+ #include "base/numerics/safe_math.h"
+ #include "base/strings/utf_string_conversions.h"
+-#include "base/third_party/double_conversion/double-conversion/double-conversion.h"
++#include <double-conversion/double-conversion.h>
+ 
+ namespace base {
+ 
+--- a/base/BUILD.gn
++++ b/base/BUILD.gn
+@@ -1231,7 +1231,7 @@
+   defines = []
+   data = []
+   data_deps = []
+-  libs = []
++  libs = [ "double-conversion" ]
+ 
+   configs += [
+     ":base_flags",
+@@ -1243,7 +1243,6 @@
+   deps = [
+     "//base/allocator",
+     "//base/allocator:buildflags",
+-    "//base/third_party/double_conversion",
+     "//base/third_party/dynamic_annotations",
+     "//third_party/modp_b64",
+   ]

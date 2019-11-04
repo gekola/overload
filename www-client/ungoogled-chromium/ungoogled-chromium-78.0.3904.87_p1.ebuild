@@ -30,7 +30,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="
 	+cfi +clang closure-compile cups custom-cflags gnome gold jumbo-build kerberos
 	libcxx +lld new-tcmalloc optimize-thinlto optimize-webui +pdf
-	+proprietary-codecs pulseaudio selinux +suid +system-ffmpeg system-harfbuzz
+	+proprietary-codecs pulseaudio selinux +suid +system-double-conversion
+	+system-ffmpeg system-harfbuzz
 	+system-icu	+system-jsoncpp +system-libevent +system-libvpx +system-openh264
 	+system-openjpeg +tcmalloc +thinlto vaapi widevine
 "
@@ -107,7 +108,7 @@ CDEPEND="
 	system-icu? ( >=dev-libs/icu-64:= )
 	system-jsoncpp? ( dev-libs/jsoncpp )
 	system-libevent? ( dev-libs/libevent )
-	system-libvpx? ( >=media-libs/libvpx-1.7.0:=[postproc,svc] )
+	system-libvpx? ( >=media-libs/libvpx-1.8.1-r100:=[postproc,svc] )
 	system-openh264? ( >=media-libs/openh264-1.6.0:= )
 	system-openjpeg? ( media-libs/openjpeg:2= )
 	vaapi? ( x11-libs/libva:= )
@@ -177,24 +178,23 @@ For native file dialogs in KDE, install kde-apps/kdialog.
 
 PATCHES=(
 	"${FILESDIR}/${PN}-compiler-r6.patch"
+	"${FILESDIR}/${PN}-disable-font-tests.patch"
+	"${FILESDIR}/${PN}-disable-installer.patch"
 	"${FILESDIR}/${PN}-disable-swiftshader.patch"
 	"${FILESDIR}/${PN}-disable-third-party-lzma-sdk-r0.patch"
 	"${FILESDIR}/${PN}-disable-tracing.patch"
+	"${FILESDIR}/${PN}-fix-doh-const.patch"
 	"${FILESDIR}/${PN}-fix-gcc.patch"
-	"${FILESDIR}/${PN}-fix-gn.patch"
 	"${FILESDIR}/${PN}-fix-unique-ptr.patch"
-	"${FILESDIR}/${PN}-fix-numeric-limits.patch"
 	"${FILESDIR}/${PN}-gold-r4.patch"
 	"${FILESDIR}/${PN}-empty-array-r0.patch"
-	# Gentoo patches
 	"${FILESDIR}/${PN}-lss.patch"
-	# Extra patches taken from openSUSE
 	"${FILESDIR}/${PN}-libusb-interrupt-event-handler-r1.patch"
 	"${FILESDIR}/${PN}-system-libusb-r0.patch"
 	"${FILESDIR}/${PN}-system-nspr-r0.patch"
-	"${FILESDIR}/${PN}-system-openjpeg-r1.patch"
+	"${FILESDIR}/${PN}-system-openjpeg-r2.patch"
 	"${FILESDIR}/${PN}-system-fix-shim-headers-r0.patch"
-	"${FILESDIR}/${PN}-system-zlib.patch"
+	"${FILESDIR}/${PN}-system-zlib-r1.patch"
 )
 
 S="${WORKDIR}/chromium-${PV/_*}"
@@ -230,12 +230,21 @@ src_prepare() {
 
 	default
 
+	if use vaapi ; then
+		eapply "${FILESDIR}/${PN}-enable-vaapi-r1.patch" || die
+		eapply "${FILESDIR}/${PN}-fix-vaapi-r1.patch" || die
+	fi
+
 	if use "system-jsoncpp" ; then
 		eapply "${FILESDIR}/${PN}-system-jsoncpp-r1.patch" || die
 	fi
 
 	if use "system-icu" ; then
 		eapply "${FILESDIR}/${PN}-system-icu.patch" || die
+	fi
+
+	if use "system-double-conversion" ; then
+		eapply "${FILESDIR}/${PN}-system-double-conversion.patch" || die
 	fi
 
 	if use optimize-webui; then
@@ -263,7 +272,6 @@ src_prepare() {
 
 	local keeplibs=(
 		base/third_party/cityhash
-		base/third_party/dmg_fp
 		base/third_party/dynamic_annotations
 		base/third_party/icu
 		base/third_party/superfasthash
@@ -313,18 +321,21 @@ src_prepare() {
 		third_party/catapult/third_party/six
 		third_party/catapult/tracing/third_party/d3
 		third_party/catapult/tracing/third_party/gl-matrix
+		third_party/catapult/tracing/third_party/jpeg-js
 		third_party/catapult/tracing/third_party/jszip
 		third_party/catapult/tracing/third_party/mannwhitneyu
 		third_party/catapult/tracing/third_party/oboe
 		third_party/catapult/tracing/third_party/pako
 		third_party/ced
 		third_party/cld_3
+		third_party/closure_compiler
 		third_party/crashpad
 		third_party/crashpad/crashpad/third_party/zlib
 		third_party/crc32c
 		third_party/cros_system_api
 		third_party/dav1d
 		third_party/dawn
+		third_party/depot_tools
 		third_party/devscripts
 		third_party/dom_distiller_js
 		third_party/emoji-segmenter
@@ -371,6 +382,7 @@ src_prepare() {
 		third_party/pffft
 		third_party/ply
 		third_party/polymer
+		third_party/private-join-and-compute
 		third_party/protobuf
 		third_party/protobuf/third_party/six
 		third_party/pyjson5
@@ -409,6 +421,7 @@ src_prepare() {
 		third_party/xdg-utils
 		third_party/yasm/run_yasm.py
 		third_party/zlib/google
+		tools/grit/third_party/six
 		url/third_party/mozilla
 		v8/src/third_party/siphash
 		v8/src/third_party/valgrind
@@ -417,7 +430,6 @@ src_prepare() {
 		v8/third_party/v8
 	)
 
-	use closure-compile && keeplibs+=( third_party/closure_compiler )
 	use optimize-webui && keeplibs+=(
 		third_party/node
 		third_party/node/node_modules/polymer-bundler/lib/third_party/UglifyJS2
@@ -484,6 +496,8 @@ setup_compile_flags() {
 		# 'gcc_s' is still required if 'compiler-rt' is Clang's default rtlib
 		has_version 'sys-devel/clang[default-compiler-rt]' && \
 			append-ldflags "-Wl,-lgcc_s"
+	else
+		append-cxxflags -fpermissive
 	fi
 
 	if use thinlto; then
@@ -641,7 +655,6 @@ src_configure() {
 		"use_vaapi=$(usetf vaapi)"
 
 		# Additional flags
-		"enable_desktop_in_product_help=false"
 		"enable_pdf=$(usetf pdf)"
 		"enable_print_preview=$(usetf pdf)"
 		"rtc_build_examples=false"

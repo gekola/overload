@@ -1,13 +1,3 @@
---- a/third_party/pdfium/core/fpdfapi/BUILD.gn
-+++ b/third_party/pdfium/core/fpdfapi/BUILD.gn
-@@ -12,6 +12,7 @@
-   ]
-   configs += [ "../../:pdfium_core_config" ]
-   deps = [
-+    "../../third_party:libopenjpeg2",
-     "../fxcodec",
-     "../fxcrt",
-     "../fxge",
 --- a/third_party/pdfium/core/fpdfapi/page/BUILD.gn
 +++ b/third_party/pdfium/core/fpdfapi/page/BUILD.gn
 @@ -97,6 +97,7 @@
