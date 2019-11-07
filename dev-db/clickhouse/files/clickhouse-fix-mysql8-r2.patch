@@ -9,14 +9,3 @@
      if (mysql_options(driver.get(), MYSQL_OPT_RECONNECT, reinterpret_cast<const char *>(&reconnect)))
          throw ConnectionFailed(errorMessage(driver.get()), mysql_errno(driver.get()));
  
---- a/contrib/mariadb-connector-c-cmake/linux_x86_64/libmariadb/ma_client_plugin.c
-+++ b/contrib/mariadb-connector-c-cmake/linux_x86_64/libmariadb/ma_client_plugin.c
-@@ -50,7 +50,7 @@
-   struct st_mysql_client_plugin *plugin;
- };
- 
--static my_bool initialized= 0;
-+static bool initialized= 0;
- static MA_MEM_ROOT mem_root;
- 
- static uint valid_plugins[][2]= {

@@ -1,7 +1,7 @@
---- a/cmake/find/unwind.cmake	2019-09-11 01:19:41.509726413 +0300
-+++ b/cmake/find/unwind.cmake	2019-09-11 01:22:53.959721446 +0300
-@@ -1,12 +1,20 @@
- option (USE_UNWIND "Enable libunwind (better stacktraces)" ON)
+--- a/cmake/find/unwind.cmake
++++ b/cmake/find/unwind.cmake
+@@ -1,12 +1,21 @@
+ option (USE_UNWIND "Enable libunwind (better stacktraces)" ${ENABLE_LIBRARIES})
 +option (USE_INTERNAL_UNWIND_LIBRARY "Set to FALSE to use system unwind library instead of bundled" ON)
  
  if (NOT CMAKE_SYSTEM MATCHES "Linux" OR ARCH_ARM OR ARCH_32)
@@ -15,7 +15,8 @@
 +        add_subdirectory(contrib/libunwind-cmake)
 +        set (UNWIND_LIBRARIES unwind)
 +    else()
-+        find_library (UNWIND_LIBRARIES unwind)
++        find_library (UNWIND_LIBRARIES NAMES unwind)
++        check_library_exists(gcc_s __gcc_personality_v0 "" LIBUNWIND_HAS_GCC_S_LIB)
 +        find_path (UNWIND_INCLUDE_DIR NAMES unwind.h PATHS ${UNWIND_INCLUDE_PATHS})
 +        set(CMAKE_REQUIRED_INCLUDES ${UNWIND_INCLUDE_DIR})
 +        set(CMAKE_REQUIRED_LIBRARIES ${UNWIND_LIBRARIES})
@@ -23,3 +24,14 @@
      set (EXCEPTION_HANDLING_LIBRARY ${UNWIND_LIBRARIES})
  
      message (STATUS "Using libunwind: ${UNWIND_LIBRARIES}")
+--- a/cmake/find/cxx.cmake
++++ b/cmake/find/cxx.cmake
+@@ -32,5 +32,8 @@
+     message (STATUS "Using libcxxabi: ${LIBCXXABI_LIBRARY}")
+ else ()
+     target_link_libraries(global-libs INTERFACE -l:libstdc++.a -l:libstdc++fs.a) # Always link these libraries as static
+     target_link_libraries(global-libs INTERFACE ${EXCEPTION_HANDLING_LIBRARY})
++    if(LIBUNWIND_HAS_GCC_S_LIB)
++        target_link_libraries(global-libs INTERFACE gcc_s)
++    endif()
+ endif ()

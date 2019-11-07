@@ -64,7 +64,7 @@ else
 fi
 
 SLOT="0/${TYPE}"
-IUSE=" +client doc kafka lto mongodb mysql orc +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools unwind cpu_flags_x86_sse4_2"
+IUSE=" +client doc kafka lto mongodb mysql orc redis +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools unwind cpu_flags_x86_sse4_2"
 KEYWORDS="~amd64"
 
 REQUIRED_USE="
@@ -143,8 +143,8 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-		"${FILESDIR}/${PN}-fix-mysql8-r1.patch"
-		"${FILESDIR}/${PN}-allow-system-unwind-r1.patch"
+		"${FILESDIR}/${PN}-fix-mysql8-r2.patch"
+		"${FILESDIR}/${PN}-allow-system-unwind-r2.patch"
 )
 
 pkg_pretend() {
@@ -204,6 +204,7 @@ src_configure() {
 	append-cxxflags $(test-flags-CXX -Wno-error=unused-parameter)
 	local mycmakeargs=(
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
+		-DENABLE_POCO_REDIS="$(usex redis)"
 		-DUSE_MYSQL="$(usex mysql)"
 		-DENABLE_RDKAFKA="$(usex kafka)"
 		-DENABLE_TESTS="$(usex test)"
