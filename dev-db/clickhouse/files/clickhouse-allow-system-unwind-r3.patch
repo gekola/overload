@@ -1,11 +1,13 @@
 --- a/cmake/find/unwind.cmake
 +++ b/cmake/find/unwind.cmake
-@@ -1,12 +1,21 @@
+@@ -1,5 +1,6 @@
  option (USE_UNWIND "Enable libunwind (better stacktraces)" ${ENABLE_LIBRARIES})
 +option (USE_INTERNAL_UNWIND_LIBRARY "Set to FALSE to use system unwind library instead of bundled" ON)
  
  if (NOT CMAKE_SYSTEM MATCHES "Linux" OR ARCH_ARM OR ARCH_32)
      set (USE_UNWIND OFF)
+ endif ()
+@@ -10,8 +11,16 @@
  endif ()
  
  if (USE_UNWIND)

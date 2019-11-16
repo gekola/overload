@@ -64,7 +64,7 @@ else
 fi
 
 SLOT="0/${TYPE}"
-IUSE=" +client doc kafka lto mongodb mysql orc redis +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools unwind cpu_flags_x86_sse4_2"
+IUSE=" +client doc kafka lld lto mongodb mysql orc redis +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools unwind cpu_flags_x86_sse4_2"
 KEYWORDS="~amd64"
 
 REQUIRED_USE="
@@ -134,7 +134,8 @@ DEPEND="${RDEPEND}
 	)
 	dev-cpp/sparsehash
 	dev-util/patchelf
-	>=sys-devel/lld-6.0.0
+	lld? ( >=sys-devel/lld-6.0.0 )
+	!lld? ( sys-devel/binutils[gold] )
 	sys-libs/libtermcap-compat
 	|| (
 		>=sys-devel/gcc-8.0
@@ -144,7 +145,7 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 		"${FILESDIR}/${PN}-fix-mysql8-r2.patch"
-		"${FILESDIR}/${PN}-allow-system-unwind-r2.patch"
+		"${FILESDIR}/${PN}-allow-system-unwind-r3.patch"
 )
 
 pkg_pretend() {
@@ -235,6 +236,7 @@ src_configure() {
 		-DMAKE_STATIC_LIBRARIES="$(usex static)"
 		-DENABLE_EMBEDDED_COMPILER=OFF
 		-DENABLE_IPO=$(usex lto)
+		-DLINKER_NAME=$(usex lld lld gold)
 		# build fails w/o odbc
 		-DENABLE_ODBC=True
 		-DENABLE_CLICKHOUSE_ODBC_BRIDGE=True
