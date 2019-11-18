@@ -185,6 +185,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-disable-tracing.patch"
 	"${FILESDIR}/${PN}-fix-doh-const.patch"
 	"${FILESDIR}/${PN}-fix-gcc.patch"
+	"${FILESDIR}/${PN}-fix-shutdown-crash.patch"
 	"${FILESDIR}/${PN}-fix-unique-ptr-r1.patch"
 	"${FILESDIR}/${PN}-gold-r4.patch"
 	"${FILESDIR}/${PN}-empty-array-r0.patch"
