@@ -28,3 +28,40 @@
      "//base/third_party/dynamic_annotations",
      "//third_party/modp_b64",
    ]
+--- a/third_party/blink/renderer/platform/wtf/BUILD.gn
++++ b/third_party/blink/renderer/platform/wtf/BUILD.gn
+@@ -220,10 +220,11 @@
+ 
+   public_deps = [
+     "//base",
+-    "//base/third_party/double_conversion",
+     "//third_party/icu",
+   ]
+ 
++  libs = [ "double-conversion" ]
++
+   # Rules changing the |sources| list are temporarily commented out, until
+   # those files are actually moved to here.
+ 
+--- a/third_party/blink/renderer/platform/wtf/dtoa.h
++++ b/third_party/blink/renderer/platform/wtf/dtoa.h
+@@ -22,7 +22,7 @@
+ #define THIRD_PARTY_BLINK_RENDERER_PLATFORM_WTF_DTOA_H_
+ 
+ #include "base/numerics/safe_conversions.h"
+-#include "base/third_party/double_conversion/double-conversion/double-conversion.h"
++#include <double-conversion/double-conversion.h>
+ #include "third_party/blink/renderer/platform/wtf/text/ascii_ctype.h"
+ #include "third_party/blink/renderer/platform/wtf/text/unicode.h"
+ #include "third_party/blink/renderer/platform/wtf/wtf_export.h"
+--- a/third_party/blink/renderer/platform/wtf/wtf.cc
++++ b/third_party/blink/renderer/platform/wtf/wtf.cc
+@@ -30,7 +30,7 @@
+ 
+ #include "third_party/blink/renderer/platform/wtf/wtf.h"
+ 
+-#include "base/third_party/double_conversion/double-conversion/double-conversion.h"
++#include <double-conversion/double-conversion.h>
+ #include "third_party/blink/renderer/platform/wtf/allocator/partitions.h"
+ #include "third_party/blink/renderer/platform/wtf/assertions.h"
+ #include "third_party/blink/renderer/platform/wtf/date_math.h"

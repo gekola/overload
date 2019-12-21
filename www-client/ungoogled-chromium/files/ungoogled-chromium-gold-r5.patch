@@ -25,7 +25,7 @@
        # linker jobs. This is still suboptimal to a potential dynamic
        # resource allocation scheme, but should be good enough.
 -      if (use_lld) {
--        ldflags += [ "-Wl,--thinlto-jobs=8" ]
+-        ldflags += [ "-Wl,--thinlto-jobs=" + max_jobs_per_link ]
 -
 -        # Caching on Chrome OS materially slows the PFQ down; disable it until
 -        # we can figure out why. (crbug.com/964328)
@@ -53,7 +53,7 @@
 +          ]
          }
 -      } else {
--        ldflags += [ "-Wl,-plugin-opt,jobs=8" ]
+-        ldflags += [ "-Wl,-plugin-opt,jobs=" + max_jobs_per_link ]
        }
  
        if (use_lld) {

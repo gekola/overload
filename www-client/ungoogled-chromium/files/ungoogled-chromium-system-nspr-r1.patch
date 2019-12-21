@@ -47,9 +47,10 @@ author: Michael Gilbert <mgilbert@debian.org>
 --- a/tools/gn/build/gen.py
 +++ b/tools/gn/build/gen.py
 @@ -325,6 +325,8 @@ def WriteGNNinja(path, platform, host, o
-       ldflags.extend([
-           '-Wl,--as-needed',
-       ])
+ 
+       if not options.no_static_libstdcpp:
+         ldflags.append('-static-libstdc++')
+ 
 +      # Additional system libraries that are used.
 +      libs.append('-lnspr4')
        # This is needed by libc++.

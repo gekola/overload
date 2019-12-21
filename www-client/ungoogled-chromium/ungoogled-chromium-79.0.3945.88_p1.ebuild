@@ -29,7 +29,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="
 	+cfi +clang closure-compile cups custom-cflags gnome gold jumbo-build kerberos
-	libcxx +lld new-tcmalloc optimize-thinlto optimize-webui +pdf
+	libcxx +lld optimize-thinlto optimize-webui +pdf
 	+proprietary-codecs pulseaudio selinux +suid +system-double-conversion
 	+system-ffmpeg system-harfbuzz
 	+system-icu	+system-jsoncpp +system-libevent +system-libvpx +system-openh264
@@ -40,8 +40,6 @@ REQUIRED_USE="
 	|| ( $(python_gen_useflags 'python3*') )
 	|| ( $(python_gen_useflags 'python2*') )
 	cfi? ( clang thinlto )
-	libcxx? ( new-tcmalloc )
-	new-tcmalloc? ( tcmalloc )
 	optimize-thinlto? ( thinlto )
 	system-openjpeg? ( pdf )
 	thinlto? ( clang )
@@ -179,20 +177,20 @@ For native file dialogs in KDE, install kde-apps/kdialog.
 PATCHES=(
 	"${FILESDIR}/${PN}-compiler-r6.patch"
 	"${FILESDIR}/${PN}-disable-font-tests.patch"
-	"${FILESDIR}/${PN}-disable-installer.patch"
-	"${FILESDIR}/${PN}-disable-swiftshader.patch"
+	"${FILESDIR}/${PN}-disable-installer-r1.patch"
+	"${FILESDIR}/${PN}-disable-swiftshader-r1.patch"
 	"${FILESDIR}/${PN}-disable-third-party-lzma-sdk-r0.patch"
-	"${FILESDIR}/${PN}-disable-tracing.patch"
-	"${FILESDIR}/${PN}-fix-doh-const.patch"
+	"${FILESDIR}/${PN}-disable-tracing-r1.patch"
+	"${FILESDIR}/${PN}-disable-perfetto.patch"
 	"${FILESDIR}/${PN}-fix-gcc.patch"
-	"${FILESDIR}/${PN}-fix-shutdown-crash.patch"
 	"${FILESDIR}/${PN}-fix-unique-ptr-r1.patch"
-	"${FILESDIR}/${PN}-gold-r4.patch"
+	"${FILESDIR}/${PN}-fix-include.patch"
+	"${FILESDIR}/${PN}-gold-r5.patch"
 	"${FILESDIR}/${PN}-empty-array-r0.patch"
 	"${FILESDIR}/${PN}-lss.patch"
 	"${FILESDIR}/${PN}-libusb-interrupt-event-handler-r1.patch"
 	"${FILESDIR}/${PN}-system-libusb-r0.patch"
-	"${FILESDIR}/${PN}-system-nspr-r0.patch"
+	"${FILESDIR}/${PN}-system-nspr-r1.patch"
 	"${FILESDIR}/${PN}-system-openjpeg-r2.patch"
 	"${FILESDIR}/${PN}-system-fix-shim-headers-r0.patch"
 	"${FILESDIR}/${PN}-system-zlib-r1.patch"
@@ -241,11 +239,15 @@ src_prepare() {
 	fi
 
 	if use "system-icu" ; then
-		eapply "${FILESDIR}/${PN}-system-icu.patch" || die
+		eapply "${FILESDIR}/${PN}-system-icu-r1.patch" || die
 	fi
 
 	if use "system-double-conversion" ; then
 		eapply "${FILESDIR}/${PN}-system-double-conversion.patch" || die
+	fi
+
+	if use "system-harfbuzz" ; then
+		eapply "${FILESDIR}/${PN}-system-harfbuzz.patch" || die
 	fi
 
 	if use optimize-webui; then
@@ -320,13 +322,6 @@ src_prepare() {
 		third_party/catapult/third_party/html5lib-python
 		third_party/catapult/third_party/polymer
 		third_party/catapult/third_party/six
-		third_party/catapult/tracing/third_party/d3
-		third_party/catapult/tracing/third_party/gl-matrix
-		third_party/catapult/tracing/third_party/jpeg-js
-		third_party/catapult/tracing/third_party/jszip
-		third_party/catapult/tracing/third_party/mannwhitneyu
-		third_party/catapult/tracing/third_party/oboe
-		third_party/catapult/tracing/third_party/pako
 		third_party/ced
 		third_party/cld_3
 		third_party/closure_compiler
@@ -592,9 +587,7 @@ src_configure() {
 		# UGC's "common" GN flags (config_bundles/common/gn_flags.map)
 		"blink_symbol_level=0"
 		"closure_compile=$(usetf closure-compile)"
-		"enable_ac3_eac3_audio_demuxing=true"
 		"enable_hangout_services_extension=false"
-		"enable_hevc_demuxing=true"
 		"enable_iterator_debugging=false"
 		"enable_mdns=false"
 		"enable_mse_mpeg2ts_stream_parser=true"
@@ -660,9 +653,6 @@ src_configure() {
 		"enable_print_preview=$(usetf pdf)"
 		"rtc_build_examples=false"
 		"use_icf=true"
-		# Enables the soon-to-be default tcmalloc (https://crbug.com/724399)
-		# It is relevant only when use_allocator == "tcmalloc"
-		"use_new_tcmalloc=$(usetf new-tcmalloc)"
 	)
 
 	# use_cfi_icall only works with LLD
