@@ -1,12 +1,11 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $
 
-EAPI=6
+EAPI=7
 
 CMAKE_MAKEFILE_GENERATOR="ninja"
 
-inherit cmake-utils user check-reqs versionator flag-o-matic systemd
+inherit cmake-utils check-reqs flag-o-matic systemd
 
 declare -A contrib_versions=(
 	["capnproto"]="a00ccd9"
@@ -17,7 +16,7 @@ declare -A contrib_versions=(
 	["libunwind"]="5afe6d8"
 	["lz4"]="7a4e3b1"
 	["orc"]="5981208"
-	["poco"]="6216cc0"
+	["poco"]="d478f62"
 	["re2"]="7cf8b88"
 	["ssl"]="ba8de79"
 	["zstd"]="2555975"
@@ -64,16 +63,20 @@ else
 fi
 
 SLOT="0/${TYPE}"
-IUSE=" +client doc kafka lld lto mongodb mysql orc redis +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools unwind cpu_flags_x86_sse4_2"
+IUSE="+client doc jemalloc kafka lld lto mongodb mysql orc redis +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools unwind cpu_flags_x86_sse4_2"
 KEYWORDS="~amd64"
 
 REQUIRED_USE="
 	server? ( cpu_flags_x86_sse4_2 )
 	static? ( client server tools )
+	test? ( !system-gtest )
 "
 
 RDEPEND="
+	dev-libs/libpcre
 	dev-libs/re2:0=
+	<sys-devel/llvm-10:=
+	server? ( acct-group/clickhouse acct-user/clickhouse )
 	!static? (
 		client? (
 			sys-libs/ncurses:0
@@ -83,6 +86,7 @@ RDEPEND="
 		system-double-conversion? ( dev-libs/double-conversion )
 		system-lz4? ( app-arch/lz4 )
 		system-zstd? ( app-arch/zstd )
+		jemalloc? ( dev-libs/jemalloc )
 		kafka? ( system-librdkafka? ( dev-libs/librdkafka:= ) )
 		unwind? ( system-libunwind? ( sys-libs/libunwind:7 ) )
 		system-ssl? ( dev-libs/openssl:0= )
@@ -96,12 +100,10 @@ RDEPEND="
 		dev-libs/icu:=
 		dev-libs/glib
 		>=dev-libs/boost-1.65.0:=
-		mysql? ( virtual/libmysqlclient )
+		mysql? ( dev-db/mysql-connector-c )
 		orc? ( dev-libs/cyrus-sasl:2= )
 	)
-	dev-libs/libpcre
 	system-poco? ( >=dev-libs/poco-1.9.0 )
-	<sys-devel/llvm-10
 "
 
 DEPEND="${RDEPEND}
@@ -129,7 +131,7 @@ DEPEND="${RDEPEND}
 		dev-libs/icu[static-libs]
 		dev-libs/glib[static-libs]
 		>=dev-libs/boost-1.65.0[static-libs]
-		virtual/libmysqlclient[static-libs]
+		dev-db/mysql-connector-c[static-libs]
 		orc? ( dev-libs/cyrus-sasl:2[static-libs] )
 	)
 	dev-cpp/sparsehash
@@ -189,7 +191,7 @@ src_prepare() {
 	#sed -i -r -e "s: -Wno-(for-loop-analysis|unused-local-typedef|unused-private-field): -Wno-unused-variable:g" \
 	#	contrib/libpoco/CMakeLists.txt || die "Cannot patch poco"
 	if use system-poco; then
-		epatch "${FILESDIR}/system-poco.patch" || die "Cannot patch sources for usage with system Poco"
+		eapply "${FILESDIR}/system-poco.patch" || die "Cannot patch sources for usage with system Poco"
 	fi
 	if $(tc-getCC) -no-pie -v 2>&1 | grep -q unrecognized; then
 		sed -i -e 's:--no-pie::' -i CMakeLists.txt || die "Cannot patch CMakeLists.txt"
@@ -204,6 +206,7 @@ src_prepare() {
 src_configure() {
 	append-cxxflags $(test-flags-CXX -Wno-error=unused-parameter)
 	local mycmakeargs=(
+		-DENABLE_JEMALLOC="$(usex jemalloc)"
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
 		-DENABLE_POCO_REDIS="$(usex redis)"
 		-DUSE_MYSQL="$(usex mysql)"
@@ -243,6 +246,10 @@ src_configure() {
 		# Let portage handle ccache, otherwise sandbox fails when FEATURES=-ccache
 		-DCCACHE_FOUND=0
 	)
+
+	if use jemalloc; then
+		append-ldflags -ljemalloc
+	fi
 
 	if use test; then
 		mycmakeargs+=(-DUSE_INTERNAL_GTEST_LIBRARY="$(usex !system-gtest)")
@@ -288,12 +295,5 @@ src_install() {
 		fperms -R 0750 /var/lib/clickhouse
 		fowners -R clickhouse:adm /var/log/clickhouse-server
 		fperms -R 0750 /var/log/clickhouse-server
-	fi
-}
-
-pkg_setup() {
-	if use server; then
-		enewgroup clickhouse
-		enewuser clickhouse -1 -1 /var/lib/clickhouse clickhouse
 	fi
 }
