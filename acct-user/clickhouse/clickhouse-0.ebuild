@@ -8,5 +8,6 @@ inherit acct-user
 DESCRIPTION="ClickHouse program user"
 ACCT_USER_ID=160
 ACCT_USER_GROUPS=( clickhouse )
+ACCT_USER_HOME="/var/lib/clickhouse"
+
 acct-user_add_deps
-SLOT="0"
