@@ -1,12 +1,11 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-p2p/litecoind/litecoind-0.10.2.2-r1.ebuild,v 1.2 2015/07/17 19:10:54 blueness Exp $
 
-EAPI=5
+EAPI=7
 
 DB_VER="4.8"
 
-inherit autotools db-use eutils systemd user
+inherit autotools db-use eutils systemd
 
 MyPV="${PV/_/-}"
 MyPN="litecoin"
@@ -22,6 +21,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE="logrotate upnp +wallet"
 
 RDEPEND="
+	acct-group/litecoin
+	acct-user/litecoin
 	dev-libs/boost[threads(+)]
 	dev-libs/openssl:0[-bindist]
 	logrotate? ( app-admin/logrotate )
@@ -34,17 +35,17 @@ DEPEND="${RDEPEND}
 	sys-apps/sed
 "
 
+PATCHES=(
+	"${FILESDIR}/0.9.0-sys_leveldb.patch"
+	"${FILESDIR}/fix-includes.patch"
+	"${FILESDIR}/litecoind-0.13.2.1-memenv_h.patch"
+)
+
 S="${WORKDIR}/${MyP}"
 
-pkg_setup() {
-	local UG='litecoin'
-	enewgroup "${UG}"
-	enewuser "${UG}" -1 -1 /var/lib/litecoin "${UG}"
-}
-
 src_prepare() {
-	epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
-	epatch "${FILESDIR}/litecoind-0.13.2.1-memenv_h.patch"
+	default
+
 	eautoreconf
 	rm -r src/leveldb
 }
