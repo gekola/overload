@@ -1,13 +1,13 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=7
 
 DB_VER="4.8"
 
 LANGS="af af_ZA ar be_BY bg bg_BG ca ca_ES ca@valencia cs cy da de el el_GR en en_GB eo es es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
 
-inherit autotools db-use eutils fdo-mime gnome2-utils
+inherit autotools db-use eutils xdg-utils
 
 MyPV="${PV/_/-}"
 MyPN="litecoin"
@@ -22,7 +22,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="dbus kde +qrcode upnp"
 for l in $LANGS; do
-  IUSE+=" l10n_$l"
+	IUSE+=" l10n_$l"
 done
 
 RDEPEND="
@@ -49,13 +49,19 @@ DEPEND="${RDEPEND}
 	>=app-shells/bash-4.1
 "
 
+PATCHES=(
+	"${FILESDIR}"/0.9.0-sys_leveldb.patch
+	"${FILESDIR}"/fix-includes.patch
+	"${FILESDIR}"/litecoind-0.13.2.1-memenv_h.patch
+)
+
 DOCS="doc/README.md doc/release-notes-litecoin.md"
 
 S="${WORKDIR}/${MyP}"
 
 src_prepare() {
-	epatch "${FILESDIR}"/0.9.0-sys_leveldb.patch
-	epatch "${FILESDIR}"/litecoind-0.13.2.1-memenv_h.patch
+	default
+
 	eautoreconf
 	rm -r src/leveldb
 
@@ -128,9 +134,8 @@ src_install() {
 }
 
 update_caches() {
-	gnome2_icon_cache_update
-	fdo-mime_desktop_database_update
-	buildsycoca
+	xdg_desktop_database_update
+	xdg_icon_cache_update
 }
 
 pkg_postinst() {
