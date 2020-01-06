@@ -1,9 +1,9 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{5,6,7,8} pypy3 )
+PYTHON_COMPAT=( python3_{6,7,8} pypy3 )
 
 inherit distutils-r1
 
@@ -22,9 +22,13 @@ RDEPEND="
 	dev-python/requests[${PYTHON_USEDEP}]
 	dev-python/six[${PYTHON_USEDEP}]
 	dev-python/tqdm[${PYTHON_USEDEP}]
-	<dev-python/urllib3-1.25[${PYTHON_USEDEP}]
+	<dev-python/urllib3-1.26[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
+
+PATCHES=(
+	"${FILESDIR}/kaggle-urllib3-ver.patch"
+)
