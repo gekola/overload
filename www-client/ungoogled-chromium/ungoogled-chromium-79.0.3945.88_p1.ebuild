@@ -231,7 +231,7 @@ src_prepare() {
 
 	if use vaapi ; then
 		eapply "${FILESDIR}/${PN}-enable-vaapi-r1.patch" || die
-		eapply "${FILESDIR}/${PN}-fix-vaapi-r1.patch" || die
+		eapply "${FILESDIR}/${PN}-fix-vaapi-r2.patch" || die
 	fi
 
 	if use "system-jsoncpp" ; then
