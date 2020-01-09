@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
@@ -159,15 +159,6 @@ DEPEND="${CDEPEND}
 				pgo? ( =sys-libs/compiler-rt-sanitizers-7*[profile] )
 			)
 		)
-		(
-			sys-devel/clang:6
-			!clang? ( sys-devel/llvm:6 )
-			clang? (
-				=sys-devel/lld-6*
-				sys-devel/llvm:6[gold]
-				pgo? ( =sys-libs/compiler-rt-sanitizers-6*[profile] )
-			)
-		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
 	>=virtual/rust-1.34.0
@@ -275,8 +266,6 @@ src_prepare() {
 	rm "${WORKDIR}"/firefox/2013_avoid_noinline_on_GCC_with_skcms.patch
 	rm "${WORKDIR}"/firefox/2015_fix_cssparser.patch
 	eapply "${WORKDIR}/firefox"
-
-	eapply "${FILESDIR}"/${PN}-68.2.0-rust-1.39+.patch
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
