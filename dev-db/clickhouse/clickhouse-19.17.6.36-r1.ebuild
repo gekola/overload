@@ -206,6 +206,7 @@ src_prepare() {
 src_configure() {
 	append-cxxflags $(test-flags-CXX -Wno-error=unused-parameter)
 	local mycmakeargs=(
+		-DBUILD_SHARED_LIBS=OFF
 		-DENABLE_JEMALLOC="$(usex jemalloc)"
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
 		-DENABLE_POCO_REDIS="$(usex redis)"
