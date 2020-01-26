@@ -1,0 +1,11 @@
+--- a/cmake/find/s3.cmake
++++ b/cmake/find/s3.cmake
+@@ -18,7 +18,7 @@
+         set(USE_AWS_S3 1)
+     else()
+         set(USE_INTERNAL_AWS_S3_LIBRARY 0)
+-        set(USE_AWS_S3 0)
++        find_package(AWSSDK REQUIRED COMPONENTS core s3)
+     endif ()
+ 
+ endif()

@@ -5,7 +5,7 @@ EAPI=7
 
 CMAKE_MAKEFILE_GENERATOR="ninja"
 
-inherit cmake-utils user flag-o-matic systemd
+inherit cmake-utils flag-o-matic systemd
 
 declare -A contrib_versions=(
 	["capnproto"]="a00ccd9"

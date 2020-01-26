@@ -6,14 +6,15 @@
 	</upstream>
 	<use>
 		<flag name="client">Build CLI client.</flag>
-		<flag name="server">Build server.</flag>
+		<flag name="jemalloc">Use jemalloc library for memory allocation.</flag>
 		<flag name="kafka">Enable support for kafka consumer.</flag>
-		<flag name="mongodb">Enable support for MongoDB-based dictionaries.</flag>
-		<flag name="tools">Build various tools, like benchmark, copier, etc.</flag>
 		<flag name="lld">Use llvm lld linker for build.</flag>
 		<flag name="lto">Enable lto optimizations.</flag>
+		<flag name="mongodb">Enable support for MongoDB-based dictionaries.</flag>
+		<flag name="parquet">Enable parquet.</flag>
 		<flag name="redis">Enable support for Redis-based dictionaries.</flag>
-		<flag name="jemalloc">Use jemalloc library for memory allocation.</flag>
+		<flag name="s3">Enable S3.</flag>
+		<flag name="server">Build server.</flag>
 		<flag name="system-capnproto">Use system-wide capnproto library.</flag>
 		<flag name="system-double-conversion">Use system-wide double-conversion library.</flag>
 		<flag name="system-gtest">Use system-wide Google Test library.</flag>
@@ -24,5 +25,6 @@
 		<flag name="system-re2">Use system-wide re2 library.</flag>
 		<flag name="system-ssl">Use system-wide OpensSSL library.</flag>
 		<flag name="system-zstd">Use system-wide zstd library.</flag>
+		<flag name="tools">Build various tools, like benchmark, copier, etc.</flag>
 	</use>
 </pkgmetadata>

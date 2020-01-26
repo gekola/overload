@@ -8,17 +8,20 @@ CMAKE_MAKEFILE_GENERATOR="ninja"
 inherit cmake-utils flag-o-matic systemd
 
 declare -A contrib_versions=(
+	["arrow"]="b789226"
 	["capnproto"]="a00ccd9"
 	["cctz"]="4f9776a"
 	["double-conversion"]="cf2f0f3"
-	["googletest"]="d175c8b"
+	["googletest"]="703bd9c"
 	["librdkafka"]="6160ec2"
 	["libunwind"]="5afe6d8"
-	["lz4"]="7a4e3b1"
+	["lz4"]="3d67671"
 	["orc"]="5981208"
 	["poco"]="d478f62"
 	["re2"]="7cf8b88"
-	["ssl"]="ba8de79"
+	["ryu"]="5b4a85"
+	["ssl"]="c74e78"
+	["thrift"]="010ccf0"
 	["zstd"]="2555975"
 )
 
@@ -45,8 +48,13 @@ if [[ ${PV} == 9999 ]]; then
 else
 	TYPE="stable"
 	SRC_URI="
-		https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.tar.gz -> ${P}.tar.gz
+		https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE} -> ${P}.tar.gz
 		https://github.com/google/cctz/archive/$(contrib_mapping cctz)
+		https://github.com/ClickHouse-Extras/ryu/archive/$(contrib_mapping ryu)
+		parquet? (
+			https://github.com/apache/arrow/archive/$(contrib_mapping arrow)
+			https://github.com/apache/thrift/archive/$(contrib_mapping thrift)
+		)
 		orc? ( https://github.com/apache/orc/archive/$(contrib_mapping orc) )
 		unwind? ( !system-libunwind? ( https://github.com/ClickHouse-Extras/libunwind/archive/$(contrib_mapping libunwind) ) )
 		!system-capnproto? ( https://github.com/capnproto/capnproto/archive/$(contrib_mapping capnproto) )
@@ -56,26 +64,30 @@ else
 		!system-lz4? ( https://github.com/lz4/lz4/archive/$(contrib_mapping lz4) )
 		!system-poco? ( https://github.com/ClickHouse-Extras/poco/archive/$(contrib_mapping poco) )
 		!system-re2? ( https://github.com/google/re2/archive/$(contrib_mapping re2) )
-		!system-ssl? ( https://github.com/ClickHouse-Extras/ssl/archive/$(contrib_mapping ssl) )
+		!system-ssl? ( https://github.com/ClickHouse-Extras/openssl/archive/$(contrib_mapping ssl) )
 		!system-zstd? ( https://github.com/facebook/zstd/archive/$(contrib_mapping zstd) )
 	"
 	S="${WORKDIR}/${MY_PN}-${PV}-${TYPE}"
 fi
 
 SLOT="0/${TYPE}"
-IUSE="+client doc jemalloc kafka lld lto mongodb mysql orc redis +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools unwind cpu_flags_x86_sse4_2"
+IUSE="+client doc jemalloc kafka lld lto mongodb mysql orc parquet redis s3 +server static +system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd test tools unwind cpu_flags_x86_sse4_2"
 KEYWORDS="~amd64"
 
 REQUIRED_USE="
+	parquet? ( orc )
 	server? ( cpu_flags_x86_sse4_2 )
 	static? ( client server tools )
-	test? ( !system-gtest )
 "
+#	test? ( !system-gtest )
+#"
 
 RDEPEND="
 	dev-libs/libpcre
 	dev-libs/re2:0=
+	>=sys-devel/llvm-8:=
 	<sys-devel/llvm-10:=
+	s3? ( dev-libs/aws-sdk-cpp[s3] )
 	server? ( acct-group/clickhouse acct-user/clickhouse )
 	!static? (
 		client? (
@@ -141,12 +153,15 @@ DEPEND="${RDEPEND}
 	sys-libs/libtermcap-compat
 	|| (
 		>=sys-devel/gcc-8.0
-		>=sys-devel/clang-7.0
+		>=sys-devel/clang-8.0
 	)
 "
 
 PATCHES=(
 		"${FILESDIR}/${PN}-fix-mysql8-r2.patch"
+		"${FILESDIR}/${PN}-20.1-allow-system-flatbuffers.patch"
+		"${FILESDIR}/${PN}-20.1-allow-system-s3.patch"
+		"${FILESDIR}/${PN}-20.1-enforce-static-internal-libs.patch"
 		"${FILESDIR}/${PN}-allow-system-unwind-r3.patch"
 )
 
@@ -166,17 +181,23 @@ src_unpack() {
 	default_src_unpack
 	[[ ${PV} == 9999 ]] && return 0
 	cd "${S}/contrib"
-	mkdir -p cctz double-conversion googletest librdkafka lz4 orc re2 zstd
-	tar --strip-components=1 -C cctz -xf "${DISTDIR}/cctz-${contrib_versions[cctz]}.tar.gz" || die
+	mkdir -p arrow cctz double-conversion googletest librdkafka lz4 orc re2 ryu thrift zstd
+	for comp in cctz ryu; do
+		tar --strip-components=1 -C $comp -xf "${DISTDIR}/$(contrib_file $comp y)" || die
+	done
 	if use orc; then
-		tar --strip-components=1 -C orc -xf "${DISTDIR}/orc-${contrib_versions[orc]}.tar.gz" || die
+		tar --strip-components=1 -C orc -xf "${DISTDIR}/$(contrib_file orc y)" || die
+	fi
+	if use parquet; then
+		tar --strip-components=1 -C arrow -xf "${DISTDIR}/$(contrib_file arrow y)" || die
+		tar --strip-components=1 -C thrift -xf "${DISTDIR}/$(contrib_file thrift y)" || die
 	fi
 	use system-capnproto || tar --strip-components=1 -C capnproto -xf "${DISTDIR}/$(contrib_file capnproto y)" || die
 	use system-double-conversion || tar --strip-components=1 -C double-conversion -xf "${DISTDIR}/$(contrib_file double-conversion y)" || die
 	use system-lz4 || tar --strip-components=1 -C lz4 -xf "${DISTDIR}/$(contrib_file lz4 y)" || die
 	use system-poco || tar --strip-components=1 -C poco -xf "${DISTDIR}/$(contrib_file poco y)" || die
 	use system-re2 || tar --strip-components=1 -C re2 -xf "${DISTDIR}/$(contrib_file re2 y)" || die
-	use system-ssl || tar --strip-components=1 -C ssl -xf "${DISTDIR}/$(contrib_file ssl y)" || die
+	use system-ssl || tar --strip-components=1 -C openssl -xf "${DISTDIR}/$(contrib_file ssl y)" || die
 	use system-zstd || tar --strip-components=1 -C zstd -xf "${DISTDIR}/$(contrib_file zstd y)" || die
 	if use kafka; then
 		use system-librdkafka || tar --strip-components=1 -C librdkafka -xf "${DISTDIR}/$(contrib_file librdkafka y)" || die
@@ -206,13 +227,16 @@ src_prepare() {
 src_configure() {
 	append-cxxflags $(test-flags-CXX -Wno-error=unused-parameter)
 	local mycmakeargs=(
-		-DBUILD_SHARED_LIBS=OFF
 		-DENABLE_JEMALLOC="$(usex jemalloc)"
+		-DENABLE_PARQUET="$(usex parquet)"
+		-DUSE_INTERNAL_PARQUET_LIBRARY=$(usex parquet)
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
 		-DENABLE_POCO_REDIS="$(usex redis)"
-		-DUSE_MYSQL="$(usex mysql)"
+		-DENABLE_S3="$(usex s3)"
 		-DENABLE_RDKAFKA="$(usex kafka)"
 		-DENABLE_TESTS="$(usex test)"
+		-DUSE_MYSQL="$(usex mysql)"
+		-DUSE_SNAPPY="$(usex parquet)"
 		-DUSE_UNWIND="$(usex unwind)"
 		-DENABLE_CLICKHOUSE_SERVER="$(usex server)"
 		-DENABLE_CLICKHOUSE_CLIENT="$(usex client)"
@@ -248,9 +272,9 @@ src_configure() {
 		-DCCACHE_FOUND=0
 	)
 
-	if use jemalloc; then
-		append-ldflags -ljemalloc
-	fi
+	# if use jemalloc; then
+	# 	append-ldflags -ljemalloc
+	# fi
 
 	if use test; then
 		mycmakeargs+=(-DUSE_INTERNAL_GTEST_LIBRARY="$(usex !system-gtest)")

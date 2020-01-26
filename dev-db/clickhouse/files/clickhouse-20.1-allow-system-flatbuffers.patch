@@ -1,0 +1,77 @@
+--- a/contrib/arrow-cmake/CMakeLists.txt
++++ b/contrib/arrow-cmake/CMakeLists.txt
+@@ -77,6 +77,8 @@
+ 
+ # === flatbuffers
+ 
++option(USE_FLATBUFFERS_INTERNAL "Use bundled flatbuffers library" ${BUNDLED})
++if (USE_FLATBUFFERS_INTERNAL)
+ ##############################################################
+ # fbs - Step 1: build flatbuffers lib and flatc compiler
+ ##############################################################
+@@ -97,7 +99,11 @@
+ set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Skip flatbuffers tests")
+ 
+ add_subdirectory(${FLATBUFFERS_SRC_DIR} "${FLATBUFFERS_BINARY_DIR}")
++else ()
++find_program(FLATBUFFERS_COMPILER NAMES flatc)
++find_path(FLATBUFFERS_INCLUDE_DIR NAMES flatbuffers/flatbuffers.h)
++endif ()
+ 
+ ###################################
+ # fbs - Step 2: compile *.fbs files
+ ###################################
+@@ -139,12 +144,15 @@
+         -o
+         ${FLATBUFFERS_COMPILED_OUT_DIR}/
+         ${ABS_FBS_SRC}
+-        DEPENDS flatc ${ABS_FBS_SRC}
++        DEPENDS $<$<BOOL:${USE_FLATBUFFERS_INTERNAL}>:flatc> ${ABS_FBS_SRC}
+         COMMENT "Running flatc compiler on ${ABS_FBS_SRC}"
+         VERBATIM)
+ 
+ add_custom_target(metadata_fbs DEPENDS ${FBS_OUTPUT_FILES})
++
++if (USE_FLATBUFFERS_INTERNAL)
++    add_dependencies(metadata_fbs flatc)
++endif ()
+-add_dependencies(metadata_fbs flatc)
+ 
+ # arrow-cmake cmake file calling orc cmake subroutine which detects certain compiler features.
+ # Apple Clang compiler failed to compile this code without specifying c++11 standard. 
+@@ -326,10 +334,17 @@
+ add_library(${ARROW_LIBRARY} ${ARROW_SRCS})
+ 
+ # Arrow dependencies
++if (USE_FLATBUFFERS_INTERNAL)
++    add_dependencies(${ARROW_LIBRARY} ${FLATBUFFERS_LIBRARY})
++endif ()
++add_dependencies(${ARROW_LIBRARY} metadata_fbs)
+-add_dependencies(${ARROW_LIBRARY} ${FLATBUFFERS_LIBRARY} metadata_fbs)
+ 
++target_link_libraries(${ARROW_LIBRARY} PRIVATE ${Boost_SYSTEM_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY})
++if (USE_FLATBUFFERS_INTERNAL)
++    target_link_libraries(${ARROW_LIBRARY} PRIVATE ${FLATBUFFERS_LIBRARY})
++else ()
++    target_link_libraries(${ARROW_LIBRARY} PRIVATE flatbuffers)
++endif()
+-target_link_libraries(${ARROW_LIBRARY} PRIVATE boost_system_internal boost_filesystem_internal boost_regex_internal)
+-target_link_libraries(${ARROW_LIBRARY} PRIVATE ${FLATBUFFERS_LIBRARY})
+ 
+ if (USE_INTERNAL_PROTOBUF_LIBRARY)
+     add_dependencies(${ARROW_LIBRARY} protoc)
+--- a/cmake/find/parquet.cmake
++++ b/cmake/find/parquet.cmake
+@@ -59,7 +59,11 @@
+         set(PARQUET_LIBRARY parquet_static)
+         set(THRIFT_LIBRARY thrift_static)
+     else()
+-        set(FLATBUFFERS_LIBRARY flatbuffers_shared)
++        if(USE_FLATBUFFERS_INTERNAL)
++            set(FLATBUFFERS_LIBRARY flatbuffers_shared)
++        else()
++            set(FLATBUFFERS_LIBRARY flatbuffers)
++        endif()
+         set(ARROW_LIBRARY arrow_shared)
+         set(PARQUET_LIBRARY parquet_shared)
+         if(USE_INTERNAL_PARQUET_LIBRARY_NATIVE_CMAKE)
