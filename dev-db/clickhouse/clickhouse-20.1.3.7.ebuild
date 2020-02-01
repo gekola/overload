@@ -48,7 +48,7 @@ if [[ ${PV} == 9999 ]]; then
 else
 	TYPE="stable"
 	SRC_URI="
-		https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE} -> ${P}.tar.gz
+		https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.tar.gz -> ${P}.tar.gz
 		https://github.com/google/cctz/archive/$(contrib_mapping cctz)
 		https://github.com/ClickHouse-Extras/ryu/archive/$(contrib_mapping ryu)
 		parquet? (
