@@ -1,6 +1,7 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+
+EAPI=7
 
 inherit latex-package
 
@@ -10,7 +11,7 @@ SRC_URI="http://mirrors.ctan.org/macros/latex/contrib/${PN}.zip"
 
 LICENSE="LPPL-1.3b"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="app-arch/unzip"
