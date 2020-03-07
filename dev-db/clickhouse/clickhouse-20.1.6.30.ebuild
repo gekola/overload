@@ -20,7 +20,7 @@ declare -A contrib_versions=(
 	["poco"]="d805cf5"
 	["re2"]="7cf8b88"
 	["ryu"]="5b4a85"
-	["ssl"]="c74e78"
+	["ssl"]="debbae"
 	["thrift"]="010ccf0"
 	["zstd"]="2555975"
 )
