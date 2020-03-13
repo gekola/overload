@@ -1,0 +1,21 @@
+--- a/dbms/src/Dictionaries/MongoDBDictionarySource.cpp
++++ b/dbms/src/Dictionaries/MongoDBDictionarySource.cpp
+@@ -11,6 +11,8 @@
+ #    include <Poco/MongoDB/Database.h>
+ #    include <Poco/MongoDB/ObjectId.h>
+ #    include <Poco/Util/AbstractConfiguration.h>
++#    include <Poco/DigestEngine.h>
++#    include <Poco/MD5Engine.h>
+ #    include <Poco/Version.h>
+ 
+ // only after poco
+--- a/base/common/DateLUT.cpp
++++ b/base/common/DateLUT.cpp
+@@ -3,6 +3,7 @@
+ #include <boost/filesystem.hpp>
+ #include <Poco/Exception.h>
+ #include <Poco/SHA1Engine.h>
++#include <Poco/DigestEngine.h>
+ #include <Poco/DigestStream.h>
+ #include <fstream>
+ 

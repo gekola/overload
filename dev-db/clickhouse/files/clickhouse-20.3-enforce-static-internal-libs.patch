@@ -20,7 +20,7 @@
  set_target_properties(${THRIFT_LIBRARY} PROPERTIES CXX_STANDARD 14) # REMOVE after https://github.com/apache/thrift/pull/1641
  target_include_directories(${THRIFT_LIBRARY} SYSTEM PUBLIC ${ClickHouse_SOURCE_DIR}/contrib/thrift/lib/cpp/src PRIVATE ${Boost_INCLUDE_DIRS})
  
-@@ -290,7 +290,7 @@ if (LZ4_INCLUDE_DIR AND LZ4_LIBRARY)
+@@ -299,7 +299,7 @@ if (LZ4_INCLUDE_DIR AND LZ4_LIBRARY)
      set(ARROW_WITH_LZ4 1)
  endif ()
  
@@ -29,7 +29,7 @@
      set(ARROW_WITH_SNAPPY 1)
  endif ()
  
-@@ -323,7 +323,7 @@ if (ARROW_WITH_ZSTD)
+@@ -332,6 +332,6 @@ if (ARROW_WITH_ZSTD)
  endif ()
  
  
@@ -37,8 +37,7 @@
 +add_library(${ARROW_LIBRARY} STATIC ${ARROW_SRCS})
  
  # Arrow dependencies
- add_dependencies(${ARROW_LIBRARY} ${FLATBUFFERS_LIBRARY} metadata_fbs)
-@@ -392,7 +392,7 @@ list(APPEND PARQUET_SRCS
+@@ -409,7 +409,7 @@ list(APPEND PARQUET_SRCS
          ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/parquet/parquet_constants.cpp
          ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/parquet/parquet_types.cpp
          )
@@ -110,7 +109,7 @@
  
 --- a/contrib/librdkafka-cmake/CMakeLists.txt
 +++ b/contrib/librdkafka-cmake/CMakeLists.txt
-@@ -61,7 +61,7 @@ set(SRCS
+@@ -63,7 +63,7 @@ set(SRCS
    ${RDKAFKA_SOURCE_DIR}/rdgz.c
  )
  
@@ -159,7 +158,7 @@
  
  target_include_directories(ltdl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/linux_x86_64/libltdl)
  target_include_directories(ltdl PUBLIC ${ODBC_SOURCE_DIR}/libltdl)
-@@ -274,7 +274,7 @@ ${ODBC_SOURCE_DIR}/lst/lstSetFreeFunc.c
+@@ -273,7 +273,7 @@ ${ODBC_SOURCE_DIR}/lst/lstSetFreeFunc.c
  ${ODBC_SOURCE_DIR}/lst/_lstVisible.c
  )
  
@@ -170,7 +169,7 @@
  
 --- a/dbms/CMakeLists.txt
 +++ b/dbms/CMakeLists.txt
-@@ -253,7 +253,7 @@ if (NOT ENABLE_SSL)
+@@ -252,7 +252,7 @@ if (NOT ENABLE_SSL)
      list (REMOVE_ITEM clickhouse_common_io_headers src/Common/OpenSSLHelpers.h)
  endif ()
  
@@ -211,8 +210,8 @@
 -add_library(clickhouse_aggregate_functions ${clickhouse_aggregate_functions_sources})
 +add_library(clickhouse_aggregate_functions STATIC ${clickhouse_aggregate_functions_sources})
  target_link_libraries(clickhouse_aggregate_functions PRIVATE dbms PUBLIC ${CITYHASH_LIBRARIES})
- target_include_directories(clickhouse_aggregate_functions PRIVATE ${COMMON_INCLUDE_DIR})
  
+ if(ENABLE_TESTS)
 --- a/dbms/src/Common/Config/CMakeLists.txt
 +++ b/dbms/src/Common/Config/CMakeLists.txt
 @@ -2,7 +2,7 @@ include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
@@ -293,8 +292,8 @@
 -add_library(clickhouse_functions_url ${clickhouse_functions_url_sources} ${clickhouse_functions_url_headers})
 +add_library(clickhouse_functions_url STATIC ${clickhouse_functions_url_sources} ${clickhouse_functions_url_headers})
  target_link_libraries(clickhouse_functions_url PRIVATE dbms)
- target_include_directories(clickhouse_functions_url PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/../include) # ${CMAKE_CURRENT_BINARY_DIR}/include
  
+ if (CMAKE_BUILD_TYPE_UC STREQUAL "RELEASE" OR CMAKE_BUILD_TYPE_UC STREQUAL "RELWITHDEBINFO" OR CMAKE_BUILD_TYPE_UC STREQUAL "MINSIZEREL")
 --- a/dbms/src/Functions/array/CMakeLists.txt
 +++ b/dbms/src/Functions/array/CMakeLists.txt
 @@ -1,6 +1,6 @@
@@ -335,39 +334,39 @@
 -add_library(clickhouse_table_functions ${clickhouse_table_functions_sources})
 +add_library(clickhouse_table_functions STATIC ${clickhouse_table_functions_sources})
  target_link_libraries(clickhouse_table_functions PRIVATE clickhouse_parsers clickhouse_storages_system dbms ${Poco_Foundation_LIBRARY})
---- a/libs/consistent-hashing-sumbur/CMakeLists.txt
-+++ b/libs/consistent-hashing-sumbur/CMakeLists.txt
+--- a/base/consistent-hashing-sumbur/CMakeLists.txt
++++ b/base/consistent-hashing-sumbur/CMakeLists.txt
 @@ -1,2 +1,2 @@
 -add_library(consistent-hashing-sumbur sumbur.cpp)
 +add_library(consistent-hashing-sumbur STATIC sumbur.cpp)
  target_include_directories(consistent-hashing-sumbur PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
---- a/libs/consistent-hashing/CMakeLists.txt
-+++ b/libs/consistent-hashing/CMakeLists.txt
+--- a/base/consistent-hashing/CMakeLists.txt
++++ b/base/consistent-hashing/CMakeLists.txt
 @@ -1,2 +1,2 @@
 -add_library(consistent-hashing consistent_hashing.cpp popcount.cpp)
 +add_library(consistent-hashing STATIC consistent_hashing.cpp popcount.cpp)
  target_include_directories(consistent-hashing PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
---- a/libs/libcommon/CMakeLists.txt
-+++ b/libs/libcommon/CMakeLists.txt
+--- a/base/common/CMakeLists.txt
++++ b/base/common/CMakeLists.txt
 @@ -10,7 +10,7 @@ if (DEFINED APPLE_HAVE_CLOCK_GETTIME)
-     target_compile_definitions(apple_rt PUBLIC -DAPPLE_HAVE_CLOCK_GETTIME=${APPLE_HAVE_CLOCK_GETTIME})
+     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${INCLUDE_DEBUG_HELPERS}")
  endif ()
+
+-add_library (common ${SRCS})
++add_library (common STATIC ${SRCS})
  
--add_library (common
-+add_library (common STATIC
-     src/DateLUT.cpp
-     src/DateLUTImpl.cpp
-     src/preciseExp10.c
---- a/libs/libdaemon/CMakeLists.txt
-+++ b/libs/libdaemon/CMakeLists.txt
+ target_include_directories(common PUBLIC .. ${CMAKE_CURRENT_BINARY_DIR}/..)
+ 
+--- a/base/daemon/CMakeLists.txt
++++ b/base/daemon/CMakeLists.txt
 @@ -1,4 +1,4 @@
 -add_library (daemon
 +add_library (daemon STATIC
      src/BaseDaemon.cpp
      src/GraphiteWriter.cpp
  
---- a/libs/libloggers/loggers/CMakeLists.txt
-+++ b/libs/libloggers/loggers/CMakeLists.txt
+--- a/base/loggers/loggers/CMakeLists.txt
++++ b/base/loggers/loggers/CMakeLists.txt
 @@ -1,5 +1,5 @@
  include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
  add_headers_and_sources(loggers .)
@@ -375,21 +374,21 @@
 +add_library(loggers STATIC ${loggers_sources} ${loggers_headers})
  target_link_libraries(loggers PRIVATE dbms clickhouse_common_io ${Poco_Foundation_LIBRARY})
  target_include_directories(loggers PUBLIC ..)
---- a/libs/libmemcpy/CMakeLists.txt
-+++ b/libs/libmemcpy/CMakeLists.txt
+--- a/base/memcpy/CMakeLists.txt
++++ b/base/memcpy/CMakeLists.txt
 @@ -1 +1 @@
 -add_library(memcpy memcpy.c)
 +add_library(memcpy STATIC memcpy.c)
---- a/libs/libmysqlxx/CMakeLists.txt
-+++ b/libs/libmysqlxx/CMakeLists.txt
+--- a/base/mysqlxx/CMakeLists.txt
++++ b/base/mysqlxx/CMakeLists.txt
 @@ -1,4 +1,4 @@
 -add_library (mysqlxx
 +add_library (mysqlxx STATIC
      src/Connection.cpp
      src/Exception.cpp
      src/Query.cpp
---- a/libs/libwidechar_width/CMakeLists.txt
-+++ b/libs/libwidechar_width/CMakeLists.txt
+--- a/base/widechar_width/CMakeLists.txt
++++ b/base/widechar_width/CMakeLists.txt
 @@ -1,2 +1,2 @@
 -add_library(widechar_width widechar_width.cpp)
 +add_library(widechar_width STATIC widechar_width.cpp)

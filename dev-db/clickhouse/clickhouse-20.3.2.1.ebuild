@@ -5,7 +5,7 @@ EAPI=7
 
 CMAKE_MAKEFILE_GENERATOR="ninja"
 
-inherit cmake-utils flag-o-matic systemd
+inherit check-reqs cmake-utils flag-o-matic systemd
 
 declare -A contrib_versions=(
 	["arrow"]="b789226"
@@ -13,14 +13,14 @@ declare -A contrib_versions=(
 	["cctz"]="4f9776a"
 	["double-conversion"]="cf2f0f3"
 	["googletest"]="703bd9c"
-	["librdkafka"]="6160ec2"
-	["libunwind"]="5afe6d8"
+	["librdkafka"]="4ffe54b"
+	["libunwind"]="ede0062"
 	["lz4"]="3d67671"
 	["orc"]="5981208"
 	["poco"]="d805cf5"
 	["re2"]="7cf8b88"
 	["ryu"]="5b4a85"
-	["ssl"]="debbae"
+	["ssl"]="07e962"
 	["thrift"]="010ccf0"
 	["zstd"]="2555975"
 )
@@ -158,16 +158,18 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-		"${FILESDIR}/${PN}-fix-mysql8-r2.patch"
+		"${FILESDIR}/${PN}-20.3-fix-mysql8.patch"
 		"${FILESDIR}/${PN}-20.1-allow-system-flatbuffers.patch"
 		"${FILESDIR}/${PN}-20.1-allow-system-s3.patch"
-		"${FILESDIR}/${PN}-20.1-enforce-static-internal-libs.patch"
+		"${FILESDIR}/${PN}-20.3-enforce-static-internal-libs.patch"
 		"${FILESDIR}/${PN}-allow-system-unwind-r3.patch"
+		"${FILESDIR}/${PN}-20.3-system-grpc.patch"
+		"${FILESDIR}/${PN}-20.3-system-libc.patch"
 )
 
+CHECKREQS_DISK_BUILD="2G"
+
 pkg_pretend() {
-	CHECKREQS_DISK_BUILD="2G"
-	# Actually it is 960M on my machine
 	check-reqs_pkg_pretend
 	if [[ $(tc-getCC) == clang ]]; then
 		:
@@ -212,7 +214,7 @@ src_prepare() {
 	#sed -i -r -e "s: -Wno-(for-loop-analysis|unused-local-typedef|unused-private-field): -Wno-unused-variable:g" \
 	#	contrib/libpoco/CMakeLists.txt || die "Cannot patch poco"
 	if use system-poco; then
-		eapply "${FILESDIR}/system-poco.patch" || die "Cannot patch sources for usage with system Poco"
+		eapply "${FILESDIR}/${PN}-20.3-system-poco.patch" || die "Cannot patch sources for usage with system Poco"
 	fi
 	if $(tc-getCC) -no-pie -v 2>&1 | grep -q unrecognized; then
 		sed -i -e 's:--no-pie::' -i CMakeLists.txt || die "Cannot patch CMakeLists.txt"
@@ -232,8 +234,9 @@ src_configure() {
 		-DUSE_INTERNAL_PARQUET_LIBRARY=$(usex parquet)
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
 		-DENABLE_POCO_REDIS="$(usex redis)"
-		-DENABLE_S3="$(usex s3)"
 		-DENABLE_RDKAFKA="$(usex kafka)"
+		-DENABLE_REPLXX=OFF
+		-DENABLE_S3="$(usex s3)"
 		-DENABLE_TESTS="$(usex test)"
 		-DUSE_MYSQL="$(usex mysql)"
 		-DUSE_SNAPPY="$(usex parquet)"
