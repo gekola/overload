@@ -165,6 +165,7 @@ PATCHES=(
 		"${FILESDIR}/${PN}-allow-system-unwind-r3.patch"
 		"${FILESDIR}/${PN}-20.3-system-grpc.patch"
 		"${FILESDIR}/${PN}-20.3-system-libc.patch"
+		"${FILESDIR}/${PN}-20.3-fix-readline.patch"
 )
 
 CHECKREQS_DISK_BUILD="2G"
@@ -235,6 +236,7 @@ src_configure() {
 		-DENABLE_POCO_MONGODB="$(usex mongodb)"
 		-DENABLE_POCO_REDIS="$(usex redis)"
 		-DENABLE_RDKAFKA="$(usex kafka)"
+		-DENABLE_READLINE=ON
 		-DENABLE_REPLXX=OFF
 		-DENABLE_S3="$(usex s3)"
 		-DENABLE_TESTS="$(usex test)"
