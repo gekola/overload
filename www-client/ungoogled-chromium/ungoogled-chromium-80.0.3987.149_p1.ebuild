@@ -1,35 +1,39 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
+PYTHON_COMPAT=( python{2_7,3_{7,8}} )
 
-CHROMIUM_LANGS="
-	am ar bg bn ca cs da de el en-GB es es-419 et fa fi fil fr gu he hi hr hu id
-	it ja kn ko lt lv ml mr ms nb nl pl pt-BR pt-PT ro ru sk sl sr sv sw ta te
-	th tr uk vi zh-CN zh-TW
-"
+CHROMIUM_LANGS="am ar bg bn ca cs da de el en-GB es es-419 et fa fi fil fr gu he
+	hi hr hu id it ja kn ko lt lv ml mr ms nb nl pl pt-BR pt-PT ro ru sk sl sr
+	sv sw ta te th tr uk vi zh-CN zh-TW"
 
 inherit check-reqs chromium-2 desktop flag-o-matic ninja-utils pax-utils python-r1 readme.gentoo-r1 toolchain-funcs xdg-utils
 
 UGC_PV="${PV/_p/-}"
 UGC_P="${PN}-${UGC_PV}"
 UGC_WD="${WORKDIR}/${UGC_P}"
+UGC_PATCHES_PV="${UGC_PV}.sid1"
+UGC_PATCHES_PN="${PN}-debian"
+UGC_PATCHES_P="${UGC_PATCHES_PN}-${UGC_PATCHES_PV}"
+UGC_PATCHES_WD="${WORKDIR}/${UGC_PATCHES_P}"
+
 
 DESCRIPTION="Modifications to Chromium for removing Google integration and enhancing privacy"
 HOMEPAGE="https://www.chromium.org/Home https://github.com/Eloston/ungoogled-chromium"
 SRC_URI="
 	https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${PV/_*}.tar.xz
 	https://github.com/Eloston/${PN}/archive/${UGC_PV}.tar.gz -> ${UGC_P}.tar.gz
+	https://github.com/ungoogled-software/${UGC_PATCHES_PN}/archive/${UGC_PATCHES_PV}.tar.gz -> ${UGC_PATCHES_P}.tar.gz
 "
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="
-	+cfi +clang closure-compile cups custom-cflags gnome gold jumbo-build kerberos
-	libcxx +lld optimize-thinlto optimize-webui +pdf
+	+cfi +clang closure-compile cups custom-cflags gnome gold jumbo-build
+	kerberos libcxx +lld optimize-thinlto optimize-webui +pdf
 	+proprietary-codecs pulseaudio selinux +suid +system-double-conversion
 	+system-ffmpeg system-harfbuzz
 	+system-icu	+system-jsoncpp +system-libevent +system-libvpx +system-openh264
@@ -37,8 +41,8 @@ IUSE="
 "
 REQUIRED_USE="
 	^^ ( gold lld )
-	|| ( $(python_gen_useflags 'python3*') )
 	|| ( $(python_gen_useflags 'python2*') )
+	|| ( $(python_gen_useflags 'python3*') )
 	cfi? ( clang thinlto )
 	optimize-thinlto? ( thinlto )
 	system-openjpeg? ( pdf )
@@ -52,7 +56,7 @@ RESTRICT="
 
 CDEPEND="
 	>=app-accessibility/at-spi2-atk-2.26:2
-	app-arch/snappy:=
+	app-arch/bzip2:=
 	>=dev-libs/atk-2.26
 	dev-libs/expat:=
 	dev-libs/glib:2
@@ -103,7 +107,7 @@ CDEPEND="
 		media-libs/freetype:=
 		>=media-libs/harfbuzz-2.4.0:0=[icu(-)]
 	)
-	system-icu? ( >=dev-libs/icu-64:= )
+	system-icu? ( >=dev-libs/icu-65:= )
 	system-jsoncpp? ( dev-libs/jsoncpp )
 	system-libevent? ( dev-libs/libevent )
 	system-libvpx? ( >=media-libs/libvpx-1.8.1-r100:=[postproc,svc] )
@@ -123,7 +127,6 @@ RDEPEND="${CDEPEND}
 # sys-apps/sandbox - https://crbug.com/586444
 DEPEND="${CDEPEND}"
 BDEPEND="
-	app-arch/bzip2:=
 	>=app-arch/gzip-1.7
 	dev-lang/perl
 	dev-lang/yasm
@@ -176,24 +179,39 @@ For native file dialogs in KDE, install kde-apps/kdialog.
 
 PATCHES=(
 	"${FILESDIR}/${PN}-compiler-r6.patch"
-	"${FILESDIR}/${PN}-disable-font-tests.patch"
-	"${FILESDIR}/${PN}-disable-installer-r1.patch"
-	"${FILESDIR}/${PN}-disable-swiftshader-r1.patch"
-	"${FILESDIR}/${PN}-disable-third-party-lzma-sdk-r0.patch"
-	"${FILESDIR}/${PN}-disable-tracing-r1.patch"
-	"${FILESDIR}/${PN}-disable-perfetto.patch"
 	"${FILESDIR}/${PN}-fix-gcc.patch"
-	"${FILESDIR}/${PN}-fix-unique-ptr-r1.patch"
-	"${FILESDIR}/${PN}-fix-include.patch"
 	"${FILESDIR}/${PN}-gold-r5.patch"
-	"${FILESDIR}/${PN}-empty-array-r0.patch"
+	"${UGC_PATCHES_WD}/debian/patches/gn/libcxx.patch"
+	"${UGC_PATCHES_WD}/debian/patches/arm/gcc_skcms_ice.patch"
+	"${UGC_PATCHES_WD}/debian/patches/arm/pffffft-buildfix.patch"
+	"${UGC_PATCHES_WD}/debian/patches/gcc/ambiguous-initializer.patch"
+	"${UGC_PATCHES_WD}/debian/patches/gcc/namespace5.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/breakpad.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/gpu-timeout.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/sequence-point.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/jumbo-namespace.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/widevine-enable-version-string.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/missing-includes.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/multiple-definition.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/incomplete-definition.patch"
+	"${UGC_PATCHES_WD}/debian/patches/disable/buildbot.patch"
+	"${UGC_PATCHES_WD}/debian/patches/disable/chromeos.patch"
+	"${UGC_PATCHES_WD}/debian/patches/disable/installer.patch"
+	"${UGC_PATCHES_WD}/debian/patches/disable/font-tests.patch"
+	"${UGC_PATCHES_WD}/debian/patches/disable/swiftshader.patch"
+	"${UGC_PATCHES_WD}/debian/patches/system/jpeg.patch"
+	"${UGC_PATCHES_WD}/debian/patches/system/nspr.patch"
+	"${UGC_PATCHES_WD}/debian/patches/system/zlib.patch"
+	"${UGC_PATCHES_WD}/debian/patches/system/libxml2.patch"
+	"${UGC_PATCHES_WD}/debian/patches/system/openjpeg.patch"
+	"${UGC_PATCHES_WD}/debian/patches/inox-patchset/fix-cfi-failures-with-unbundled-libxml.patch"
+	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/manpage.patch"
+	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/safebrowsing.patch"
+	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/headers.patch"
 	"${FILESDIR}/${PN}-lss.patch"
 	"${FILESDIR}/${PN}-libusb-interrupt-event-handler-r1.patch"
 	"${FILESDIR}/${PN}-system-libusb-r0.patch"
-	"${FILESDIR}/${PN}-system-nspr-r1.patch"
-	"${FILESDIR}/${PN}-system-openjpeg-r2.patch"
 	"${FILESDIR}/${PN}-system-fix-shim-headers-r0.patch"
-	"${FILESDIR}/${PN}-system-zlib-r1.patch"
 )
 
 S="${WORKDIR}/chromium-${PV/_*}"
@@ -230,24 +248,22 @@ src_prepare() {
 	default
 
 	if use vaapi ; then
-		eapply "${FILESDIR}/${PN}-enable-vaapi-r1.patch" || die
-		eapply "${FILESDIR}/${PN}-fix-vaapi-r2.patch" || die
+		eapply "${UGC_PATCHES_WD}/debian/patches/fedora/vaapi.patch" || die
+		eapply "${UGC_PATCHES_WD}/debian/patches/fedora/vaapi-fix.patch" || die
 	fi
 
 	if use "system-jsoncpp" ; then
-		eapply "${FILESDIR}/${PN}-system-jsoncpp-r1.patch" || die
+		eapply "${UGC_PATCHES_WD}/debian/patches/system/jsoncpp.patch" || die
 	fi
 
 	if use "system-icu" ; then
-		eapply "${FILESDIR}/${PN}-system-icu-r1.patch" || die
+		eapply "${UGC_PATCHES_WD}/debian/patches/system/icu.patch" || die
+		eapply "${UGC_PATCHES_WD}/debian/patches/system/convertutf.patch" || die
+		eapply "${FILESDIR}/${PN}-system-icu-r2.patch" || die
 	fi
 
 	if use "system-double-conversion" ; then
 		eapply "${FILESDIR}/${PN}-system-double-conversion.patch" || die
-	fi
-
-	if use "system-harfbuzz" ; then
-		eapply "${FILESDIR}/${PN}-system-harfbuzz.patch" || die
 	fi
 
 	if use optimize-webui; then
@@ -262,6 +278,9 @@ src_prepare() {
 		third_party/libusb/src/libusb/libusb.h || die
 
 	ebegin "Pruning binaries"
+	if use closure-compile; then
+		sed -i '\#third_party/closure_compiler/compiler/compiler.jar#d' "${UGC_WD}/pruning.list"
+	fi
 	"${UGC_WD}/utils/prune_binaries.py" . "${UGC_WD}/pruning.list"
 	eend $? || die
 
@@ -309,8 +328,6 @@ src_prepare() {
 		third_party/blink
 		third_party/boringssl
 		third_party/boringssl/src/third_party/fiat
-		third_party/boringssl/src/third_party/sike
-		third_party/boringssl/linux-x86_64/crypto/third_party/sike
 		third_party/breakpad
 		third_party/breakpad/breakpad/src/third_party/curl
 		third_party/brotli
@@ -322,9 +339,17 @@ src_prepare() {
 		third_party/catapult/third_party/html5lib-python
 		third_party/catapult/third_party/polymer
 		third_party/catapult/third_party/six
+		third_party/catapult/tracing/third_party/d3
+		third_party/catapult/tracing/third_party/gl-matrix
+		third_party/catapult/tracing/third_party/jpeg-js
+		third_party/catapult/tracing/third_party/jszip
+		third_party/catapult/tracing/third_party/mannwhitneyu
+		third_party/catapult/tracing/third_party/oboe
+		third_party/catapult/tracing/third_party/pako
 		third_party/ced
 		third_party/cld_3
 		third_party/closure_compiler
+		third_party/closure_compiler/compiler
 		third_party/crashpad
 		third_party/crashpad/crashpad/third_party/zlib
 		third_party/crc32c
@@ -333,10 +358,11 @@ src_prepare() {
 		third_party/dawn
 		third_party/depot_tools
 		third_party/devscripts
+		third_party/devtools-frontend
+		third_party/devtools-frontend/src/third_party
 		third_party/dom_distiller_js
 		third_party/emoji-segmenter
 		third_party/flatbuffers
-		third_party/flot
 		third_party/glslang
 		third_party/google_input_tools
 		third_party/google_input_tools/third_party/closure_library
@@ -354,6 +380,7 @@ src_prepare() {
 		third_party/libaom
 		third_party/libaom/source/libaom/third_party/vector
 		third_party/libaom/source/libaom/third_party/x86inc
+		third_party/libgifcodec
 		third_party/libjingle
 		third_party/libphonenumber
 		third_party/libsecret
@@ -390,7 +417,6 @@ src_prepare() {
 		third_party/skia
 		third_party/skia/include/third_party/skcms
 		third_party/skia/include/third_party/vulkan
-		third_party/skia/third_party/gif
 		third_party/skia/third_party/skcms
 		third_party/skia/third_party/vulkan
 		third_party/smhasher
@@ -458,8 +484,9 @@ src_prepare() {
 	use system-openh264 || keeplibs+=( third_party/openh264 )
 	use tcmalloc && keeplibs+=( third_party/tcmalloc )
 
-	# Remove most bundled libraries, some are still needed
 	python_setup 'python2*'
+
+	# Remove most bundled libraries, some are still needed
 	build/linux/unbundle/remove_bundled_libraries.py "${keeplibs[@]}" --do-remove || die
 }
 
@@ -535,9 +562,6 @@ setup_compile_flags() {
 }
 
 src_configure() {
-	# Calling this here supports resumption via FEATURES=keepwork
-	python_setup 'python2*'
-
 	# Make sure the build system will use the right tools (Bug #340795)
 	tc-export AR CC CXX NM
 
@@ -553,6 +577,7 @@ src_configure() {
 	local gn_system_libraries=(
 		flac
 		fontconfig
+		freetype
 		libdrm
 		libjpeg
 		libpng
@@ -678,9 +703,6 @@ src_compile() {
 	# Final link uses lots of file descriptors
 	ulimit -n 4096
 
-	# Calling this here supports resumption via FEATURES=keepwork
-	python_setup 'python2*'
-
 	# shellcheck disable=SC2086
 	# Avoid falling back to preprocessor mode when sources contain time macros
 	has ccache ${FEATURES} && \
@@ -689,8 +711,13 @@ src_compile() {
 	# Build mksnapshot and pax-mark it
 	local x
 	for x in mksnapshot v8_context_snapshot_generator; do
-		eninja -C out/Release "${x}"
-		pax-mark m "out/Release/${x}"
+		if tc-is-cross-compiler; then
+			eninja -C out/Release "host/${x}"
+			pax-mark m "out/Release/host/${x}"
+		else
+			eninja -C out/Release "${x}"
+			pax-mark m "out/Release/${x}"
+		fi
 	done
 
 	# Even though ninja autodetects number of CPUs, we respect
@@ -705,11 +732,18 @@ src_compile() {
 			s|@@MENUNAME@@|Chromium|g;' \
 			chrome/app/resources/manpage.1.in > \
 			out/Release/chromium-browser.1 || die
+
+	# Build desktop file; bug #706786
+	sed -e 's|@@MENUNAME@@|Chromium|g;
+		s|@@USR_BIN_SYMLINK_NAME@@|chromium-browser|g;
+		s|@@PACKAGE@@|chromium-browser|g;
+		s|\(^Exec=\)/usr/bin/|\1|g;' \
+		chrome/installer/linux/common/desktop.template > \
+		out/Release/chromium-browser-chromium.desktop || die
 }
 
 src_install() {
-	local CHROMIUM_HOME # SC2155
-	CHROMIUM_HOME="/usr/$(get_libdir)/chromium-browser"
+	local CHROMIUM_HOME="/usr/$(get_libdir)/chromium-browser"
 	exeinto "${CHROMIUM_HOME}"
 	doexe out/Release/chrome
 
@@ -720,9 +754,9 @@ src_install() {
 
 	doexe out/Release/chromedriver
 
-	newexe "${FILESDIR}/${PN}-launcher-r3.sh" chromium-launcher.sh
-	sed -i "s:/usr/lib/:/usr/$(get_libdir)/:g" \
-		"${ED}${CHROMIUM_HOME}/chromium-launcher.sh" || die
+	local sedargs=( -e "s:/usr/lib/:/usr/$(get_libdir)/:g" )
+	sed "${sedargs[@]}" "${FILESDIR}/${PN}-launcher-r3.sh" > chromium-launcher.sh || die
+	doexe chromium-launcher.sh
 
 	# It is important that we name the target "chromium-browser",
 	# xdg-utils expect it (Bug #355517)
@@ -750,6 +784,11 @@ src_install() {
 	doins -r out/Release/locales
 	doins -r out/Release/resources
 
+	if [[ -d out/Release/swiftshader ]]; then
+		insinto "${CHROMIUM_HOME}/swiftshader"
+		doins out/Release/swiftshader/*.so
+	fi
+
 	# Install icons and desktop entry
 	local branding size
 	for size in 16 24 32 48 64 128 256; do
@@ -760,21 +799,12 @@ src_install() {
 		newicon -s ${size} "${branding}/product_logo_${size}.png" chromium-browser.png
 	done
 
-	local mime_types="text/html;text/xml;application/xhtml+xml;"
-	mime_types+="x-scheme-handler/http;x-scheme-handler/https;" # Bug #360797
-	mime_types+="x-scheme-handler/ftp;" # Bug #412185
-	mime_types+="x-scheme-handler/mailto;x-scheme-handler/webcal;" # Bug #416393
-	make_desktop_entry \
-		chromium-browser \
-		"Chromium" \
-		chromium-browser \
-		"Network;WebBrowser" \
-		"MimeType=${mime_types}\\nStartupWMClass=chromium-browser"
-	sed -i "/^Exec/s/$/ %U/" "${ED}"/usr/share/applications/*.desktop || die
+	# Install desktop entry
+	domenu out/Release/chromium-browser-chromium.desktop
 
 	# Install GNOME default application entry (Bug #303100)
 	insinto /usr/share/gnome-control-center/default-apps
-	doins "${FILESDIR}/chromium-browser.xml"
+	newins "${FILESDIR}"/chromium-browser.xml chromium-browser.xml
 
 	# Install manpage; bug #684550
 	doman out/Release/chromium-browser.1
