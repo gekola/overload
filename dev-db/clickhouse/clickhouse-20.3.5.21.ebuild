@@ -100,7 +100,7 @@ RDEPEND="
 		system-zstd? ( app-arch/zstd )
 		jemalloc? ( dev-libs/jemalloc )
 		kafka? ( system-librdkafka? ( dev-libs/librdkafka:= ) )
-		unwind? ( system-libunwind? ( sys-libs/libunwind:7 ) )
+		unwind? ( system-libunwind? ( sys-libs/libunwind:= ) )
 		system-ssl? ( dev-libs/openssl:0= )
 
 		dev-libs/libltdl:0
@@ -126,11 +126,10 @@ DEPEND="${RDEPEND}
 			sys-libs/ncurses:0=[static-libs]
 			sys-libs/readline:0=[static-libs]
 		)
-		system-double-conversion? ( dev-libs/double-conversion[static-libs] )
 		system-lz4? ( app-arch/lz4[static-libs] )
 		system-zstd? ( app-arch/zstd[static-libs] )
 		kafka? ( system-librdkafka? ( dev-libs/librdkafka[static-libs] ) )
-		unwind? ( system-libunwind? ( sys-libs/libunwind:7[static-libs] ) )
+		unwind? ( system-libunwind? ( sys-libs/libunwind[static-libs] ) )
 		system-ssl? ( dev-libs/openssl[static-libs] )
 
 		system-capnproto? ( dev-libs/capnproto[static-libs] )
