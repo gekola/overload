@@ -194,6 +194,21 @@ if [[ -z $GMP_PLUGIN_LIST ]] ; then
 	GMP_PLUGIN_LIST=( gmp-gmpopenh264 gmp-widevinecdm )
 fi
 
+fix_path() {
+	local value_to_move=${1}
+	local new_path path_value
+	IFS=:; local -a path_values=( ${PATH} )
+	for path_value in "${path_values[@]}" ; do
+		if [[ ${path_value} == *"${value_to_move}"* ]] ; then
+			new_path="${path_value}${new_path:+:}${new_path}"
+		else
+			new_path+="${new_path:+:}${path_value}"
+		fi
+	done
+
+	echo "${new_path}"
+}
+
 llvm_check_deps() {
 	if ! has_version --host-root "sys-devel/clang:${LLVM_SLOT}" ; then
 		ewarn "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
@@ -268,6 +283,15 @@ pkg_setup() {
 	addpredict /proc/self/oom_score_adj
 
 	llvm_pkg_setup
+
+	# Workaround for #627726
+	if has ccache ${FEATURES} ; then
+		einfo "Fixing PATH for FEATURES=ccache ..."
+		PATH=$(fix_path 'ccache/bin')
+	elif has distcc ${FEATURES} ; then
+		einfo "Fixing PATH for FEATURES=distcc ..."
+		PATH=$(fix_path 'distcc/bin')
+	fi
 }
 
 src_unpack() {
@@ -634,7 +658,7 @@ src_install() {
 	pax-mark m "${BUILD_OBJ_DIR}"/dist/bin/xpcshell
 
 	# Add our default prefs for firefox
-	cp "${FILESDIR}"/gentoo-default-prefs.js-2 \
+	cp "${FILESDIR}"/gentoo-default-prefs.js-3 \
 		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
@@ -725,23 +749,78 @@ PROFILE_EOF
 	newins "${FILESDIR}"/disable-auto-update.policy.json policies.json
 
 	# Install icons and .desktop for menu entry
-	for size in ${sizes}; do
+	for size in ${sizes} ; do
 		insinto "/usr/share/icons/hicolor/${size}x${size}/apps"
 		newins "${icon_path}/default${size}.png" "${icon}.png"
 	done
 	# Install a 48x48 icon into /usr/share/pixmaps for legacy DEs
 	newicon "${icon_path}/default48.png" "${icon}.png"
-	newmenu "${FILESDIR}/icon/${PN}.desktop" "${P}.desktop"
-	sed -i -e "s:@NAME@:${name}:" -e "s:@ICON@:${icon}:" -e "s:@EXE@:${P}:" \
-		"${ED}/usr/share/applications/${P}.desktop" || die
 
 	# Add StartupNotify=true bug 237317
+	local startup_notify="false"
 	if use startup-notification ; then
-		echo "StartupNotify=true"\
-			 >> "${ED}/usr/share/applications/${P}.desktop" \
-			|| die
+		startup_notify="true"
 	fi
 
+	local display_protocols="auto X11" use_wayland="false"
+	if use wayland ; then
+		display_protocols+=" Wayland"
+		use_wayland="true"
+	fi
+
+	local app_name desktop_filename display_protocol exec_command
+	for display_protocol in ${display_protocols} ; do
+		app_name="${name} on ${display_protocol}"
+		desktop_filename="${P}-${display_protocol,,}.desktop"
+
+		case ${display_protocol} in
+			Wayland)
+				exec_command='${P}-wayland --name firefox-wayland'
+				newbin "${FILESDIR}"/firefox-wayland.sh "${P}-wayland"
+				;;
+			X11)
+				if ! use wayland ; then
+					# Exit loop here because there's no choice so
+					# we don't need wrapper/.desktop file for X11.
+					continue
+				fi
+
+				exec_command='${P}-x11 --name firefox-x11'
+				newbin "${FILESDIR}"/firefox-x11.sh "${P}-x11"
+				;;
+			*)
+				app_name="${name}"
+				desktop_filename="${P}.desktop"
+				exec_command="${P}"
+				;;
+		esac
+
+		newmenu "${FILESDIR}/icon/${PN}-r1.desktop" "${desktop_filename}"
+		sed -i \
+			-e "s:@NAME@:${app_name}:" \
+			-e "s:@EXEC@:${exec_command}:" \
+			-e "s:@ICON@:${icon}:" \
+			-e "s:@STARTUP_NOTIFY@:${startup_notify}:" \
+			"${ED%/}/usr/share/applications/${desktop_filename}" || die
+	done
+
+	rm "${ED%/}"/usr/bin/firefox || die
+	newbin "${FILESDIR}"/firefox.sh ${P}
+
+	local wrapper
+	for wrapper in \
+		"${ED%/}"/usr/bin/${P} \
+		"${ED%/}"/usr/bin/${P}-x11 \
+		"${ED%/}"/usr/bin/${P}-wayland \
+	; do
+		[[ ! -f "${wrapper}" ]] && continue
+
+		sed -i \
+			-e "s:@PREFIX@:${EPREFIX%/}/usr:g" \
+			-e "s:@DEFAULT_WAYLAND@:${use_wayland}:" \
+			-e "s:@MOZ_FIVE_HOME@:${P}:" \
+			"${wrapper}" || die
+	done
 	# Don't install llvm-symbolizer from sys-devel/llvm package
 	[[ -f "${ED%/}${MOZILLA_FIVE_HOME}/llvm-symbolizer" ]] && \
 		rm "${ED%/}${MOZILLA_FIVE_HOME}/llvm-symbolizer"
@@ -751,10 +830,7 @@ PROFILE_EOF
 	dosym firefox ${MOZILLA_FIVE_HOME}/firefox-bin
 
 	# Required in order to use plugins and even run firefox on hardened.
-	pax-mark m "${ED}"${MOZILLA_FIVE_HOME}/{firefox,plugin-container}
-
-	rm ${ED%/}/usr/bin/firefox
-	dosym ${MOZILLA_FIVE_HOME}/firefox /usr/bin/${P}
+	pax-mark m "${ED%/}"${MOZILLA_FIVE_HOME}/{firefox,plugin-container}
 }
 
 pkg_preinst() {
@@ -796,6 +872,50 @@ pkg_postinst() {
 		elog
 	fi
 
+	local show_doh_information show_normandy_information
+
+	if [[ -z "${REPLACING_VERSIONS}" ]] ; then
+		# New install; Tell user that DoH is disabled by default
+		show_doh_information=yes
+		show_normandy_information=yes
+	else
+		local replacing_version
+		for replacing_version in ${REPLACING_VERSIONS} ; do
+			if ver_test "${replacing_version}" -lt 68.6.0-r3 ; then
+				# Tell user only once about our DoH default
+				show_doh_information=yes
+				# Tell user only once about our Normandy default
+				show_normandy_information=yes
+			fi
+		done
+	fi
+
+	if [[ -n "${show_doh_information}" ]] ; then
+		elog
+		elog "Note regarding Trusted Recursive Resolver aka DNS-over-HTTPS (DoH):"
+		elog "Due to privacy concerns (encrypting DNS might be a good thing, sending all"
+		elog "DNS traffic to Cloudflare by default is not a good idea and applications"
+		elog "should respect OS configured settings), \"network.trr.mode\" was set to 5"
+		elog "(\"Off by choice\") by default."
+		elog "You can enable DNS-over-HTTPS in ${PN^}'s preferences."
+	fi
+
+	# bug 713782
+	if [[ -n "${show_normandy_information}" ]] ; then
+		elog
+		elog "Upstream operates a service named Normandy which allows Mozilla to"
+		elog "push changes for default settings or even install new add-ons remotely."
+		elog "While this can be useful to address problems like 'Armagadd-on 2.0' or"
+		elog "revert previous decisions to disable TLS 1.0/1.1, privacy and security"
+		elog "concerns prevail, which is why we have switched off the use of this"
+		elog "service by default."
+		elog
+		elog "To re-enable this service set"
+		elog
+		elog "    app.normandy.enabled=true"
+		elog
+		elog "in about:config."
+	fi
 	use symlink && eselect firefox update --if-unset
 }
 
