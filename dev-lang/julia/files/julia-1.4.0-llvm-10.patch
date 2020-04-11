@@ -1,0 +1,107 @@
+From ebce82e4f92ad6618e17fa7151191b811ed9920a Mon Sep 17 00:00:00 2001
+From: Valentin Churavy <v.churavy@gmail.com>
+Date: Tue, 21 Jan 2020 14:04:55 -0500
+Subject: [PATCH] [LLVM10] remove unused stream argument
+
+---
+ src/disasm.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/disasm.cpp b/src/disasm.cpp
+index e11ca2b8258f..cabfe4659e47 100644
+--- a/src/disasm.cpp
++++ b/src/disasm.cpp
+@@ -914,7 +914,9 @@ static void jl_dump_asm_internal(
+             MCDisassembler::DecodeStatus S;
+             FuncMCView view = memoryObject.slice(Index);
+             S = DisAsm->getInstruction(Inst, insSize, view, 0,
++#if JL_LLVM_VERSION < 100000
+                                       /*VStream*/ nulls(),
++#endif
+                                       /*CStream*/ pass != 0 ? Streamer->GetCommentOS() : nulls());
+             if (pass != 0 && Streamer->GetCommentOS().tell() > 0)
+                 Streamer->GetCommentOS() << '\n';
+From b7efa971e1bf667b5ebe86967a2013b397078d28 Mon Sep 17 00:00:00 2001
+From: Valentin Churavy <v.churavy@gmail.com>
+Date: Wed, 8 Jan 2020 15:14:41 -0500
+Subject: [PATCH] [LLVM10] use M->global_object().{begin|end}()
+
+---
+ src/jitlayers.cpp | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/jitlayers.cpp b/src/jitlayers.cpp
+index fa1ab7e9c44c..dd8391202ba3 100644
+--- a/src/jitlayers.cpp
++++ b/src/jitlayers.cpp
+@@ -460,7 +460,7 @@ void JuliaOJIT::addModule(std::unique_ptr<Module> M)
+ {
+ #ifndef JL_NDEBUG
+     // validate the relocations for M
+-    for (Module::global_object_iterator I = M->global_object_begin(), E = M->global_object_end(); I != E; ) {
++    for (Module::global_object_iterator I = M->global_objects().begin(), E = M->global_objects().end(); I != E; ) {
+         GlobalObject *F = &*I;
+         ++I;
+         if (F->isDeclaration()) {
+@@ -771,7 +771,7 @@ static void jl_merge_recursive(Module *m, Module *collector)
+     // since the declarations may get destroyed by the jl_merge_module call.
+     // this is also why we copy the Name string, rather than save a StringRef
+     SmallVector<std::string, 8> to_finalize;
+-    for (Module::global_object_iterator I = m->global_object_begin(), E = m->global_object_end(); I != E; ++I) {
++    for (Module::global_object_iterator I = m->global_objects().begin(), E = m->global_objects().end(); I != E; ++I) {
+         GlobalObject *F = &*I;
+         if (!F->isDeclaration()) {
+             module_for_fname.erase(F->getName());
+@@ -846,7 +846,7 @@ void jl_finalize_module(Module *m, bool shadow)
+ {
+     // record the function names that are part of this Module
+     // so it can be added to the JIT when needed
+-    for (Module::global_object_iterator I = m->global_object_begin(), E = m->global_object_end(); I != E; ++I) {
++    for (Module::global_object_iterator I = m->global_objects().begin(), E = m->global_objects().end(); I != E; ++I) {
+         GlobalObject *F = &*I;
+         if (!F->isDeclaration()) {
+             if (isa<Function>(F)) {
+From multiple commits, squashed
+Date: Sun, 29 Mar 2020 20:02:34 -0400
+
+diff --git a/src/jitlayers.h b/src/jitlayers.h
+index 61fa8c3fedb6..773afbe60ec9 100644
+--- a/src/jitlayers.h
++++ b/src/jitlayers.h
+@@ -145,8 +145,10 @@ typedef JITSymbol JL_JITSymbol;
+ using RTDyldObjHandleT = orc::RTDyldObjectLinkingLayerBase::ObjHandleT;
+ #endif
+ 
+-#if JL_LLVM_VERSION >= 70000
++#if JL_LLVM_VERSION >= 100000
++using CompilerResultT = Expected<orc::LegacyRTDyldObjectLinkingLayerBase::ObjectPtr>;
++#elif JL_LLVM_VERSION >= 70000
+ using CompilerResultT = std::unique_ptr<llvm::MemoryBuffer>;
+ #else
+ using CompilerResultT = object::OwningBinary<object::ObjectFile>;
+ #endif
+From b81321d1ab9fb1dfd08110f84030c113d89b32fd Mon Sep 17 00:00:00 2001
+From: Valentin Churavy <v.churavy@gmail.com>
+Date: Wed, 8 Jan 2020 12:07:43 -0500
+Subject: [PATCH] [LLVM10] Memset requires MaybeAlign
+
+---
+ src/llvm-alloc-opt.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/llvm-alloc-opt.cpp b/src/llvm-alloc-opt.cpp
+index fd4566579138..0ebd8abc1374 100644
+--- a/src/llvm-alloc-opt.cpp
++++ b/src/llvm-alloc-opt.cpp
+@@ -1360,7 +1360,11 @@ void Optimizer::splitOnStack(CallInst *orig_inst)
+                                                                           offset - slot.offset);
+                             auto sub_size = std::min(slot.offset + slot.size, offset + size) -
+                                 std::max(offset, slot.offset);
++#if JL_LLVM_VERSION >= 100000
++                            builder.CreateMemSet(ptr8, val_arg, sub_size, MaybeAlign(0));
++#else
+                             builder.CreateMemSet(ptr8, val_arg, sub_size, 0);
++#endif
+                         }
+                         call->eraseFromParent();
+                         return;
