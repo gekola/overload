@@ -39,6 +39,8 @@ DESCRIPTION="An OSS column-oriented database management system for real-time dat
 HOMEPAGE="https://clickhouse.yandex"
 LICENSE="Apache-2.0"
 MY_PN="ClickHouse"
+CH_LTS=1
+
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/yandex/${MY_PN}.git"
@@ -46,7 +48,11 @@ if [[ ${PV} == 9999 ]]; then
 	SRC_URI=""
 	TYPE="unstable"
 else
-	TYPE="stable"
+	if [[ ${CH_LTS} == 1 ]]; then
+		TYPE="lts"
+	else
+		TYPE="stable"
+	fi
 	SRC_URI="
 		https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.tar.gz -> ${P}.tar.gz
 		https://github.com/google/cctz/archive/$(contrib_mapping cctz)
@@ -160,11 +166,12 @@ PATCHES=(
 		"${FILESDIR}/${PN}-20.3-fix-mysql8.patch"
 		"${FILESDIR}/${PN}-20.1-allow-system-flatbuffers.patch"
 		"${FILESDIR}/${PN}-20.1-allow-system-s3.patch"
-		"${FILESDIR}/${PN}-20.3-enforce-static-internal-libs.patch"
+		"${FILESDIR}/${PN}-20.3-enforce-static-internal-libs-r1.patch"
 		"${FILESDIR}/${PN}-allow-system-unwind-r3.patch"
 		"${FILESDIR}/${PN}-20.3-system-grpc.patch"
 		"${FILESDIR}/${PN}-20.3-system-libc.patch"
 		"${FILESDIR}/${PN}-20.3-fix-readline.patch"
+		"${FILESDIR}/${PN}-20.6-fix-versions.patch"
 )
 
 CHECKREQS_DISK_BUILD="2G"
@@ -214,7 +221,7 @@ src_prepare() {
 	#sed -i -r -e "s: -Wno-(for-loop-analysis|unused-local-typedef|unused-private-field): -Wno-unused-variable:g" \
 	#	contrib/libpoco/CMakeLists.txt || die "Cannot patch poco"
 	if use system-poco; then
-		eapply "${FILESDIR}/${PN}-20.3-system-poco.patch" || die "Cannot patch sources for usage with system Poco"
+		eapply "${FILESDIR}/${PN}-20.3-system-poco-r1.patch" || die "Cannot patch sources for usage with system Poco"
 	fi
 	if $(tc-getCC) -no-pie -v 2>&1 | grep -q unrecognized; then
 		sed -i -e 's:--no-pie::' -i CMakeLists.txt || die "Cannot patch CMakeLists.txt"
@@ -223,7 +230,7 @@ src_prepare() {
 		sed -i -e 's:--no-pie:-no-pie:' -i CMakeLists.txt || die "Cannot patch CMakeLists.txt"
 	fi
 
-	sed -i -- "s/VERSION_DESCRIBE .*)/VERSION_DESCRIBE v${PV}-${TYPE})/g" dbms/cmake/version.cmake || die "Cannot patch version.cmake"
+	sed -i -- "s/VERSION_DESCRIBE .*)/VERSION_DESCRIBE v${PV}-${TYPE})/g" cmake/version.cmake || die "Cannot patch version.cmake"
 }
 
 src_configure() {
@@ -275,10 +282,6 @@ src_configure() {
 		# Let portage handle ccache, otherwise sandbox fails when FEATURES=-ccache
 		-DCCACHE_FOUND=0
 	)
-
-	# if use jemalloc; then
-	# 	append-ldflags -ljemalloc
-	# fi
 
 	if use test; then
 		mycmakeargs+=(-DUSE_INTERNAL_GTEST_LIBRARY="$(usex !system-gtest)")

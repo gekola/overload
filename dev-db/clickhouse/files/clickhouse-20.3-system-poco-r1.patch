@@ -1,5 +1,5 @@
---- a/dbms/src/Dictionaries/MongoDBDictionarySource.cpp
-+++ b/dbms/src/Dictionaries/MongoDBDictionarySource.cpp
+--- a/src/Dictionaries/MongoDBDictionarySource.cpp
++++ b/src/Dictionaries/MongoDBDictionarySource.cpp
 @@ -11,6 +11,8 @@
  #    include <Poco/MongoDB/Database.h>
  #    include <Poco/MongoDB/ObjectId.h>
