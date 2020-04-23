@@ -89,6 +89,7 @@ CDEPEND="
 	x11-libs/libXrender:=
 	x11-libs/libXScrnSaver:=
 	x11-libs/libXtst:=
+	>=x11-libs/libdrm-2.4.101
 	x11-libs/pango:=
 	closure-compile? ( virtual/jre:* )
 	cups? ( >=net-print/cups-1.3.11:= )
@@ -180,29 +181,25 @@ For native file dialogs in KDE, install kde-apps/kdialog.
 PATCHES=(
 	"${FILESDIR}/${PN}-compiler-r6.patch"
 	"${FILESDIR}/${PN}-fix-gcc.patch"
-	"${FILESDIR}/${PN}-gold-r5.patch"
+	"${FILESDIR}/${PN}-gold-r6.patch"
 	"${UGC_PATCHES_WD}/debian/patches/gn/libcxx.patch"
-	"${UGC_PATCHES_WD}/debian/patches/arm/gcc_skcms_ice.patch"
 	"${UGC_PATCHES_WD}/debian/patches/arm/pffffft-buildfix.patch"
-	"${UGC_PATCHES_WD}/debian/patches/gcc/ambiguous-initializer.patch"
-	"${UGC_PATCHES_WD}/debian/patches/gcc/namespace5.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/breakpad.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/gl.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/gpu-timeout.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/sequence-point.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/jumbo-namespace.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/widevine-enable-version-string.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/missing-includes.patch"
-	"${UGC_PATCHES_WD}/debian/patches/fixes/multiple-definition.patch"
-	"${UGC_PATCHES_WD}/debian/patches/fixes/incomplete-definition.patch"
 	"${UGC_PATCHES_WD}/debian/patches/disable/buildbot.patch"
 	"${UGC_PATCHES_WD}/debian/patches/disable/chromeos.patch"
 	"${UGC_PATCHES_WD}/debian/patches/disable/installer.patch"
 	"${UGC_PATCHES_WD}/debian/patches/disable/font-tests.patch"
+	"${UGC_PATCHES_WD}/debian/patches/disable/glmark.patch"
 	"${UGC_PATCHES_WD}/debian/patches/disable/swiftshader.patch"
 	"${UGC_PATCHES_WD}/debian/patches/system/jpeg.patch"
 	"${UGC_PATCHES_WD}/debian/patches/system/nspr.patch"
 	"${UGC_PATCHES_WD}/debian/patches/system/zlib.patch"
-	"${UGC_PATCHES_WD}/debian/patches/system/libxml2.patch"
 	"${UGC_PATCHES_WD}/debian/patches/system/openjpeg.patch"
 	"${UGC_PATCHES_WD}/debian/patches/inox-patchset/fix-cfi-failures-with-unbundled-libxml.patch"
 	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/manpage.patch"
@@ -316,6 +313,7 @@ src_prepare() {
 		third_party/angle/src/third_party/compiler
 		third_party/angle/src/third_party/libXNVCtrl
 		third_party/angle/src/third_party/trace_event
+		third_party/angle/src/third_party/volk
 		third_party/angle/third_party/glslang
 		third_party/angle/third_party/spirv-headers
 		third_party/angle/third_party/spirv-tools
@@ -359,6 +357,8 @@ src_prepare() {
 		third_party/depot_tools
 		third_party/devscripts
 		third_party/devtools-frontend
+		third_party/devtools-frontend/src/front_end/third_party/fabricjs
+		third_party/devtools-frontend/src/front_end/third_party/wasmparser
 		third_party/devtools-frontend/src/third_party
 		third_party/dom_distiller_js
 		third_party/emoji-segmenter
@@ -412,7 +412,6 @@ src_prepare() {
 		third_party/qcms
 		third_party/rnnoise
 		third_party/s2cellid
-		third_party/sfntly
 		third_party/simplejson
 		third_party/skia
 		third_party/skia/include/third_party/skcms
@@ -424,7 +423,6 @@ src_prepare() {
 		third_party/spirv-headers
 		third_party/SPIRV-Tools
 		third_party/sqlite
-		third_party/ungoogled
 		third_party/usb_ids
 		third_party/usrsctp
 		third_party/vulkan
@@ -472,6 +470,7 @@ src_prepare() {
 	use system-ffmpeg || keeplibs+=( third_party/ffmpeg third_party/opus )
 	use system-harfbuzz || keeplibs+=(
 		third_party/freetype
+		build/config/freetype/freetype.gni
 		third_party/harfbuzz-ng
 	)
 	use system-icu || keeplibs+=( third_party/icu )
@@ -692,6 +691,9 @@ src_configure() {
 
 	# Bug #654216
 	addpredict /dev/dri/ #nowarn
+
+	# Chromium relies on this, but was disabled in >=clang-10, crbug.com/1042470
+	append-cxxflags $(test-flags-CXX -flax-vector-conversions=all)
 
 	einfo "Configuring Chromium..."
 	set -- gn gen --args="${myconf_gn[*]} ${EXTRA_GN}" out/Release
