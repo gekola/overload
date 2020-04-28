@@ -89,7 +89,7 @@ CDEPEND="
 	x11-libs/libXrender:=
 	x11-libs/libXScrnSaver:=
 	x11-libs/libXtst:=
-	>=x11-libs/libdrm-2.4.101
+	x11-libs/libdrm:=
 	x11-libs/pango:=
 	closure-compile? ( virtual/jre:* )
 	cups? ( >=net-print/cups-1.3.11:= )
@@ -137,7 +137,7 @@ BDEPEND="
 	dev-vcs/git
 	sys-apps/hwids[usb(+)]
 	>=sys-devel/bison-2.4.3
-	clang? ( >=sys-devel/clang-7.0.0 )
+	clang? ( >=sys-devel/clang-8.0.0 )
 	sys-devel/flex
 	>=sys-devel/llvm-7.0.0[gold?]
 	virtual/libusb:1
@@ -185,7 +185,6 @@ PATCHES=(
 	"${UGC_PATCHES_WD}/debian/patches/gn/libcxx.patch"
 	"${UGC_PATCHES_WD}/debian/patches/arm/pffffft-buildfix.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/breakpad.patch"
-	"${UGC_PATCHES_WD}/debian/patches/fixes/gl.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/gpu-timeout.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/sequence-point.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/jumbo-namespace.patch"
@@ -247,6 +246,7 @@ src_prepare() {
 	if use vaapi ; then
 		eapply "${UGC_PATCHES_WD}/debian/patches/fedora/vaapi.patch" || die
 		eapply "${UGC_PATCHES_WD}/debian/patches/fedora/vaapi-fix.patch" || die
+		eapply "${UGC_PATCHES_WD}/debian/patches/fedora/chromium-81-vaapi-r738595.patch" || die
 	fi
 
 	if use "system-jsoncpp" ; then
