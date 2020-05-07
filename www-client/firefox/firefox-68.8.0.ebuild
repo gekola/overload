@@ -27,7 +27,7 @@ if [[ ${MOZ_ESR} == 1 ]] ; then
 fi
 
 # Patch version
-PATCH="${PN}-68.0-patches-12"
+PATCH="${PN}-68.0-patches-14"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
 MOZ_SRC_URI="${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz"
@@ -42,7 +42,7 @@ LLVM_MAX_SLOT=10
 
 inherit check-reqs eapi7-ver flag-o-matic toolchain-funcs eutils \
 		gnome2-utils llvm mozcoreconf-v6 pax-utils xdg-utils \
-		autotools mozlinguas-v2 virtualx
+		autotools mozlinguas-v2 multiprocessing virtualx
 
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="https://www.mozilla.com/firefox"
@@ -92,7 +92,7 @@ CDEPEND="
 	>=dev-libs/glib-2.26:2
 	>=sys-libs/zlib-1.2.3
 	>=virtual/libffi-3.0.10:=
-	virtual/ffmpeg
+	media-video/ffmpeg
 	x11-libs/libX11
 	x11-libs/libXcomposite
 	x11-libs/libXdamage
@@ -286,6 +286,10 @@ pkg_setup() {
 
 	# Workaround for #627726
 	if has ccache ${FEATURES} ; then
+		if use clang && use pgo ; then
+			die "Using FEATURES=ccache with USE=clang and USE=pgo is currently known to be broken (bug #718632)."
+		fi
+
 		einfo "Fixing PATH for FEATURES=ccache ..."
 		PATH=$(fix_path 'ccache/bin')
 	elif has distcc ${FEATURES} ; then
@@ -308,6 +312,12 @@ src_prepare() {
 
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
+
+	# Make LTO respect MAKEOPTS
+	sed -i \
+		-e "s/multiprocessing.cpu_count()/$(makeopts_jobs)/" \
+		"${S}"/build/moz.configure/toolchain.configure \
+		|| die "sed failed to set num_cores"
 
 	# Enable gnomebreakpad
 	if use debug ; then
