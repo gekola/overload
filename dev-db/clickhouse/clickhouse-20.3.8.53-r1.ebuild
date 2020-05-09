@@ -92,7 +92,7 @@ RDEPEND="
 	dev-libs/libpcre
 	dev-libs/re2:0=
 	>=sys-devel/llvm-8:=
-	<sys-devel/llvm-10:=
+	<sys-devel/llvm-11:=
 	s3? ( dev-libs/aws-sdk-cpp[s3] )
 	server? ( acct-group/clickhouse acct-user/clickhouse )
 	!static? (
@@ -171,7 +171,8 @@ PATCHES=(
 		"${FILESDIR}/${PN}-20.3-system-grpc.patch"
 		"${FILESDIR}/${PN}-20.3-system-libc.patch"
 		"${FILESDIR}/${PN}-20.3-fix-readline.patch"
-		"${FILESDIR}/${PN}-20.6-fix-versions.patch"
+		"${FILESDIR}/${PN}-20.3-fix-versions.patch"
+		"${FILESDIR}/${PN}-20.3-fix-headers.patch"
 )
 
 CHECKREQS_DISK_BUILD="2G"
