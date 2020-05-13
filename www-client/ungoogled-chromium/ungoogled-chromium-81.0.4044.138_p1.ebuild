@@ -204,10 +204,13 @@ PATCHES=(
 	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/manpage.patch"
 	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/safebrowsing.patch"
 	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/headers.patch"
+	"${FILESDIR}/${PN}-gcc-10.patch"
 	"${FILESDIR}/${PN}-lss.patch"
 	"${FILESDIR}/${PN}-libusb-interrupt-event-handler-r1.patch"
 	"${FILESDIR}/${PN}-system-libusb-r0.patch"
 	"${FILESDIR}/${PN}-system-fix-shim-headers-r0.patch"
+	"${FILESDIR}/${PN}-system-fix-icu67.patch"
+	"${FILESDIR}/${PN}-fix-re2-0.2020.05.01.patch"
 )
 
 S="${WORKDIR}/chromium-${PV/_*}"

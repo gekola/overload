@@ -1,0 +1,37 @@
+From f8ab799f09a8152e3d276ba85f394e90d0fdc079 Mon Sep 17 00:00:00 2001
+From: Lei Lei <leilei@chromium.org>
+Date: Mon, 17 Jun 2019 14:13:49 +0000
+Subject: [PATCH] [client]Update utils/tools.py to make it python3 compatible.
+
+It was missing in crrev.com/c/1637369.
+
+Change-Id: I2b07fe7ca99ee82ab044a6dae3b2d9b20314a7f3
+Bug: 942720
+Reviewed-on: https://chromium-review.googlesource.com/c/infra/luci/luci-py/+/1661146
+Commit-Queue: Marc-Antoine Ruel <maruel@chromium.org>
+Reviewed-by: Marc-Antoine Ruel <maruel@chromium.org>
+---
+
+diff --git a/client/utils/tools.py b/client/utils/tools.py
+index 377a61c..3b2a790 100644
+--- a/client/utils/tools.py
++++ b/client/utils/tools.py
+@@ -5,7 +5,6 @@
+ """Various utility functions and classes not specific to any single area."""
+ 
+ import atexit
+-import cStringIO
+ import functools
+ import json
+ import logging
+@@ -18,6 +17,10 @@
+ import utils
+ from . import zip_package
+ 
++if sys.version_info.major == 2:
++  import cStringIO
++else:
++  import io as cStringIO
+ 
+ # Path to (possibly extracted from zip) cacert.pem bundle file.
+ # See get_cacerts_bundle().
