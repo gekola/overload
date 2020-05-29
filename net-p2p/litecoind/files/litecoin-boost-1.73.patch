@@ -1,0 +1,20 @@
+--- a/src/validation.cpp
++++ b/src/validation.cpp
+@@ -45,6 +45,7 @@
+ #include <sstream>
+ 
+ #include <boost/algorithm/string/replace.hpp>
++#include <boost/bind.hpp>
+ #include <boost/thread.hpp>
+ 
+ #if defined(NDEBUG)
+--- a/src/validationinterface.cpp
++++ b/src/validationinterface.cpp
+@@ -16,6 +16,7 @@
+ #include <atomic>
+ #include <future>
+ 
++#include <boost/bind.hpp>
+ #include <boost/signals2/signal.hpp>
+ 
+ struct MainSignalsInstance {

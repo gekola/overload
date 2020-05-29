@@ -39,6 +39,7 @@ PATCHES=(
 	"${FILESDIR}/0.9.0-sys_leveldb.patch"
 	"${FILESDIR}/fix-includes.patch"
 	"${FILESDIR}/litecoind-0.13.2.1-memenv_h.patch"
+	"${FILESDIR}/litecoin-boost-1.73.patch"
 )
 
 S="${WORKDIR}/${MyP}"
