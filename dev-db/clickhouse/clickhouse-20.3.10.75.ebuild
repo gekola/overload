@@ -17,7 +17,7 @@ declare -A contrib_versions=(
 	["libunwind"]="ede0062"
 	["lz4"]="3d67671"
 	["orc"]="5981208"
-	["poco"]="d805cf5"
+	["poco"]="bc8ad1b"
 	["re2"]="7cf8b88"
 	["ryu"]="5b4a85"
 	["ssl"]="07e962"
@@ -292,7 +292,7 @@ src_configure() {
 }
 
 src_install() {
-	patchelf --remove-rpath dbms/src/Server/clickhouse
+	patchelf --remove-rpath src/Server/clickhouse
 
 	cmake-utils_src_install
 
