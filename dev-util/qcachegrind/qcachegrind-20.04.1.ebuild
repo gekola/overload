@@ -10,7 +10,7 @@ HOMEPAGE="https://kde.org/applications/development/kcachegrind"
 SLOT="0"
 
 BUNDLENAME=kcachegrind
-SRC_URI="mirror://kde/unstable/applications/${PV}/src/${BUNDLENAME}-${PV}.tar.xz"
+SRC_URI="https://download.kde.org/stable/release-service/${PV}/src/${BUNDLENAME}-${PV}.tar.xz"
 S="${WORKDIR}/${BUNDLENAME}-${PV}"
 
 LICENSE="GPL-2"
