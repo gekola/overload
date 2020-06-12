@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -37,7 +37,6 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	"${FILESDIR}/0.9.0-sys_leveldb.patch"
-	"${FILESDIR}/fix-includes.patch"
 	"${FILESDIR}/litecoind-0.13.2.1-memenv_h.patch"
 	"${FILESDIR}/litecoin-boost-1.73.patch"
 )

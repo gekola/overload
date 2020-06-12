@@ -1,11 +1,11 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 DB_VER="4.8"
 
-LANGS="af af_ZA ar be_BY bg bg_BG ca ca_ES ca@valencia cs cy da de el el_GR en en_GB eo es es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fr fr_CA fr_FR gl he hi_IN hr hu id_ID it it_IT ja ka kk_KZ ko_KR ku_IQ ky la lt lv_LV mk_MK mn ms_MY nb ne nl pam pl pt_BR pt_PT ro ro_RO ru ru_RU sk sl_SI sq sr sr@latin sv ta th_TH tr tr_TR uk ur_PK uz@Cyrl vi vi_VN zh zh_CN zh_HK zh_TW"
+LANGS="af af_ZA am ar be_BY bg bg_BG bn bs ca ca@valencia ca_ES cs cs_CZ cy da de de_DE el el_GR en en_AU en_GB eo es es_419 es_AR es_CL es_CO es_DO es_ES es_MX es_UY es_VE et et_EE eu_ES fa fa_IR fi fil fr fr_CA fr_FR gl he he_IL hi hi_IN hr hu hu_HU id id_ID is it it_IT ja ka kk_KZ km_KH ko ko_KR ku_IQ ky la lt lv_LV mk_MK ml mn mr_IN ms ms_MY my nb nb_NO ne nl nl_BE nl_NL pam pl pl_PL pt pt_BR pt_PT ro ro_RO ru ru_RU si sk sk_SK sl_SI sn sq sr sr@latin sv szl ta ta_IN te th th_TH tr tr_TR uk uk_UA ur_PK uz@Cyrl vi vi_VN zh-Hans zh zh_CN zh_HK zh_TW"
 
 inherit autotools db-use eutils desktop xdg-utils
 
@@ -51,9 +51,9 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	"${FILESDIR}"/0.9.0-sys_leveldb.patch
-	"${FILESDIR}"/fix-includes.patch
 	"${FILESDIR}"/litecoind-0.13.2.1-memenv_h.patch
 	"${FILESDIR}"/litecoin-boost-1.73.patch
+	"${FILESDIR}"/litecoin-0.18.1-fix-includes.patch
 )
 
 DOCS="doc/README.md doc/release-notes-litecoin.md"
