@@ -137,7 +137,7 @@ BDEPEND="
 	dev-vcs/git
 	sys-apps/hwids[usb(+)]
 	>=sys-devel/bison-2.4.3
-	clang? ( >=sys-devel/clang-8.0.0 )
+	clang? ( >=sys-devel/clang-8.0.0[static-analyzer] )
 	sys-devel/flex
 	>=sys-devel/llvm-7.0.0[gold?]
 	virtual/libusb:1
@@ -179,38 +179,46 @@ For native file dialogs in KDE, install kde-apps/kdialog.
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-compiler-r6.patch"
+	"${FILESDIR}/${PN}-compiler-r7.patch"
 	"${FILESDIR}/${PN}-fix-gcc.patch"
 	"${FILESDIR}/${PN}-gold-r6.patch"
 	"${UGC_PATCHES_WD}/debian/patches/gn/libcxx.patch"
 	"${UGC_PATCHES_WD}/debian/patches/arm/pffffft-buildfix.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/mojo.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/gnu-as.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/breakpad.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/ordering.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/gpu-timeout.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/sequence-point.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/jumbo-namespace.patch"
-	"${UGC_PATCHES_WD}/debian/patches/fixes/widevine-enable-version-string.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/incomplete-type.patch"
 	"${UGC_PATCHES_WD}/debian/patches/fixes/missing-includes.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/lambda-expression.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/widevine-enable-version-string.patch"
+	"${UGC_PATCHES_WD}/debian/patches/fixes/nullptr-dereference.patch"
+	"${UGC_PATCHES_WD}/debian/patches/disable/tests.patch"
+	"${UGC_PATCHES_WD}/debian/patches/disable/glmark.patch"
+	"${UGC_PATCHES_WD}/debian/patches/disable/owners.patch"
 	"${UGC_PATCHES_WD}/debian/patches/disable/buildbot.patch"
-	"${UGC_PATCHES_WD}/debian/patches/disable/chromeos.patch"
 	"${UGC_PATCHES_WD}/debian/patches/disable/installer.patch"
 	"${UGC_PATCHES_WD}/debian/patches/disable/font-tests.patch"
-	"${UGC_PATCHES_WD}/debian/patches/disable/glmark.patch"
 	"${UGC_PATCHES_WD}/debian/patches/disable/swiftshader.patch"
+	"${UGC_PATCHES_WD}/debian/patches/system/re2.patch"
 	"${UGC_PATCHES_WD}/debian/patches/system/jpeg.patch"
 	"${UGC_PATCHES_WD}/debian/patches/system/nspr.patch"
 	"${UGC_PATCHES_WD}/debian/patches/system/zlib.patch"
 	"${UGC_PATCHES_WD}/debian/patches/system/openjpeg.patch"
 	"${UGC_PATCHES_WD}/debian/patches/inox-patchset/fix-cfi-failures-with-unbundled-libxml.patch"
+	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/clang.patch"
 	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/manpage.patch"
 	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/safebrowsing.patch"
 	"${UGC_PATCHES_WD}/debian/patches/ungoogled-chromium/headers.patch"
 	"${FILESDIR}/${PN}-gcc-10.patch"
 	"${FILESDIR}/${PN}-lss.patch"
+	"${FILESDIR}/${PN}-83-system-clang-format.patch"
 	"${FILESDIR}/${PN}-libusb-interrupt-event-handler-r1.patch"
 	"${FILESDIR}/${PN}-system-libusb-r0.patch"
 	"${FILESDIR}/${PN}-system-fix-shim-headers-r0.patch"
-	"${FILESDIR}/${PN}-system-fix-icu67.patch"
-	"${FILESDIR}/${PN}-fix-re2-0.2020.05.01.patch"
 )
 
 S="${WORKDIR}/chromium-${PV/_*}"
@@ -249,7 +257,6 @@ src_prepare() {
 	if use vaapi ; then
 		eapply "${UGC_PATCHES_WD}/debian/patches/fedora/vaapi.patch" || die
 		eapply "${UGC_PATCHES_WD}/debian/patches/fedora/vaapi-fix.patch" || die
-		eapply "${UGC_PATCHES_WD}/debian/patches/fedora/chromium-81-vaapi-r738595.patch" || die
 	fi
 
 	if use "system-jsoncpp" ; then
@@ -258,6 +265,7 @@ src_prepare() {
 
 	if use "system-icu" ; then
 		eapply "${UGC_PATCHES_WD}/debian/patches/system/icu.patch" || die
+		eapply "${UGC_PATCHES_WD}/debian/patches/system/icu67.patch" || die
 		eapply "${UGC_PATCHES_WD}/debian/patches/system/convertutf.patch" || die
 		eapply "${FILESDIR}/${PN}-system-icu-r2.patch" || die
 	fi
@@ -308,7 +316,6 @@ src_prepare() {
 		net/third_party/quic
 		net/third_party/uri_template
 		third_party/abseil-cpp
-		third_party/adobe
 		third_party/angle
 		third_party/angle/src/common/third_party/base
 		third_party/angle/src/common/third_party/smhasher
@@ -324,6 +331,7 @@ src_prepare() {
 		third_party/angle/third_party/vulkan-loader
 		third_party/angle/third_party/vulkan-tools
 		third_party/angle/third_party/vulkan-validation-layers
+		third_party/adobe
 		third_party/apple_apsl
 		third_party/axe-core
 		third_party/blink
@@ -361,6 +369,7 @@ src_prepare() {
 		third_party/devscripts
 		third_party/devtools-frontend
 		third_party/devtools-frontend/src/front_end/third_party/fabricjs
+		third_party/devtools-frontend/src/front_end/third_party/lighthouse
 		third_party/devtools-frontend/src/front_end/third_party/wasmparser
 		third_party/devtools-frontend/src/third_party
 		third_party/dom_distiller_js
@@ -371,6 +380,7 @@ src_prepare() {
 		third_party/google_input_tools/third_party/closure_library
 		third_party/google_input_tools/third_party/closure_library/third_party/closure
 		third_party/googletest
+		third_party/harfbuzz-ng/utils
 		third_party/hunspell
 		third_party/iccjpeg
 		third_party/inspector_protocol
@@ -395,6 +405,7 @@ src_prepare() {
 		third_party/libxml/chromium
 		third_party/libyuv
 		third_party/lss
+		third_party/mako
 		third_party/markupsafe
 		third_party/mesa
 		third_party/metrics_proto
@@ -415,6 +426,7 @@ src_prepare() {
 		third_party/qcms
 		third_party/rnnoise
 		third_party/s2cellid
+		third_party/schema_org
 		third_party/simplejson
 		third_party/skia
 		third_party/skia/include/third_party/skcms
