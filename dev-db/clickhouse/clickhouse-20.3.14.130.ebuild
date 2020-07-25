@@ -39,7 +39,7 @@ DESCRIPTION="An OSS column-oriented database management system for real-time dat
 HOMEPAGE="https://clickhouse.yandex"
 LICENSE="Apache-2.0"
 MY_PN="ClickHouse"
-CH_LTS=0
+CH_LTS=1
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
@@ -117,6 +117,7 @@ RDEPEND="
 		)
 		dev-libs/icu:=
 		dev-libs/glib
+		dev-libs/libfmt
 		>=dev-libs/boost-1.65.0:=
 		mysql? ( dev-db/mysql-connector-c )
 		orc? ( dev-libs/cyrus-sasl:2= )
@@ -173,6 +174,7 @@ PATCHES=(
 		"${FILESDIR}/${PN}-20.3-fix-readline.patch"
 		"${FILESDIR}/${PN}-20.3-fix-versions.patch"
 		"${FILESDIR}/${PN}-20.3-fix-headers.patch"
+		"${FILESDIR}/${PN}-20.3-system-libfmt.patch"
 )
 
 CHECKREQS_DISK_BUILD="2G"

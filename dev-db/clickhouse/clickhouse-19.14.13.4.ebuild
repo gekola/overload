@@ -5,7 +5,7 @@ EAPI=7
 
 CMAKE_MAKEFILE_GENERATOR="ninja"
 
-inherit cmake-utils flag-o-matic systemd
+inherit check-reqs cmake-utils flag-o-matic systemd
 
 declare -A contrib_versions=(
 	["capnproto"]="a00ccd9"
@@ -147,10 +147,12 @@ DEPEND="${RDEPEND}
 PATCHES=(
 		"${FILESDIR}/${PN}-fix-mysql8-r2.patch"
 		"${FILESDIR}/${PN}-19.14-allow-system-unwind.patch"
+		"${FILESDIR}/${PN}-19.14-fix-gcc-10.patch"
 )
 
+CHECKREQS_DISK_BUILD="2G"
+
 pkg_pretend() {
-	CHECKREQS_DISK_BUILD="2G"
 	# Actually it is 960M on my machine
 	check-reqs_pkg_pretend
 	if [[ $(tc-getCC) == clang ]]; then
