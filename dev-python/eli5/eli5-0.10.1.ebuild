@@ -17,11 +17,11 @@ KEYWORDS="~amd64 ~x86"
 
 RDEPEND="
 	>=dev-python/numpy-1.9[${PYTHON_USEDEP}]
-	sci-libs/scipy[${PYTHON_USEDEP}]
 	>=sci-libs/scikits_learn-0.18[${PYTHON_USEDEP}]
 	dev-python/attrs[${PYTHON_USEDEP}]
 	dev-python/graphviz[${PYTHON_USEDEP}]
 	dev-python/jinja[${PYTHON_USEDEP}]
+	dev-python/scipy[${PYTHON_USEDEP}]
 	python_targets_python2_7? ( dev-python/singledispatch[python_targets_python2_7] )
 "
 
