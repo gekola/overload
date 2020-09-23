@@ -175,6 +175,7 @@ PATCHES=(
 		"${FILESDIR}/${PN}-20.3-fix-versions.patch"
 		"${FILESDIR}/${PN}-20.3-fix-headers.patch"
 		"${FILESDIR}/${PN}-20.3-system-libfmt.patch"
+		"${FILESDIR}/${PN}-20.3-fix-atomic.patch"
 )
 
 CHECKREQS_DISK_BUILD="2G"
