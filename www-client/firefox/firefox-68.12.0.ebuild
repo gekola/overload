@@ -6,15 +6,16 @@ VIRTUALX_REQUIRED="pgo"
 WANT_AUTOCONF="2.1"
 MOZ_ESR="1"
 
-PYTHON_COMPAT=( python3_{6,7,8} )
+PYTHON_COMPAT=( python3_{6,7,8,9} )
 PYTHON_REQ_USE='ncurses,sqlite,ssl,threads(+)'
 
 # This list can be updated with scripts/get_langs.sh from the mozilla overlay
-MOZ_LANGS=(ach af an ar ast az be bg bn br bs ca cak cs cy da de dsb el en en-CA
-en-GB en-US eo es-AR es-CL es-ES es-MX et eu fa ff fi fr fy-NL ga-IE gd gl gn gu-IN
-he hi-IN hr hsb hu hy-AM ia id is it ja ka kab kk km kn ko lij lt lv mk mr ms my
-nb-NO nl nn-NO oc pa-IN pl pt-BR pt-PT rm ro ru si sk sl son sq sr sv-SE ta te
-th tr uk ur uz vi xh zh-CN zh-TW )
+MOZ_LANGS=( ach af an ar ast az be bg bn br bs ca cak cs cy da de dsb
+el en en-CA en-GB en-US eo es-AR es-CL es-ES es-MX et eu fa ff fi fr
+fy-NL ga-IE gd gl gn gu-IN he hi-IN hr hsb hu hy-AM ia id is it ja ka
+kab kk km kn ko lij lt lv mk mr ms my nb-NO nl nn-NO oc pa-IN pl pt-BR
+pt-PT rm ro ru si sk sl son sq sr sv-SE ta te th tr uk ur uz vi xh
+zh-CN zh-TW )
 
 # Convert the ebuild version to the upstream mozilla version, used by mozlinguas
 MOZ_PV="${PV/_alpha/a}" # Handle alpha for SRC_URI
@@ -27,10 +28,10 @@ if [[ ${MOZ_ESR} == 1 ]] ; then
 fi
 
 # Patch version
-PATCH="${PN}-68.0-patches-14"
+PATCH="${PN}-68.0-patches-15"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
-MOZ_SRC_URI="${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz"
+MOZ_SRC_URI="${MOZ_HTTP_URI}/${MOZ_PV}/source/${PN}-${MOZ_PV}.source.tar.xz"
 
 if [[ "${PV}" == *_rc* ]]; then
 	MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/candidates/${MOZ_PV}-candidates/build${PV##*_rc}"
@@ -53,10 +54,10 @@ SLOT="${PV}"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="bindist clang cpu_flags_x86_avx2 dbus debug eme-free geckodriver
 	google-services	+gmp-autoupdate hardened hwaccel jack lto
-	cpu_flags_arm_neon pgo pulseaudio +screenshot selinux
+	cpu_flags_arm_neon +openh264 pgo pulseaudio +screenshot selinux
 	startup-notification symlink +system-av1 +system-harfbuzz
 	+system-icu +system-jpeg +system-libevent +system-sqlite
-	+system-libvpx +system-webp test wayland wifi webrtc"
+	+system-libvpx +system-webp test wayland webrtc wifi"
 
 REQUIRED_USE="pgo? ( lto )
 	wifi? ( dbus )"
@@ -70,7 +71,7 @@ SRC_URI="${SRC_URI}
 	${PATCH_URIS[@]}"
 
 CDEPEND="
-	>=dev-libs/nss-3.44.3
+	>=dev-libs/nss-3.44.4
 	>=dev-libs/nspr-4.21
 	dev-libs/atk
 	dev-libs/expat
@@ -85,13 +86,15 @@ CDEPEND="
 	>=media-libs/freetype-2.4.10
 	kernel_linux? ( !pulseaudio? ( media-libs/alsa-lib ) )
 	virtual/freedesktop-icon-theme
-	dbus? ( >=sys-apps/dbus-0.60
-		>=dev-libs/dbus-glib-0.72 )
+	dbus? (
+		>=sys-apps/dbus-0.60
+		>=dev-libs/dbus-glib-0.72
+	)
 	startup-notification? ( >=x11-libs/startup-notification-0.8 )
 	>=x11-libs/pixman-0.19.2
 	>=dev-libs/glib-2.26:2
 	>=sys-libs/zlib-1.2.3
-	>=virtual/libffi-3.0.10:=
+	>=dev-libs/libffi-3.0.10:=
 	media-video/ffmpeg
 	x11-libs/libX11
 	x11-libs/libXcomposite
@@ -104,7 +107,10 @@ CDEPEND="
 		>=media-libs/dav1d-0.3.0:=
 		>=media-libs/libaom-1.0.0:=
 	)
-	system-harfbuzz? ( >=media-libs/harfbuzz-2.4.0:0= >=media-gfx/graphite2-1.3.13 )
+	system-harfbuzz? (
+		>=media-libs/harfbuzz-2.4.0:0=
+		>=media-gfx/graphite2-1.3.13
+	)
 	system-icu? ( >=dev-libs/icu-63.1:= )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1 )
 	system-libevent? ( >=dev-libs/libevent-2.0:0=[threads] )
@@ -114,16 +120,25 @@ CDEPEND="
 	)
 	system-sqlite? ( >=dev-db/sqlite-3.28.0:3[secure-delete,debug=] )
 	system-webp? ( >=media-libs/libwebp-1.0.2:0= )
-	wifi? ( kernel_linux? ( >=sys-apps/dbus-0.60
+	wifi? (
+		kernel_linux? (
+			>=sys-apps/dbus-0.60
 			>=dev-libs/dbus-glib-0.72
-			net-misc/networkmanager ) )
+			net-misc/networkmanager
+		)
+	)
 	jack? ( virtual/jack )
 	selinux? ( sec-policy/selinux-mozilla )"
 
 RDEPEND="${CDEPEND}
 	jack? ( virtual/jack )
-	pulseaudio? ( || ( media-sound/pulseaudio
-		>=media-sound/apulse-0.1.9 ) )
+	openh264? ( media-libs/openh264:*[plugin] )
+	pulseaudio? (
+		|| (
+			media-sound/pulseaudio
+			>=media-sound/apulse-0.1.9
+		)
+	)
 	selinux? ( sec-policy/selinux-mozilla )
 	symlink? ( app-eselect/eselect-firefox )"
 
@@ -134,6 +149,8 @@ DEPEND="${CDEPEND}
 	>=net-libs/nodejs-8.11.0
 	>=sys-devel/binutils-2.30
 	sys-apps/findutils
+	virtual/pkgconfig
+	>=virtual/rust-1.34.0
 	|| (
 		(
 			sys-devel/clang:10
@@ -173,7 +190,6 @@ DEPEND="${CDEPEND}
 		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
-	>=virtual/rust-1.34.0
 	wayland? ( >=x11-libs/gtk+-3.11:3[wayland] )
 	amd64? ( >=dev-lang/yasm-1.1 virtual/opengl )
 	x86? ( >=dev-lang/yasm-1.1 virtual/opengl )
@@ -183,8 +199,6 @@ DEPEND="${CDEPEND}
 	)"
 
 S="${WORKDIR}/firefox-${PV%_*}"
-
-QA_PRESTRIPPED="usr/lib*/${P}/firefox"
 
 BUILD_OBJ_DIR="${S}/ff"
 
@@ -218,44 +232,52 @@ llvm_check_deps() {
 }
 
 pkg_pretend() {
-	if use pgo ; then
-		if ! has usersandbox $FEATURES ; then
-			die "You must enable usersandbox as X server can not run as root!"
+	if [[ ${MERGE_TYPE} != binary ]] ; then
+		if use pgo ; then
+			if ! has usersandbox $FEATURES ; then
+				die "You must enable usersandbox as X server can not run as root!"
+			fi
 		fi
-	fi
 
-	# Ensure we have enough disk space to compile
-	if use pgo || use lto || use debug || use test ; then
-		CHECKREQS_DISK_BUILD="8G"
-	else
-		CHECKREQS_DISK_BUILD="4G"
-	fi
+		# Ensure we have enough disk space to compile
+		if use pgo || use lto || use debug || use test ; then
+			CHECKREQS_DISK_BUILD="8G"
+		else
+			CHECKREQS_DISK_BUILD="4G"
+		fi
 
-	check-reqs_pkg_pretend
+		check-reqs_pkg_pretend
+	fi
 }
 
 pkg_setup() {
 	moz_pkgsetup
 	export MOZILLA_FIVE_HOME="/usr/$(get_libdir)/${P}"
 
-	# Ensure we have enough disk space to compile
-	if use pgo || use lto || use debug || use test ; then
-		CHECKREQS_DISK_BUILD="8G"
-	else
-		CHECKREQS_DISK_BUILD="4G"
+	if [[ ${MERGE_TYPE} != binary ]] ; then
+		# Ensure we have enough disk space to compile
+		if use pgo || use lto || use debug || use test ; then
+			CHECKREQS_DISK_BUILD="8G"
+		else
+			CHECKREQS_DISK_BUILD="4G"
+		fi
+
+		check-reqs_pkg_setup
+
+		# Avoid PGO profiling problems due to enviroment leakage
+		# These should *always* be cleaned up anyway
+		unset DBUS_SESSION_BUS_ADDRESS \
+			DISPLAY \
+			ORBIT_SOCKETDIR \
+			SESSION_MANAGER \
+			XDG_CACHE_HOME \
+			XDG_SESSION_COOKIE \
+			XAUTHORITY
+
+		addpredict /proc/self/oom_score_adj
+
+		llvm_pkg_setup
 	fi
-
-	check-reqs_pkg_setup
-
-	# Avoid PGO profiling problems due to enviroment leakage
-	# These should *always* be cleaned up anyway
-	unset DBUS_SESSION_BUS_ADDRESS \
-		DISPLAY \
-		ORBIT_SOCKETDIR \
-		SESSION_MANAGER \
-		XDG_CACHE_HOME \
-		XDG_SESSION_COOKIE \
-		XAUTHORITY
 
 	if ! use bindist ; then
 		einfo
@@ -263,16 +285,6 @@ pkg_setup() {
 		elog "to any users on your network or the internet. Doing so puts yourself into"
 		elog "a legal problem with Mozilla Foundation."
 		elog "You can disable it by emerging ${PN} _with_ the bindist USE-flag."
-	fi
-
-	addpredict /proc/self/oom_score_adj
-
-	llvm_pkg_setup
-
-	if has ccache ${FEATURES} ; then
-		if use clang && use pgo ; then
-			die "Using FEATURES=ccache with USE=clang and USE=pgo is currently known to be broken (bug #718632)."
-		fi
 	fi
 }
 
@@ -284,18 +296,26 @@ src_unpack() {
 }
 
 src_prepare() {
-	rm "${WORKDIR}"/firefox/2013_avoid_noinline_on_GCC_with_skcms.patch
-	rm "${WORKDIR}"/firefox/2015_fix_cssparser.patch
+	rm "${WORKDIR}"/firefox/2016_set_CARGO_PROFILE_RELEASE_LTO.patch
 	eapply "${WORKDIR}/firefox"
-
-	# Allow user to apply any additional patches without modifing ebuild
-	eapply_user
 
 	# Make LTO respect MAKEOPTS
 	sed -i \
 		-e "s/multiprocessing.cpu_count()/$(makeopts_jobs)/" \
 		"${S}"/build/moz.configure/toolchain.configure \
 		|| die "sed failed to set num_cores"
+
+	# sed-in toolchain prefix
+	sed -i \
+		-e "s/objdump/${CHOST}-objdump/" \
+		"${S}"/python/mozbuild/mozbuild/configure/check_debug_ranges.py \
+		|| die "sed failed to set toolchain prefix"
+
+	# Allow user to apply any additional patches without modifing ebuild
+	eapply_user
+
+	einfo "Removing pre-built binaries ..."
+	find "${S}"/third_party -type f \( -name '*.so' -o -name '*.o' \) -print -delete || die
 
 	# Enable gnomebreakpad
 	if use debug ; then
@@ -529,6 +549,7 @@ src_configure() {
 	# Set both --target and --host as mozilla uses python to guess values otherwise
 	mozconfig_annotate '' --target="${CHOST}"
 	mozconfig_annotate '' --host="${CBUILD:-${CHOST}}"
+	mozconfig_annotate '' --with-toolchain-prefix="${CHOST}-"
 	if use system-libevent ; then
 		mozconfig_annotate '' --with-system-libevent="${SYSROOT}${EPREFIX}"/usr
 	fi
@@ -597,10 +618,22 @@ src_configure() {
 	# when they would normally be larger than 2GiB.
 	append-ldflags "-Wl,--compress-debug-sections=zlib"
 
-	if use clang && ! use arm64; then
+	if use clang ; then
 		# https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
 		# https://bugzilla.mozilla.org/show_bug.cgi?id=1483822
-		mozconfig_annotate 'elf-hack is broken when using Clang' --disable-elf-hack
+		# toolkit/moz.configure Elfhack section: target.cpu in ('arm', 'x86', 'x86_64')
+		local disable_elf_hack=
+		if use amd64 ; then
+			disable_elf_hack=yes
+		elif use x86 ; then
+			disable_elf_hack=yes
+		elif use arm ; then
+			disable_elf_hack=yes
+		fi
+
+		if [[ -n ${disable_elf_hack} ]] ; then
+			mozconfig_annotate 'elf-hack is broken when using Clang' --disable-elf-hack
+		fi
 	fi
 
 	echo "mk_add_options MOZ_OBJDIR=${BUILD_OBJ_DIR}" >> "${S}"/.mozconfig
@@ -685,12 +718,14 @@ src_install() {
 		"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
 		|| die
 
-	local plugin
-	use gmp-autoupdate || use eme-free || for plugin in "${GMP_PLUGIN_LIST[@]}" ; do
-		echo "pref(\"media.${plugin}.autoupdate\", false);" >> \
-			"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
-			|| die
-	done
+	if ! use gmp-autoupdate ; then
+		local plugin
+		for plugin in "${GMP_PLUGIN_LIST[@]}" ; do
+			echo "pref(\"media.${plugin}.autoupdate\", false);" >> \
+				"${BUILD_OBJ_DIR}/dist/bin/browser/defaults/preferences/all-gentoo.js" \
+				|| die
+		done
+	fi
 
 	cd "${S}"
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" SHELL="${SHELL:-${EPREFIX}/bin/bash}" MOZ_NOSPAM=1 \
@@ -845,11 +880,13 @@ pkg_postinst() {
 	gnome2_icon_cache_update
 	xdg_desktop_database_update
 
-	if ! use gmp-autoupdate && ! use eme-free ; then
+	if ! use gmp-autoupdate ; then
 		elog "USE='-gmp-autoupdate' has disabled the following plugins from updating or"
 		elog "installing into new profiles:"
 		local plugin
-		for plugin in "${GMP_PLUGIN_LIST[@]}"; do elog "\t ${plugin}" ; done
+		for plugin in "${GMP_PLUGIN_LIST[@]}" ; do
+			elog "\t ${plugin}" ;
+		done
 		elog
 	fi
 
