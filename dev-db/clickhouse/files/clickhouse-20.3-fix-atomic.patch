@@ -1,5 +1,5 @@
---- src/Processors/Port.h
-+++ src/Processors/Port.h
+--- a/src/Processors/Port.h
++++ b/src/Processors/Port.h
 @@ -1,5 +1,6 @@
  #pragma once
  
@@ -7,8 +7,8 @@
  #include <memory>
  #include <vector>
  #include <variant>
---- src/Processors/IProcessor.h
-+++ src/Processors/IProcessor.h
+--- a/src/Processors/IProcessor.h
++++ b/src/Processors/IProcessor.h
 @@ -1,5 +1,6 @@
  #pragma once
  
