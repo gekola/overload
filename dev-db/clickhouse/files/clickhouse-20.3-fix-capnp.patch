@@ -1,0 +1,31 @@
+From d7627fa4fb9d40065a132ac815cc2a39a5a7ba1f Mon Sep 17 00:00:00 2001
+From: "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
+Date: Fri, 1 May 2020 22:32:06 +0300
+Subject: [PATCH] Fix capnproto version check for
+ capnp::UnalignedFlatArrayMessageReader
+
+capnp::UnalignedFlatArrayMessageReader was introduced in
+https://github.com/capnproto/capnproto/commit/3aa2b2aa02edb1c160b154ad74c08c929a02512a
+(which is a part of 0.7.0 release). Unfortunately,
+capnp::UnalignedFlatArrayMessageReader was removed in
+https://github.com/capnproto/capnproto/commit/3f0fee61c65475c8debfdf8c01f96c2f7e7eeb14
+(which is a part of 0.8.0 release)
+
+So change CAPNP_VERSION check accordingly.
+---
+ src/Processors/Formats/Impl/CapnProtoRowInputFormat.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Processors/Formats/Impl/CapnProtoRowInputFormat.cpp b/src/Processors/Formats/Impl/CapnProtoRowInputFormat.cpp
+index 331747bca11..44e6ec02903 100644
+--- a/src/Processors/Formats/Impl/CapnProtoRowInputFormat.cpp
++++ b/src/Processors/Formats/Impl/CapnProtoRowInputFormat.cpp
+@@ -240,7 +240,7 @@ bool CapnProtoRowInputFormat::readRow(MutableColumns & columns, RowReadExtension
+ 
+     auto array = readMessage();
+ 
+-#if CAPNP_VERSION >= 8000
++#if CAPNP_VERSION >= 7000 && CAPNP_VERSION < 8000
+     capnp::UnalignedFlatArrayMessageReader msg(array);
+ #else
+     capnp::FlatArrayMessageReader msg(array);
