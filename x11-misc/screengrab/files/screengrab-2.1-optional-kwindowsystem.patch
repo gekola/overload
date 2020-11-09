@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 0080f91..37c0a82 100644
+index 2fd3667..dd29b56 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -12,6 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -50,7 +50,7 @@ index 0080f91..37c0a82 100644
  # installing
  install(TARGETS screengrab RUNTIME DESTINATION bin)
 diff --git a/src/core/core.cpp b/src/core/core.cpp
-index c7ac184..52b21bc 100644
+index d29d21f..7c08c03 100644
 --- a/src/core/core.cpp
 +++ b/src/core/core.cpp
 @@ -28,7 +28,9 @@
@@ -125,7 +125,7 @@ index c7ac184..52b21bc 100644
          return;
      }
  
-@@ -297,15 +341,24 @@ void Core::getActiveWindow() // called only with window screenshots
+@@ -297,9 +341,13 @@ void Core::getActiveWindow() // called only with window screenshots
      if (_conf->getNoDecoration())
      {
          *_pixelMap = screen->grabWindow(wnd);
@@ -137,8 +137,9 @@ index c7ac184..52b21bc 100644
  
 +#ifdef SG_USE_SYSTEM_KF5
      QRect geometry = info.frameGeometry();
-     // The offscreen part of the window will appear as a black area in the screenshot.
-     // Until a better method is found, the offscreen area is ignored here.
+ 
+     // WARNING: Until now, "KWindowInfo::frameGeometry" does not consider the screens's
+@@ -313,6 +361,11 @@ void Core::getActiveWindow() // called only with window screenshots
      QRect r = screen->virtualGeometry().intersected(geometry);
      *_pixelMap = screen->grabWindow(0, r.x(), r.y(), r.width(), r.height());
      grabCursor(geometry.x(), geometry.y());

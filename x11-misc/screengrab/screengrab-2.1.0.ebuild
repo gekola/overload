@@ -14,7 +14,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="+edit +kwindowsystem"
 PATCHES=(
-	"${FILESDIR}/${PN}-2.0-optional-kwindowsystem.patch"
+	"${FILESDIR}/${PN}-2.1-optional-kwindowsystem.patch"
 )
 
 BDEPEND="dev-qt/linguist-tools:5"
