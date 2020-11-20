@@ -1,0 +1,648 @@
+diff --git a/base/common/CMakeLists.txt b/base/common/CMakeLists.txt
+index 903168a0dd..b420f88c5c 100644
+--- a/base/common/CMakeLists.txt
++++ b/base/common/CMakeLists.txt
+@@ -31,7 +31,7 @@ if (USE_DEBUG_HELPERS)
+     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${INCLUDE_DEBUG_HELPERS}")
+ endif ()
+ 
+-add_library (common ${SRCS})
++add_library (common STATIC ${SRCS})
+ 
+ if (WITH_COVERAGE)
+     target_compile_definitions(common PUBLIC WITH_COVERAGE=1)
+diff --git a/base/daemon/CMakeLists.txt b/base/daemon/CMakeLists.txt
+index 26d59a57e7..58a39f40a4 100644
+--- a/base/daemon/CMakeLists.txt
++++ b/base/daemon/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-add_library (daemon
++add_library (daemon STATIC
+     BaseDaemon.cpp
+     GraphiteWriter.cpp
+     SentryWriter.cpp
+diff --git a/base/loggers/CMakeLists.txt b/base/loggers/CMakeLists.txt
+index 48868cf1e0..21019779fa 100644
+--- a/base/loggers/CMakeLists.txt
++++ b/base/loggers/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
+ add_headers_and_sources(loggers .)
+-add_library(loggers ${loggers_sources} ${loggers_headers})
++add_library(loggers STATIC ${loggers_sources} ${loggers_headers})
+ target_link_libraries(loggers PRIVATE dbms clickhouse_common_io)
+ target_include_directories(loggers PUBLIC ..)
+diff --git a/base/mysqlxx/CMakeLists.txt b/base/mysqlxx/CMakeLists.txt
+index b410c38cfa..d5d3dd1224 100644
+--- a/base/mysqlxx/CMakeLists.txt
++++ b/base/mysqlxx/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-add_library (mysqlxx
++add_library (mysqlxx STATIC
+     Connection.cpp
+     Exception.cpp
+     Query.cpp
+diff --git a/base/readpassphrase/CMakeLists.txt b/base/readpassphrase/CMakeLists.txt
+index 574130ce6e..ccd31d1592 100644
+--- a/base/readpassphrase/CMakeLists.txt
++++ b/base/readpassphrase/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # wget https://raw.githubusercontent.com/openssh/openssh-portable/master/openbsd-compat/readpassphrase.c
+ # wget https://raw.githubusercontent.com/openssh/openssh-portable/master/openbsd-compat/readpassphrase.h
+ 
+-add_library(readpassphrase readpassphrase.c)
++add_library(readpassphrase STATIC readpassphrase.c)
+ 
+ set_target_properties(readpassphrase PROPERTIES LINKER_LANGUAGE C)
+ target_compile_options(readpassphrase PRIVATE -Wno-unused-result -Wno-reserved-id-macro)
+diff --git a/base/widechar_width/CMakeLists.txt b/base/widechar_width/CMakeLists.txt
+index 724498ac9c..deb6064ea2 100644
+--- a/base/widechar_width/CMakeLists.txt
++++ b/base/widechar_width/CMakeLists.txt
+@@ -1,2 +1,2 @@
+-add_library(widechar_width widechar_width.cpp)
++add_library(widechar_width STATIC widechar_width.cpp)
+ target_include_directories(widechar_width PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+diff --git a/cmake/find/parquet.cmake b/cmake/find/parquet.cmake
+index 6d05fa17ae..538dea7cad 100644
+--- a/cmake/find/parquet.cmake
++++ b/cmake/find/parquet.cmake
+@@ -146,7 +146,7 @@ if(NOT EXTERNAL_PARQUET_FOUND AND NOT MISSING_INTERNAL_PARQUET_LIBRARY AND NOT O
+         set(PARQUET_INCLUDE_DIR "${ClickHouse_SOURCE_DIR}/contrib/arrow/cpp/src" ${ClickHouse_BINARY_DIR}/contrib/arrow/cpp/src)
+     endif()
+ 
+-    if(MAKE_STATIC_LIBRARIES)
++    if(TRUE)
+         set(FLATBUFFERS_LIBRARY flatbuffers)
+         set(ARROW_LIBRARY arrow_static)
+         set(PARQUET_LIBRARY parquet_static)
+diff --git a/contrib/FastMemcpy/CMakeLists.txt b/contrib/FastMemcpy/CMakeLists.txt
+index 8efe6d45df..4f899f3236 100644
+--- a/contrib/FastMemcpy/CMakeLists.txt
++++ b/contrib/FastMemcpy/CMakeLists.txt
+@@ -13,7 +13,7 @@ if (ENABLE_FASTMEMCPY)
+         memcpy_wrapper.c
+     )
+ 
+-    add_library (FastMemcpy ${SRCS})
++    add_library (FastMemcpy STATIC ${SRCS})
+     target_include_directories (FastMemcpy PUBLIC ${LIBRARY_DIR})
+ 
+     target_compile_definitions(FastMemcpy PUBLIC USE_FASTMEMCPY=1)
+diff --git a/contrib/arrow-cmake/CMakeLists.txt b/contrib/arrow-cmake/CMakeLists.txt
+index 442f2534f6..9ec483d82d 100644
+--- a/contrib/arrow-cmake/CMakeLists.txt
++++ b/contrib/arrow-cmake/CMakeLists.txt
+@@ -43,7 +43,7 @@ set(thriftcpp_threads_SOURCES
+         ${LIBRARY_DIR}/src/thrift/concurrency/Monitor.cpp
+         ${LIBRARY_DIR}/src/thrift/concurrency/Mutex.cpp
+         )
+-add_library(${THRIFT_LIBRARY} ${thriftcpp_SOURCES} ${thriftcpp_threads_SOURCES})
++      add_library(${THRIFT_LIBRARY} STATIC ${thriftcpp_SOURCES} ${thriftcpp_threads_SOURCES})
+ set_target_properties(${THRIFT_LIBRARY} PROPERTIES CXX_STANDARD 14) # REMOVE after https://github.com/apache/thrift/pull/1641
+ target_include_directories(${THRIFT_LIBRARY} SYSTEM PUBLIC ${ClickHouse_SOURCE_DIR}/contrib/thrift/lib/cpp/src)
+ target_link_libraries (${THRIFT_LIBRARY} PRIVATE boost::headers_only)
+@@ -286,15 +287,18 @@ if (ARROW_WITH_ZSTD)
+ endif ()
+ 
+ 
+-add_library(${ARROW_LIBRARY} ${ARROW_SRCS})
++add_library(${ARROW_LIBRARY} STATIC ${ARROW_SRCS})
+ 
+ # Arrow dependencies
+ if (USE_FLATBUFFERS_INTERNAL)
+     add_dependencies(${ARROW_LIBRARY} ${FLATBUFFERS_LIBRARY})
+     target_link_libraries(${ARROW_LIBRARY} PRIVATE flatbuffers)
+ endif ()
+ 
+ target_link_libraries(${ARROW_LIBRARY} PRIVATE boost::filesystem)
++if (ARROW_WITH_SNAPPY)
++    target_link_libraries(${ARROW_LIBRARY} PRIVATE ${SNAPPY_LIBRARY})
++endif ()
+ 
+ if (USE_INTERNAL_PROTOBUF_LIBRARY)
+     add_dependencies(${ARROW_LIBRARY} protoc)
+@@ -360,7 +363,7 @@ set(PARQUET_SRCS
+         ${GEN_LIBRARY_DIR}/parquet_types.cpp
+         )
+ #list(TRANSFORM PARQUET_SRCS PREPEND ${LIBRARY_DIR}/) # cmake 3.12
+-add_library(${PARQUET_LIBRARY} ${PARQUET_SRCS})
++add_library(${PARQUET_LIBRARY} STATIC ${PARQUET_SRCS})
+ target_include_directories(${PARQUET_LIBRARY} SYSTEM PUBLIC ${ClickHouse_SOURCE_DIR}/contrib/arrow/cpp/src ${CMAKE_CURRENT_SOURCE_DIR}/cpp/src PRIVATE ${OPENSSL_INCLUDE_DIR})
+ include(${ClickHouse_SOURCE_DIR}/contrib/thrift/build/cmake/ConfigureChecks.cmake) # makes config.h
+ target_link_libraries(${PARQUET_LIBRARY} PUBLIC ${ARROW_LIBRARY} PRIVATE ${THRIFT_LIBRARY} boost::headers_only boost::regex ${OPENSSL_LIBRARIES})
+diff --git a/contrib/cctz-cmake/CMakeLists.txt b/contrib/cctz-cmake/CMakeLists.txt
+index 90e33dc9f6..c67d4582b1 100644
+--- a/contrib/cctz-cmake/CMakeLists.txt
++++ b/contrib/cctz-cmake/CMakeLists.txt
+@@ -55,7 +55,7 @@ if (NOT EXTERNAL_CCTZ_LIBRARY_FOUND OR NOT EXTERNAL_CCTZ_LIBRARY_WORKS)
+         ${LIBRARY_DIR}/src/zone_info_source.cc
+     )
+ 
+-    add_library (cctz ${SRCS})
++    add_library (cctz STATIC ${SRCS})
+     target_include_directories (cctz PUBLIC ${LIBRARY_DIR}/include)
+ 
+     if (OS_FREEBSD)
+diff --git a/contrib/cityhash102/CMakeLists.txt b/contrib/cityhash102/CMakeLists.txt
+index c3f53a8f87..67b1af8b35 100644
+--- a/contrib/cityhash102/CMakeLists.txt
++++ b/contrib/cityhash102/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-add_library(cityhash
++add_library(cityhash STATIC
+ 	src/city.cc
+ 	include/citycrc.h
+ 	include/city.h
+diff --git a/contrib/consistent-hashing-sumbur/CMakeLists.txt b/contrib/consistent-hashing-sumbur/CMakeLists.txt
+index f11b5095f5..d5e329a310 100644
+--- a/contrib/consistent-hashing-sumbur/CMakeLists.txt
++++ b/contrib/consistent-hashing-sumbur/CMakeLists.txt
+@@ -1,2 +1,2 @@
+-add_library(consistent-hashing-sumbur sumbur.cpp)
++add_library(consistent-hashing-sumbur STATIC sumbur.cpp)
+ target_include_directories(consistent-hashing-sumbur PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+diff --git a/contrib/consistent-hashing/CMakeLists.txt b/contrib/consistent-hashing/CMakeLists.txt
+index 4457fe6e2d..2b5a18057e 100644
+--- a/contrib/consistent-hashing/CMakeLists.txt
++++ b/contrib/consistent-hashing/CMakeLists.txt
+@@ -1,2 +1,2 @@
+-add_library(consistent-hashing consistent_hashing.cpp popcount.cpp)
++add_library(consistent-hashing STATIC consistent_hashing.cpp popcount.cpp)
+ target_include_directories(consistent-hashing PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+diff --git a/contrib/croaring/CMakeLists.txt b/contrib/croaring/CMakeLists.txt
+index da19911487..5f29284055 100644
+--- a/contrib/croaring/CMakeLists.txt
++++ b/contrib/croaring/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-add_library(roaring
++add_library(roaring STATIC
+     roaring.c
+     roaring/roaring.h
+     roaring/roaring.hh)
+diff --git a/contrib/libbtrie/CMakeLists.txt b/contrib/libbtrie/CMakeLists.txt
+index 2b0c8e3fd7..69b22cbc1c 100644
+--- a/contrib/libbtrie/CMakeLists.txt
++++ b/contrib/libbtrie/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-add_library(btrie
++add_library(btrie STATIC
+     src/btrie.c
+     include/btrie.h
+ )
+diff --git a/contrib/libcpuid-cmake/CMakeLists.txt b/contrib/libcpuid-cmake/CMakeLists.txt
+index 8c1be50b4e..ab819026bc 100644
+--- a/contrib/libcpuid-cmake/CMakeLists.txt
++++ b/contrib/libcpuid-cmake/CMakeLists.txt
+@@ -28,7 +28,7 @@ set (SRCS
+     "${LIBRARY_DIR}/libcpuid/recog_intel.c"
+ )
+ 
+-add_library (cpuid ${SRCS})
++add_library (cpuid STATIC ${SRCS})
+ 
+ target_include_directories (cpuid SYSTEM PUBLIC "${LIBRARY_DIR}")
+ target_compile_definitions (cpuid PUBLIC USE_CPUID=1)
+diff --git a/contrib/libfarmhash/CMakeLists.txt b/contrib/libfarmhash/CMakeLists.txt
+index 20bba58cde..8ab3a13b22 100644
+--- a/contrib/libfarmhash/CMakeLists.txt
++++ b/contrib/libfarmhash/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-add_library(farmhash
++add_library(farmhash STATIC
+ 	farmhash.cc
+ 	farmhash.h)
+ 
+diff --git a/contrib/libmetrohash/CMakeLists.txt b/contrib/libmetrohash/CMakeLists.txt
+index 9304cb3644..16616226e5 100644
+--- a/contrib/libmetrohash/CMakeLists.txt
++++ b/contrib/libmetrohash/CMakeLists.txt
+@@ -6,5 +6,5 @@ if (HAVE_SSE42) # Not used. Pretty easy to port.
+     list (APPEND SRCS src/metrohash128crc.cpp)
+ endif ()
+ 
+-add_library(metrohash ${SRCS})
++add_library(metrohash STATIC ${SRCS})
+ target_include_directories(metrohash PUBLIC src)
+diff --git a/contrib/librdkafka-cmake/CMakeLists.txt b/contrib/librdkafka-cmake/CMakeLists.txt
+index c8d8d2070b..29142c1a88 100644
+--- a/contrib/librdkafka-cmake/CMakeLists.txt
++++ b/contrib/librdkafka-cmake/CMakeLists.txt
+@@ -84,7 +84,7 @@ if(${ENABLE_CYRUS_SASL})
+     )
+ endif()
+ 
+-add_library(rdkafka ${SRCS})
++add_library(rdkafka STATIC ${SRCS})
+ target_compile_options(rdkafka PRIVATE -fno-sanitize=undefined)
+ # target_include_directories(rdkafka SYSTEM PUBLIC include)
+ target_include_directories(rdkafka SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)  # for "librdkafka/rdkafka.h"
+diff --git a/contrib/libunwind-cmake/CMakeLists.txt b/contrib/libunwind-cmake/CMakeLists.txt
+index 82b3b9c0de..fae3c3343b 100644
+--- a/contrib/libunwind-cmake/CMakeLists.txt
++++ b/contrib/libunwind-cmake/CMakeLists.txt
+@@ -29,7 +29,7 @@ set(LIBUNWIND_SOURCES
+     ${LIBUNWIND_C_SOURCES}
+     ${LIBUNWIND_ASM_SOURCES})
+ 
+-add_library(unwind ${LIBUNWIND_SOURCES})
++add_library(unwind STATIC ${LIBUNWIND_SOURCES})
+ 
+ target_include_directories(unwind SYSTEM BEFORE PUBLIC $<BUILD_INTERFACE:${LIBUNWIND_SOURCE_DIR}/include>)
+ target_compile_definitions(unwind PRIVATE -D_LIBUNWIND_NO_HEAP=1 -D_DEBUG -D_LIBUNWIND_IS_NATIVE_ONLY)
+diff --git a/contrib/murmurhash/CMakeLists.txt b/contrib/murmurhash/CMakeLists.txt
+index c5e467a2d6..6085229de7 100644
+--- a/contrib/murmurhash/CMakeLists.txt
++++ b/contrib/murmurhash/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-add_library(murmurhash
++add_library(murmurhash STATIC
+     src/murmurhash2.cpp
+     src/murmurhash3.cpp
+     include/murmurhash2.h
+diff --git a/contrib/poco-cmake/Crypto/CMakeLists.txt b/contrib/poco-cmake/Crypto/CMakeLists.txt
+index 468f164151..7e365cde95 100644
+--- a/contrib/poco-cmake/Crypto/CMakeLists.txt
++++ b/contrib/poco-cmake/Crypto/CMakeLists.txt
+@@ -25,6 +25,6 @@ if (ENABLE_SSL)
+             ${LIBRARY_DIR}/Crypto/src/X509Certificate.cpp
+         )
+
+-        add_library (_poco_crypto ${SRCS})
++        add_library (_poco_crypto STATIC ${SRCS})
+         add_library (Poco::Crypto ALIAS _poco_crypto)
+
+         target_compile_options (_poco_crypto PRIVATE -Wno-newline-eof)
+diff --git a/contrib/poco-cmake/Data/CMakeLists.txt b/contrib/poco-cmake/Data/CMakeLists.txt
+index 1c185df896..8abfb05cc5 100644
+--- a/contrib/poco-cmake/Data/CMakeLists.txt
++++ b/contrib/poco-cmake/Data/CMakeLists.txt
+@@ -37,7 +37,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/Data/src/Transaction.cpp
+     )
+
+-    add_library (_poco_data ${SRCS})
++    add_library (_poco_data STATIC ${SRCS})
+     add_library (Poco::Data ALIAS _poco_data)
+
+     if (COMPILER_GCC)
+diff --git a/contrib/poco-cmake/Data/ODBC/CMakeLists.txt b/contrib/poco-cmake/Data/ODBC/CMakeLists.txt
+index cd7c5ef286..dd58432920 100644
+--- a/contrib/poco-cmake/Data/ODBC/CMakeLists.txt
++++ b/contrib/poco-cmake/Data/ODBC/CMakeLists.txt
+@@ -21,7 +21,7 @@ if (ENABLE_ODBC)
+             ${LIBRARY_DIR}/Data/ODBC/src/Utility.cpp
+         )
+
+-        add_library (_poco_data_odbc ${SRCS})
++        add_library (_poco_data_odbc STATIC ${SRCS})
+         add_library (Poco::Data::ODBC ALIAS _poco_data_odbc)
+
+         target_compile_options (_poco_data_odbc PRIVATE -Wno-unused-variable)
+diff --git a/contrib/poco-cmake/Foundation/CMakeLists.txt b/contrib/poco-cmake/Foundation/CMakeLists.txt
+index f4647461ec..35cd420e2e 100644
+--- a/contrib/poco-cmake/Foundation/CMakeLists.txt
++++ b/contrib/poco-cmake/Foundation/CMakeLists.txt
+@@ -25,7 +25,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/Foundation/src/pcre_xclass.c
+     )
+
+-    add_library (_poco_foundation_pcre ${SRCS_PCRE})
++    add_library (_poco_foundation_pcre STATIC ${SRCS_PCRE})
+     add_library (Poco::Foundation::PCRE ALIAS _poco_foundation_pcre)
+
+     target_compile_options (_poco_foundation_pcre PRIVATE -Wno-sign-compare)
+@@ -188,7 +188,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/Foundation/src/Windows1252Encoding.cpp
+     )
+ 
+-    add_library (_poco_foundation ${SRCS})
++    add_library (_poco_foundation STATIC ${SRCS})
+     add_library (Poco::Foundation ALIAS _poco_foundation)
+ 
+     if (COMPILER_GCC)
+diff --git a/contrib/poco-cmake/JSON/CMakeLists.txt b/contrib/poco-cmake/JSON/CMakeLists.txt
+index 89054cf225..d0f4bbf228 100644
+--- a/contrib/poco-cmake/JSON/CMakeLists.txt
++++ b/contrib/poco-cmake/JSON/CMakeLists.txt
+@@ -5,7 +5,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/JSON/src/pdjson.c
+     )
+
+-    add_library (_poco_json_pdjson ${SRCS_PDJSON})
++    add_library (_poco_json_pdjson STATIC ${SRCS_PDJSON})
+     add_library (Poco::JSON::Pdjson ALIAS _poco_json_pdjson)
+
+     # Poco::JSON
+@@ -25,7 +25,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/JSON/src/TemplateCache.cpp
+     )
+
+-    add_library (_poco_json ${SRCS})
++    add_library (_poco_json STATIC ${SRCS})
+     add_library (Poco::JSON ALIAS _poco_json)
+
+     target_include_directories (_poco_json SYSTEM PUBLIC ${LIBRARY_DIR}/JSON/include)
+diff --git a/contrib/poco-cmake/MongoDB/CMakeLists.txt b/contrib/poco-cmake/MongoDB/CMakeLists.txt
+index 0d79f680a6..f6dc335225 100644
+--- a/contrib/poco-cmake/MongoDB/CMakeLists.txt
++++ b/contrib/poco-cmake/MongoDB/CMakeLists.txt
+@@ -23,7 +23,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/MongoDB/src/UpdateRequest.cpp
+     )
+
+-    add_library (_poco_mongodb ${SRCS})
++    add_library (_poco_mongodb STATIC ${SRCS})
+     add_library (Poco::MongoDB ALIAS _poco_mongodb)
+
+     target_include_directories (_poco_mongodb SYSTEM PUBLIC ${LIBRARY_DIR}/MongoDB/include)
+diff --git a/contrib/poco-cmake/Net/CMakeLists.txt b/contrib/poco-cmake/Net/CMakeLists.txt
+index 9bc06e52e0..ec8fe6fd15 100644
+--- a/contrib/poco-cmake/Net/CMakeLists.txt
++++ b/contrib/poco-cmake/Net/CMakeLists.txt
+@@ -102,7 +102,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/Net/src/WebSocketImpl.cpp
+     )
+
+-    add_library (_poco_net ${SRCS})
++    add_library (_poco_net STATIC ${SRCS})
+     add_library (Poco::Net ALIAS _poco_net)
+
+     if (OS_LINUX)
+diff --git a/contrib/poco-cmake/Net/SSL/CMakeLists.txt b/contrib/poco-cmake/Net/SSL/CMakeLists.txt
+index 7cc71f441c..3c6cbdcac7 100644
+--- a/contrib/poco-cmake/Net/SSL/CMakeLists.txt
++++ b/contrib/poco-cmake/Net/SSL/CMakeLists.txt
+@@ -30,7 +30,7 @@ if (ENABLE_SSL)
+             ${LIBRARY_DIR}/NetSSL_OpenSSL/src/X509Certificate.cpp
+         )
+
+-        add_library (_poco_net_ssl ${SRCS})
++        add_library (_poco_net_ssl STATIC ${SRCS})
+         add_library (Poco::Net::SSL ALIAS _poco_net_ssl)
+
+         target_include_directories (_poco_net_ssl SYSTEM PUBLIC ${LIBRARY_DIR}/NetSSL_OpenSSL/include)
+diff --git a/contrib/poco-cmake/Redis/CMakeLists.txt b/contrib/poco-cmake/Redis/CMakeLists.txt
+index 43d0009101..b3cacc4f0f 100644
+--- a/contrib/poco-cmake/Redis/CMakeLists.txt
++++ b/contrib/poco-cmake/Redis/CMakeLists.txt
+@@ -11,7 +11,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/Redis/src/Type.cpp
+     )
+
+-    add_library (_poco_redis ${SRCS})
++    add_library (_poco_redis STATIC ${SRCS})
+     add_library (Poco::Redis ALIAS _poco_redis)
+
+     if (COMPILER_GCC)
+diff --git a/contrib/poco-cmake/Util/CMakeLists.txt b/contrib/poco-cmake/Util/CMakeLists.txt
+index f5af3a5793..abf180628f 100644
+--- a/contrib/poco-cmake/Util/CMakeLists.txt
++++ b/contrib/poco-cmake/Util/CMakeLists.txt
+@@ -29,7 +29,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/Util/src/XMLConfiguration.cpp
+     )
+
+-    add_library (_poco_util ${SRCS})
++    add_library (_poco_util STATIC ${SRCS})
+     add_library (Poco::Util ALIAS _poco_util)
+
+     target_include_directories (_poco_util SYSTEM PUBLIC ${LIBRARY_DIR}/Util/include)
+diff --git a/contrib/poco-cmake/XML/CMakeLists.txt b/contrib/poco-cmake/XML/CMakeLists.txt
+index 448b7e22c7..2c4b5846d4 100644
+--- a/contrib/poco-cmake/XML/CMakeLists.txt
++++ b/contrib/poco-cmake/XML/CMakeLists.txt
+@@ -8,7 +8,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/XML/src/xmltok.c
+     )
+
+-    add_library (_poco_xml_expat ${SRCS_EXPAT})
++    add_library (_poco_xml_expat STATIC ${SRCS_EXPAT})
+     add_library (Poco::XML::Expat ALIAS _poco_xml_expat)
+
+     target_include_directories (_poco_xml_expat PUBLIC ${LIBRARY_DIR}/XML/include)
+@@ -92,7 +92,7 @@ if (USE_INTERNAL_POCO_LIBRARY)
+         ${LIBRARY_DIR}/XML/src/xmlparse.cpp
+     )
+
+-    add_library (_poco_xml ${SRCS})
++    add_library (_poco_xml STATIC ${SRCS})
+     add_library (Poco::XML ALIAS _poco_xml)
+
+     target_compile_options (_poco_xml PRIVATE -Wno-old-style-cast)
+diff --git a/contrib/ryu-cmake/CMakeLists.txt b/contrib/ryu-cmake/CMakeLists.txt
+index bf46fdc61a..42eb12bbb5 100644
+--- a/contrib/ryu-cmake/CMakeLists.txt
++++ b/contrib/ryu-cmake/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ SET(LIBRARY_DIR ${ClickHouse_SOURCE_DIR}/contrib/ryu)
+ 
+-add_library(ryu
++add_library(ryu STATIC
+ ${LIBRARY_DIR}/ryu/d2fixed.c
+ ${LIBRARY_DIR}/ryu/d2s.c
+ ${LIBRARY_DIR}/ryu/f2s.c
+diff --git a/contrib/unixodbc-cmake/CMakeLists.txt b/contrib/unixodbc-cmake/CMakeLists.txt
+index c971c4bdd8..a9fea9fa40 100644
+--- a/contrib/unixodbc-cmake/CMakeLists.txt
++++ b/contrib/unixodbc-cmake/CMakeLists.txt
+@@ -20,7 +20,7 @@ set (SRCS_LTDL
+     ${LIBRARY_DIR}/libltdl/loaders/preopen.c
+ )
+ 
+-add_library (ltdl ${SRCS_LTDL})
++add_library (ltdl STATIC ${SRCS_LTDL})
+ 
+ target_include_directories(ltdl
+     PRIVATE
+@@ -269,7 +269,7 @@ set (SRCS
+     ${LIBRARY_DIR}/odbcinst/SQLWritePrivateProfileString.c
+ )
+ 
+-add_library (unixodbc ${SRCS})
++add_library (unixodbc STATIC ${SRCS})
+ 
+ target_link_libraries (unixodbc PRIVATE ltdl)
+ 
+diff --git a/src/AggregateFunctions/CMakeLists.txt b/src/AggregateFunctions/CMakeLists.txt
+index c23831be94..75441ee825 100644
+--- a/src/AggregateFunctions/CMakeLists.txt
++++ b/src/AggregateFunctions/CMakeLists.txt
+@@ -21,7 +21,7 @@ list(REMOVE_ITEM clickhouse_aggregate_functions_headers
+     FactoryHelpers.h
+ )
+ 
+-add_library(clickhouse_aggregate_functions ${clickhouse_aggregate_functions_sources})
++add_library(clickhouse_aggregate_functions STATIC ${clickhouse_aggregate_functions_sources})
+ target_link_libraries(clickhouse_aggregate_functions PRIVATE dbms PUBLIC ${CITYHASH_LIBRARIES})
+ 
+ if(ENABLE_TESTS)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 843dd8c261..94a02f777b 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -115,7 +115,7 @@ if (NOT ENABLE_SSL)
+     list (REMOVE_ITEM clickhouse_common_io_headers Common/OpenSSLHelpers.h)
+ endif ()
+ 
+-add_library(clickhouse_common_io ${clickhouse_common_io_headers} ${clickhouse_common_io_sources})
++add_library(clickhouse_common_io STATIC ${clickhouse_common_io_headers} ${clickhouse_common_io_sources})
+ 
+ add_library (clickhouse_malloc OBJECT Common/malloc.cpp)
+ set_source_files_properties(Common/malloc.cpp PROPERTIES COMPILE_FLAGS "-fno-builtin")
+@@ -335,6 +335,9 @@
+             dbms_target_link_libraries(PRIVATE ${ARROW_LIBRARY})
+         endif()
+     endif ()
++    if (USE_SNAPPY)
++        dbms_target_link_libraries(PRIVATE ${SNAPPY_LIBRARY})
++    endif()
+ endif ()
+ 
+ if (USE_AVRO)
+diff --git a/src/Common/Config/CMakeLists.txt b/src/Common/Config/CMakeLists.txt
+index a7914fb17e..dfddfc1850 100644
+--- a/src/Common/Config/CMakeLists.txt
++++ b/src/Common/Config/CMakeLists.txt
+@@ -5,7 +5,7 @@ set (SRCS
+     ConfigReloader.cpp
+ )
+ 
+-add_library(clickhouse_common_config ${SRCS})
++add_library(clickhouse_common_config STATIC ${SRCS})
+ 
+ target_link_libraries(clickhouse_common_config
+     PUBLIC
+diff --git a/src/Common/StringUtils/CMakeLists.txt b/src/Common/StringUtils/CMakeLists.txt
+index bd1282a08d..40956d472a 100644
+--- a/src/Common/StringUtils/CMakeLists.txt
++++ b/src/Common/StringUtils/CMakeLists.txt
+@@ -5,4 +5,4 @@ include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
+ 
+ add_headers_and_sources(clickhouse_common_stringutils .)
+ 
+-add_library(string_utils ${clickhouse_common_stringutils_headers} ${clickhouse_common_stringutils_sources})
++add_library(string_utils STATIC ${clickhouse_common_stringutils_headers} ${clickhouse_common_stringutils_sources})
+diff --git a/src/Common/ZooKeeper/CMakeLists.txt b/src/Common/ZooKeeper/CMakeLists.txt
+index ef32d9266c..78563a2315 100644
+--- a/src/Common/ZooKeeper/CMakeLists.txt
++++ b/src/Common/ZooKeeper/CMakeLists.txt
+@@ -2,7 +2,7 @@ include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
+ 
+ add_headers_and_sources(clickhouse_common_zookeeper .)
+ 
+-add_library(clickhouse_common_zookeeper ${clickhouse_common_zookeeper_headers} ${clickhouse_common_zookeeper_sources})
++add_library(clickhouse_common_zookeeper STATIC ${clickhouse_common_zookeeper_headers} ${clickhouse_common_zookeeper_sources})
+ 
+ target_link_libraries (clickhouse_common_zookeeper PUBLIC clickhouse_common_io common PRIVATE string_utils)
+ 
+diff --git a/src/Dictionaries/CMakeLists.txt b/src/Dictionaries/CMakeLists.txt
+index 0eb3c5f44d..b088fcdf8f 100644
+--- a/src/Dictionaries/CMakeLists.txt
++++ b/src/Dictionaries/CMakeLists.txt
+@@ -7,7 +7,7 @@ add_headers_and_sources(clickhouse_dictionaries ${CMAKE_CURRENT_BINARY_DIR}/gene
+ list(REMOVE_ITEM clickhouse_dictionaries_sources DictionaryFactory.cpp DictionarySourceFactory.cpp DictionaryStructure.cpp getDictionaryConfigurationFromAST.cpp)
+ list(REMOVE_ITEM clickhouse_dictionaries_headers DictionaryFactory.h DictionarySourceFactory.h DictionaryStructure.h getDictionaryConfigurationFromAST.h)
+ 
+-add_library(clickhouse_dictionaries ${clickhouse_dictionaries_sources})
++add_library(clickhouse_dictionaries STATIC ${clickhouse_dictionaries_sources})
+ 
+ target_link_libraries(clickhouse_dictionaries
+     PRIVATE
+diff --git a/src/Dictionaries/Embedded/CMakeLists.txt b/src/Dictionaries/Embedded/CMakeLists.txt
+index 9324753808..e4eb5060a5 100644
+--- a/src/Dictionaries/Embedded/CMakeLists.txt
++++ b/src/Dictionaries/Embedded/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
+ add_headers_and_sources(clickhouse_dictionaries_embedded .)
+ add_headers_and_sources(clickhouse_dictionaries_embedded GeodataProviders)
+-add_library(clickhouse_dictionaries_embedded ${clickhouse_dictionaries_embedded_sources})
++add_library(clickhouse_dictionaries_embedded STATIC ${clickhouse_dictionaries_embedded_sources})
+ target_link_libraries(clickhouse_dictionaries_embedded PRIVATE clickhouse_common_io ${MYSQLXX_LIBRARY})
+diff --git a/src/Functions/CMakeLists.txt b/src/Functions/CMakeLists.txt
+index 8d1fff2334..a808dc3457 100644
+--- a/src/Functions/CMakeLists.txt
++++ b/src/Functions/CMakeLists.txt
+@@ -24,7 +24,7 @@ if (NOT USE_H3)
+     )
+ endif ()
+ 
+-add_library(clickhouse_functions ${clickhouse_functions_sources})
++add_library(clickhouse_functions STATIC ${clickhouse_functions_sources})
+ 
+ target_link_libraries(clickhouse_functions
+     PUBLIC
+diff --git a/src/Functions/GatherUtils/CMakeLists.txt b/src/Functions/GatherUtils/CMakeLists.txt
+index bcb0205177..5d23a205f3 100644
+--- a/src/Functions/GatherUtils/CMakeLists.txt
++++ b/src/Functions/GatherUtils/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
+ add_headers_and_sources(clickhouse_functions_gatherutils .)
+-add_library(clickhouse_functions_gatherutils ${clickhouse_functions_gatherutils_sources} ${clickhouse_functions_gatherutils_headers})
++add_library(clickhouse_functions_gatherutils STATIC ${clickhouse_functions_gatherutils_sources} ${clickhouse_functions_gatherutils_headers})
+ target_link_libraries(clickhouse_functions_gatherutils PRIVATE dbms)
+ 
+ if (CMAKE_BUILD_TYPE_UC STREQUAL "RELEASE" OR CMAKE_BUILD_TYPE_UC STREQUAL "RELWITHDEBINFO" OR CMAKE_BUILD_TYPE_UC STREQUAL "MINSIZEREL")
+diff --git a/src/Functions/URL/CMakeLists.txt b/src/Functions/URL/CMakeLists.txt
+index 21f0adb659..7d61c2c905 100644
+--- a/src/Functions/URL/CMakeLists.txt
++++ b/src/Functions/URL/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
+ add_headers_and_sources(clickhouse_functions_url .)
+-add_library(clickhouse_functions_url ${clickhouse_functions_url_sources} ${clickhouse_functions_url_headers})
++add_library(clickhouse_functions_url STATIC ${clickhouse_functions_url_sources} ${clickhouse_functions_url_headers})
+ target_link_libraries(clickhouse_functions_url PRIVATE dbms)
+ 
+ if (CMAKE_BUILD_TYPE_UC STREQUAL "RELEASE" OR CMAKE_BUILD_TYPE_UC STREQUAL "RELWITHDEBINFO" OR CMAKE_BUILD_TYPE_UC STREQUAL "MINSIZEREL")
+diff --git a/src/Functions/array/CMakeLists.txt b/src/Functions/array/CMakeLists.txt
+index f826db1e81..78883dee0f 100644
+--- a/src/Functions/array/CMakeLists.txt
++++ b/src/Functions/array/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
+ add_headers_and_sources(clickhouse_functions_array .)
+-add_library(clickhouse_functions_array ${clickhouse_functions_array_sources} ${clickhouse_functions_array_headers})
++add_library(clickhouse_functions_array STATIC ${clickhouse_functions_array_sources} ${clickhouse_functions_array_headers})
+ target_link_libraries(clickhouse_functions_array PRIVATE dbms clickhouse_functions_gatherutils)
+ 
+ if (CMAKE_BUILD_TYPE_UC STREQUAL "RELEASE" OR CMAKE_BUILD_TYPE_UC STREQUAL "RELWITHDEBINFO" OR CMAKE_BUILD_TYPE_UC STREQUAL "MINSIZEREL")
+diff --git a/src/Parsers/CMakeLists.txt b/src/Parsers/CMakeLists.txt
+index 13e460da4e..aed68ea0dd 100644
+--- a/src/Parsers/CMakeLists.txt
++++ b/src/Parsers/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ include(${ClickHouse_SOURCE_DIR}/cmake/dbms_glob_sources.cmake)
+ add_headers_and_sources(clickhouse_parsers .)
+ add_headers_and_sources(clickhouse_parsers ./MySQL)
+-add_library(clickhouse_parsers ${clickhouse_parsers_headers} ${clickhouse_parsers_sources})
++add_library(clickhouse_parsers STATIC ${clickhouse_parsers_headers} ${clickhouse_parsers_sources})
+ target_link_libraries(clickhouse_parsers PUBLIC clickhouse_common_io)
+ 
+ if (USE_DEBUG_HELPERS)
+diff --git a/src/Storages/System/CMakeLists.txt b/src/Storages/System/CMakeLists.txt
+index a1eb525dce..e5888d4625 100644
+--- a/src/Storages/System/CMakeLists.txt
++++ b/src/Storages/System/CMakeLists.txt
+@@ -42,7 +42,7 @@ list (APPEND storages_system_sources ${GENERATED_TIMEZONES_SRC})
+ # Overlength strings
+ set_source_files_properties(${GENERATED_LICENSES_SRC} PROPERTIES COMPILE_FLAGS -w)
+ 
+-add_library(clickhouse_storages_system ${storages_system_headers} ${storages_system_sources})
++add_library(clickhouse_storages_system STATIC ${storages_system_headers} ${storages_system_sources})
+ target_link_libraries(clickhouse_storages_system PRIVATE
+     dbms
+     common
+diff --git a/src/TableFunctions/CMakeLists.txt b/src/TableFunctions/CMakeLists.txt
+index 33e900231e..b01d99cea0 100644
+--- a/src/TableFunctions/CMakeLists.txt
++++ b/src/TableFunctions/CMakeLists.txt
+@@ -4,5 +4,5 @@ add_headers_and_sources(clickhouse_table_functions .)
+ list(REMOVE_ITEM clickhouse_table_functions_sources ITableFunction.cpp TableFunctionFactory.cpp)
+ list(REMOVE_ITEM clickhouse_table_functions_headers ITableFunction.h TableFunctionFactory.h)
+ 
+-add_library(clickhouse_table_functions ${clickhouse_table_functions_sources})
++add_library(clickhouse_table_functions STATIC ${clickhouse_table_functions_sources})
+ target_link_libraries(clickhouse_table_functions PRIVATE clickhouse_parsers clickhouse_storages_system dbms)

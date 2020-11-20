@@ -1,0 +1,24 @@
+diff --git a/base/common/DateLUT.cpp b/base/common/DateLUT.cpp
+index 6ff0884701..a2eaf1cd26 100644
+--- a/base/common/DateLUT.cpp
++++ b/base/common/DateLUT.cpp
+@@ -1,5 +1,6 @@
+ #include "DateLUT.h"
+ 
++#include <Poco/DigestEngine.h>
+ #include <Poco/DigestStream.h>
+ #include <Poco/Exception.h>
+ #include <Poco/SHA1Engine.h>
+diff --git a/src/Dictionaries/MongoDBDictionarySource.cpp b/src/Dictionaries/MongoDBDictionarySource.cpp
+index 5b5d0c4d20..c27e73b485 100644
+--- a/src/Dictionaries/MongoDBDictionarySource.cpp
++++ b/src/Dictionaries/MongoDBDictionarySource.cpp
+@@ -43,6 +43,8 @@ void registerDictionarySourceMongoDB(DictionarySourceFactory & factory)
+ #include <Poco/MongoDB/ObjectId.h>
+ #include <Poco/URI.h>
+ #include <Poco/Util/AbstractConfiguration.h>
++#include <Poco/DigestEngine.h>
++#include <Poco/MD5Engine.h>
+ #include <Poco/Version.h>
+ 
+ // only after poco

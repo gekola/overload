@@ -1,0 +1,54 @@
+--- a/contrib/arrow-cmake/CMakeLists.txt
++++ b/contrib/arrow-cmake/CMakeLists.txt
+@@ -75,6 +75,9 @@
+ 
+ 
+ # === flatbuffers
++option(USE_FLATBUFFERS_INTERNAL "Use bundled flatbuffers library" ${BUNDLED})
++if (USE_FLATBUFFERS_INTERNAL)
++
+ set(FLATBUFFERS_SRC_DIR ${ClickHouse_SOURCE_DIR}/contrib/flatbuffers)
+ set(FLATBUFFERS_BINARY_DIR ${ClickHouse_BINARY_DIR}/contrib/flatbuffers)
+ set(FLATBUFFERS_INCLUDE_DIR ${FLATBUFFERS_SRC_DIR}/include)
+@@ -91,6 +94,11 @@
+ 
+ add_subdirectory(${FLATBUFFERS_SRC_DIR} "${FLATBUFFERS_BINARY_DIR}")
+ 
++else ()
++find_program(FLATBUFFERS_COMPILER NAMES flatc)
++find_path(FLATBUFFERS_INCLUDE_DIR NAMES flatbuffers/flatbuffers.h)
++endif ()
++
+ message(STATUS "FLATBUFFERS_LIBRARY: ${FLATBUFFERS_LIBRARY}")
+ 
+ # arrow-cmake cmake file calling orc cmake subroutine which detects certain compiler features.
+@@ -281,9 +289,12 @@
+ add_library(${ARROW_LIBRARY} ${ARROW_SRCS})
+ 
+ # Arrow dependencies
+-add_dependencies(${ARROW_LIBRARY} ${FLATBUFFERS_LIBRARY})
++if (USE_FLATBUFFERS_INTERNAL)
++    add_dependencies(${ARROW_LIBRARY} ${FLATBUFFERS_LIBRARY})
++    target_link_libraries(${ARROW_LIBRARY} PRIVATE flatbuffers)
++endif ()
+ 
+-target_link_libraries(${ARROW_LIBRARY} PRIVATE ${FLATBUFFERS_LIBRARY} boost::filesystem)
++target_link_libraries(${ARROW_LIBRARY} PRIVATE boost::filesystem)
+ 
+ if (USE_INTERNAL_PROTOBUF_LIBRARY)
+     add_dependencies(${ARROW_LIBRARY} protoc)
+--- a/cmake/find/parquet.cmake
++++ b/cmake/find/parquet.cmake
+@@ -59,7 +59,11 @@
+         set(PARQUET_LIBRARY parquet_static)
+         set(THRIFT_LIBRARY thrift_static)
+     else()
+-        set(FLATBUFFERS_LIBRARY flatbuffers_shared)
++        if(USE_FLATBUFFERS_INTERNAL)
++            set(FLATBUFFERS_LIBRARY flatbuffers_shared)
++        else()
++            set(FLATBUFFERS_LIBRARY flatbuffers)
++        endif()
+         set(ARROW_LIBRARY arrow_shared)
+         set(PARQUET_LIBRARY parquet_shared)
+         if(USE_INTERNAL_PARQUET_LIBRARY_NATIVE_CMAKE)
