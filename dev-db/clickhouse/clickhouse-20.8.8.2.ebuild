@@ -10,7 +10,7 @@ inherit check-reqs cmake flag-o-matic systemd
 declare -A contrib_versions=(
 	["arrow"]="3cbcb7b62c"
 	["capnproto"]="a00ccd9"
-	["cctz"]="7a2db4ece6"
+	["cctz"]="260ba195ef6c489968bae8c88c62a67cdac5ff9d"
 	["double-conversion"]="cf2f0f3"
 	["googletest"]="356f2d264a"
 	["librdkafka"]="2090cbf56b"
@@ -18,7 +18,7 @@ declare -A contrib_versions=(
 	["lz4"]="f39b79fb02"
 	["openssl"]="07e962"
 	["orc"]="5981208"
-	["poco"]="297fc905e1"
+	["poco"]="f3d791f6568b99366d089b4479f76a515beb66d5"
 	["re2"]="7cf8b88"
 	["ryu"]="5b4a85"
 	["thrift"]="010ccf0"
