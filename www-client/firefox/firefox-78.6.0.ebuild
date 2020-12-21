@@ -3,7 +3,7 @@
 
 EAPI="7"
 
-FIREFOX_PATCHSET="firefox-78esr-patches-06.tar.xz"
+FIREFOX_PATCHSET="firefox-78esr-patches-07.tar.xz"
 
 LLVM_MAX_SLOT=11
 
@@ -57,11 +57,11 @@ SRC_URI="${MOZ_SRC_BASE_URI}/source/${MOZ_P}.source.tar.xz -> ${MOZ_P_DISTFILES}
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="https://www.mozilla.com/firefox"
 
-KEYWORDS="~amd64 ~arm64 ~ppc64 x86"
+KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
 
 SLOT="${PV}/esr$(ver_cut 1)"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="clang cpu_flags_arm_neon dbus debug eme-free geckodriver +gmp-autoupdate
+IUSE="+clang cpu_flags_arm_neon dbus debug eme-free geckodriver +gmp-autoupdate
 	google-services
 	hardened hwaccel jack lto +openh264 pgo pulseaudio screencast selinux
 	symlink
@@ -75,7 +75,7 @@ BDEPEND="${PYTHON_DEPS}
 	app-arch/unzip
 	app-arch/zip
 	>=dev-util/cbindgen-0.14.3
-	>=net-libs/nodejs-10.19.0
+	>=net-libs/nodejs-10.21.0
 	virtual/pkgconfig
 	>=virtual/rust-1.41.0
 	|| (
@@ -875,7 +875,7 @@ src_install() {
 	# xpcshell is getting called during install
 	pax-mark m \
 		"${BUILD_DIR}"/dist/bin/xpcshell \
-		"${BUILD_DIR}"/dist/bin/firefox \
+		"${BUILD_DIR}"/dist/bin/${PN} \
 		"${BUILD_DIR}"/dist/bin/plugin-container
 
 	DESTDIR="${D}" ./mach install || die
@@ -891,6 +891,7 @@ src_install() {
 
 	# Install policy (currently only used to disable application updates)
 	insinto "${MOZILLA_FIVE_HOME}/distribution"
+	newins "${FILESDIR}"/distribution.ini distribution.ini
 	newins "${FILESDIR}"/disable-auto-update.policy.json policies.json
 
 	# Install system-wide preferences
@@ -950,7 +951,7 @@ src_install() {
 	local icon_symbolic_file="${FILESDIR}/icon/firefox-symbolic.svg"
 
 	insinto /usr/share/icons/hicolor/symbolic/apps
-	newins "${icon_symbolic_file}" ${PN}-symbolic.svg
+	newins "${icon_symbolic_file}" ${P}-symbolic.svg
 
 	local icon size
 	for icon in "${icon_srcdir}"/default*.png ; do
@@ -1020,7 +1021,7 @@ src_install() {
 	done
 
 	# Install generic wrapper script
-	[[ -e "${ED}/usr/bin/${PN}" ]] && rm "${ED}/usr/bin/${PN}"
+	[[ -e "${ED}/usr/bin/${PN}" ]] && rm -f "${ED}/usr/bin/${PN}"
 	newbin "${FILESDIR}/${PN}.sh" ${P}
 
 	# Update wrapper
