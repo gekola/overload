@@ -91,8 +91,6 @@ REQUIRED_USE="
 RDEPEND="
 	dev-libs/libpcre
 	dev-libs/re2:0=
-	>=sys-devel/llvm-8:=
-	<sys-devel/llvm-11:=
 	s3? ( dev-libs/aws-sdk-cpp[s3] )
 	server? ( acct-group/clickhouse acct-user/clickhouse )
 	!static? (
@@ -156,6 +154,7 @@ DEPEND="${RDEPEND}
 	dev-util/patchelf
 	lld? ( >=sys-devel/lld-6.0.0 )
 	!lld? ( sys-devel/binutils[gold] )
+	sys-devel/llvm
 	sys-libs/libtermcap-compat
 	|| (
 		>=sys-devel/gcc-8.0
