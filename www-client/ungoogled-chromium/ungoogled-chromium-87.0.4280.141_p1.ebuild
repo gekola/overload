@@ -1,8 +1,8 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 2009-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python{2_7,3_{7,8}} )
+PYTHON_COMPAT=( python{2_7,3_{7,8,9}} )
 PYTHON_REQ_USE="xml"
 
 CHROMIUM_LANGS="am ar bg bn ca cs da de el en-GB es es-419 et fa fi fil fr gu he
@@ -28,7 +28,6 @@ LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="component-build cups custom-cflags cpu_flags_arm_neon +hangouts headless +js-type-check kerberos official pic +proprietary-codecs pulseaudio selinux +suid +system-ffmpeg +system-icu +tcmalloc vaapi wayland widevine"
-RESTRICT="!system-ffmpeg? ( proprietary-codecs? ( bindist ) )"
 REQUIRED_USE="
 	|| ( $(python_gen_useflags 'python2*') )
 	|| ( $(python_gen_useflags 'python3*') )
@@ -238,6 +237,8 @@ pkg_setup() {
 src_prepare() {
 	# Calling this here supports resumption via FEATURES=keepwork
 	python_setup 'python3*'
+
+	rm "${WORKDIR}/patches/chromium-84-blink-disable-clang-format.patch" || die
 
 	local PATCHES=(
 		"${WORKDIR}/patches"
