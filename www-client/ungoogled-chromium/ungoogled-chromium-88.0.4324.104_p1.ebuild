@@ -17,7 +17,7 @@ UGC_WD="${WORKDIR}/${UGC_P}"
 
 DESCRIPTION="Modifications to Chromium for removing Google integration and enhancing privacy"
 HOMEPAGE="https://www.chromium.org/Home https://github.com/Eloston/ungoogled-chromium"
-PATCHSET="9"
+PATCHSET="3"
 PATCHSET_NAME="chromium-$(ver_cut 1)-patchset-${PATCHSET}"
 SRC_URI="https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${PV/_*}.tar.xz
 	https://github.com/Eloston/${PN}/archive/${UGC_PV}.tar.gz -> ${UGC_P}.tar.gz
@@ -146,7 +146,7 @@ else
 		dev-libs/libxslt:=
 		>=dev-libs/re2-0.2019.08.01:=
 		>=media-libs/openh264-1.6.0:=
-		system-icu? ( >=dev-libs/icu-67.1:= )
+		system-icu? ( >=dev-libs/icu-68.1:= )
 	"
 	RDEPEND+="${COMMON_DEPEND}"
 	DEPEND+="${COMMON_DEPEND}"
@@ -242,15 +242,9 @@ src_prepare() {
 
 	local PATCHES=(
 		"${WORKDIR}/patches"
-		"${FILESDIR}/chromium-87-ozone-deps.patch"
+		"${FILESDIR}/chromium-88-ozone-deps.patch"
 		"${FILESDIR}/chromium-87-webcodecs-deps.patch"
-		"${FILESDIR}/chromium-87-v8-icu68.patch"
-		"${FILESDIR}/chromium-87-icu68.patch"
 	)
-
-	if use vaapi; then
-		PATCHES+=( "${FILESDIR}/chromium-86-fix-vaapi-on-intel.patch" )
-	fi
 
 	default
 
@@ -341,6 +335,7 @@ src_prepare() {
 		third_party/cros_system_api
 		third_party/dav1d
 		third_party/dawn
+		third_party/dawn/third_party/khronos
 		third_party/depot_tools
 		third_party/devscripts
 		third_party/devtools-frontend
@@ -362,6 +357,7 @@ src_prepare() {
 		third_party/emoji-segmenter
 		third_party/flatbuffers
 		third_party/freetype
+		third_party/fusejs
 		third_party/libgifcodec
 		third_party/glslang
 		third_party/google_input_tools
@@ -392,6 +388,8 @@ src_prepare() {
 		third_party/libvpx
 		third_party/libvpx/source/libvpx/third_party/x86inc
 		third_party/libwebm
+		third_party/libx11
+		third_party/libxcb-keysyms
 		third_party/libxml/chromium
 		third_party/libyuv
 		third_party/llvm
@@ -446,6 +444,7 @@ src_prepare() {
 		third_party/skia/third_party/skcms
 		third_party/skia/third_party/vulkan
 		third_party/smhasher
+		third_party/spirv-cross/spirv-cross
 		third_party/spirv-headers
 		third_party/SPIRV-Tools
 		third_party/sqlite
@@ -455,6 +454,7 @@ src_prepare() {
 		third_party/swiftshader/third_party/marl
 		third_party/swiftshader/third_party/subzero
 		third_party/swiftshader/third_party/SPIRV-Headers/include/spirv/unified1
+		third_party/tint
 		third_party/ukey2
 		third_party/unrar
 		third_party/usrsctp
@@ -472,6 +472,7 @@ src_prepare() {
 		third_party/widevine
 		third_party/woff2
 		third_party/wuffs
+		third_party/x11proto
 		third_party/xcbproto
 		third_party/zxcvbn-cpp
 		third_party/zlib/google
