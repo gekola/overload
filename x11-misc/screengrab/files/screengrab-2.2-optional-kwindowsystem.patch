@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 2fd3667..dd29b56 100644
+index 5996531..7d64970 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -12,6 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -29,7 +29,7 @@ index 2fd3667..dd29b56 100644
  message(STATUS "Update source translation translations/*.ts files: " ${UPDATE_TRANSLATIONS})
  
  # docs
-@@ -189,6 +193,10 @@ if(SG_DBUS_NOTIFY)
+@@ -190,6 +194,10 @@ if(SG_DBUS_NOTIFY)
      target_link_libraries(screengrab Qt5::DBus)
  endif()
  
@@ -40,7 +40,7 @@ index 2fd3667..dd29b56 100644
  if (X11_XCB_FOUND)
      add_definitions( -DX11_XCB_FOUND="1")
      target_link_libraries(screengrab ${X11_XCB_LIBRARIES})
-@@ -210,7 +218,7 @@ if (XCB_XFIXES_FOUND)
+@@ -211,7 +219,7 @@ if (XCB_XFIXES_FOUND)
  endif()
  
  # Link with Network and X11Extras. See pull#86. TODO: Should be optional when upload module is needed.

@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -14,12 +14,12 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="+edit +kwindowsystem"
 PATCHES=(
-	"${FILESDIR}/${PN}-2.1-optional-kwindowsystem.patch"
+	"${FILESDIR}/${PN}-2.2-optional-kwindowsystem.patch"
 )
 
 BDEPEND="dev-qt/linguist-tools:5"
 DEPEND="
-	edit? ( >=dev-libs/libqtxdg-3.5.0 )
+	edit? ( >=dev-libs/libqtxdg-3.7.0 )
 	dev-qt/qtcore:5
 	dev-qt/qtdbus:5
 	dev-qt/qtgui:5
