@@ -48,7 +48,7 @@ index ff2d793711..a7abd92bae 100644
  set (CLICKHOUSE_EXTRACT_FROM_CONFIG_LINK
      PRIVATE
 diff --git a/programs/format/CMakeLists.txt b/programs/format/CMakeLists.txt
-index ab06708cd3..2d7d9f2771 100644
+index 49f17ef163..b5db7fb143 100644
 --- a/programs/format/CMakeLists.txt
 +++ b/programs/format/CMakeLists.txt
 @@ -1,4 +1,4 @@
@@ -56,6 +56,16 @@ index ab06708cd3..2d7d9f2771 100644
 +set (CLICKHOUSE_FORMAT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Format.cpp)
  
  set (CLICKHOUSE_FORMAT_LINK
+     PRIVATE
+diff --git a/programs/git-import/CMakeLists.txt b/programs/git-import/CMakeLists.txt
+index 279bb35a27..1eb37b1ca9 100644
+--- a/programs/git-import/CMakeLists.txt
++++ b/programs/git-import/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-set (CLICKHOUSE_GIT_IMPORT_SOURCES git-import.cpp)
++set (CLICKHOUSE_GIT_IMPORT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/git-import.cpp)
+ 
+ set (CLICKHOUSE_GIT_IMPORT_LINK
      PRIVATE
 diff --git a/programs/install/CMakeLists.txt b/programs/install/CMakeLists.txt
 index c3f4d96d63..021f7dbe97 100644
@@ -88,10 +98,10 @@ index d1179b3718..c67b3c00dd 100644
  set (CLICKHOUSE_OBFUSCATOR_LINK
      PRIVATE
 diff --git a/programs/odbc-bridge/CMakeLists.txt b/programs/odbc-bridge/CMakeLists.txt
-index 8cfa110ada..24b5edcaf4 100644
+index 1186435461..557d55105f 100644
 --- a/programs/odbc-bridge/CMakeLists.txt
 +++ b/programs/odbc-bridge/CMakeLists.txt
-@@ -1,15 +1,15 @@
+@@ -1,16 +1,16 @@
  set (CLICKHOUSE_ODBC_BRIDGE_SOURCES
 -    ColumnInfoHandler.cpp
 -    getIdentifierQuote.cpp
@@ -104,6 +114,7 @@ index 8cfa110ada..24b5edcaf4 100644
 -    PingHandler.cpp
 -    SchemaAllowedHandler.cpp
 -    validateODBCConnectionString.cpp
+-    odbc-bridge.cpp
 +    ${CMAKE_CURRENT_SOURCE_DIR}/ColumnInfoHandler.cpp
 +    ${CMAKE_CURRENT_SOURCE_DIR}/getIdentifierQuote.cpp
 +    ${CMAKE_CURRENT_SOURCE_DIR}/HandlerFactory.cpp
@@ -115,11 +126,12 @@ index 8cfa110ada..24b5edcaf4 100644
 +    ${CMAKE_CURRENT_SOURCE_DIR}/PingHandler.cpp
 +    ${CMAKE_CURRENT_SOURCE_DIR}/SchemaAllowedHandler.cpp
 +    ${CMAKE_CURRENT_SOURCE_DIR}/validateODBCConnectionString.cpp
++    ${CMAKE_CURRENT_SOURCE_DIR}/odbc-bridge.cpp
  )
- set (CLICKHOUSE_ODBC_BRIDGE_LINK
-     PRIVATE
+ 
+ if (OS_LINUX)
 diff --git a/programs/server/CMakeLists.txt b/programs/server/CMakeLists.txt
-index 5500a4680b..6ce4cd40fc 100644
+index 198d908116..c9bcd8b0d3 100644
 --- a/programs/server/CMakeLists.txt
 +++ b/programs/server/CMakeLists.txt
 @@ -1,6 +1,6 @@
@@ -130,10 +142,10 @@ index 5500a4680b..6ce4cd40fc 100644
 +    ${CMAKE_CURRENT_SOURCE_DIR}/Server.cpp
  )
  
- if (OS_LINUX AND ARCH_AMD64)
+ if (OS_LINUX)
 @@ -52,10 +52,4 @@ if (OS_LINUX)
  
-     add_library(clickhouse_server_configs STATIC ${CONFIG_OBJS})
+     add_library(clickhouse_server_configs STATIC ${RESOURCE_OBJS})
      set_target_properties(clickhouse_server_configs PROPERTIES LINKER_LANGUAGE C)
 -
 -    # whole-archive prevents symbols from being discarded for unknown reason

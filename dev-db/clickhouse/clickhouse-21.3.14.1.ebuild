@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,21 +8,26 @@ CMAKE_MAKEFILE_GENERATOR="ninja"
 inherit check-reqs cmake flag-o-matic systemd
 
 declare -A contrib_versions=(
-	["arrow"]="3cbcb7b62c"
-	["capnproto"]="a00ccd9"
-	["cctz"]="260ba195ef6c489968bae8c88c62a67cdac5ff9d"
-	["double-conversion"]="cf2f0f3"
-	["googletest"]="356f2d264a"
-	["librdkafka"]="2090cbf56b"
-	["libunwind"]="27026ef4a9"
-	["lz4"]="f39b79fb02"
-	["openssl"]="07e962"
-	["orc"]="5981208"
-	["poco"]="437cb59fa6ff11b8297211fae72b3ab2c7b09dc5"
-	["re2"]="7cf8b88"
-	["ryu"]="5b4a85"
-	["thrift"]="010ccf0"
-	["zstd"]="10f0e6993f"
+	["antlr4-runtime"]="a2fa7b76e2ee16d2ad955e9214a90bbf79da66fc"
+	["arrow"]="744bdfe188f018e5e05f5deebd4e9ee0a7706cf4"
+	["capnproto"]="a00ccd91b3746ef2ab51d40fe3265829949d1ace"
+	["cctz"]="c0f1bcb97fd2782f7c3f972fadd5aad5affac4b8"
+	["croaring"]="d8402939b5c9fc134fd4fcf058fe0f7006d2b129"
+	["double-conversion"]="cf2f0f3d547dc73b4612028a155b80536902ba02"
+	["dragonbox"]="923705af6fd953aa948fc175f6020b15f7359838"
+	["fast_float"]="7eae925b51fd0f570ccd5c880c12e3e27a23b86f"
+	["fmtlib"]="c108ee1d590089ccf642fc85652b845924067af2"
+	["googletest"]="356f2d264a485db2fcc50ec1c672e0d37b6cb39b"
+	["jemalloc"]="e6891d9746143bf2cf617493d880ba5a0b9a3efd"
+	["librdkafka"]="cf11d0aa36d4738f2c9bf4377807661660f1be76"
+	["libunwind"]="8fe25d7dc70f2a4ea38c3e5a33fa9d4199b67a5a"
+	["lz4"]="f39b79fb02962a1cd880bbdecb6dffba4f754a11"
+	["miniselect"]="be0af6bd0b6eb044d1acc4f754b229972d99903a"
+	["orc"]="5981208e39447df84827f6a961d1da76bacb6078"
+	["poco"]="c55b91f394efa9c238c33957682501681ef9b716"
+	["re2"]="7cf8b88e8f70f97fd4926b56aa87e7f53b2717e0"
+	["thrift"]="010ccf0a0c7023fea0f6bf4e4078ebdff7e61982"
+	["zstd"]="10f0e6993f9d2f682da6d04aa2385b7d53cbb4ee"
 )
 
 contrib_file() {
@@ -55,8 +60,12 @@ else
 	fi
 	SRC_URI="
 		https://github.com/yandex/${MY_PN}/archive/v${PV}-${TYPE}.tar.gz -> ${P}.tar.gz
+		https://github.com/ClickHouse-Extras/antlr4-runtime/archive/$(contrib_mapping antlr4-runtime)
 		https://github.com/ClickHouse-Extras/cctz/archive/$(contrib_mapping cctz)
-		https://github.com/ClickHouse-Extras/ryu/archive/$(contrib_mapping ryu)
+		https://github.com/RoaringBitmap/CRoaring/archive/$(contrib_mapping croaring)
+		https://github.com/ClickHouse-Extras/dragonbox/archive/$(contrib_mapping dragonbox)
+		https://github.com/fastfloat/fast_float/archive/$(contrib_mapping fast_float)
+		https://github.com/danlark1/miniselect/archive/$(contrib_mapping miniselect)
 		parquet? (
 			https://github.com/apache/arrow/archive/$(contrib_mapping arrow)
 			https://github.com/apache/thrift/archive/$(contrib_mapping thrift)
@@ -65,12 +74,13 @@ else
 		unwind? ( !system-libunwind? ( https://github.com/ClickHouse-Extras/libunwind/archive/$(contrib_mapping libunwind) ) )
 		!system-capnproto? ( https://github.com/capnproto/capnproto/archive/$(contrib_mapping capnproto) )
 		!system-double-conversion? ( https://github.com/google/double-conversion/archive/$(contrib_mapping double-conversion) )
+		!system-fmt? ( https://github.com/fmtlib/fmt/archive/$(contrib_mapping fmtlib) )
 		test? ( !system-gtest? ( https://github.com/google/googletest/archive/$(contrib_mapping googletest) ) )
+		jemalloc? ( !system-jemalloc? ( https://github.com/ClickHouse-Extras/jemalloc/archive/$(contrib_mapping jemalloc) ) )
 		!system-librdkafka? ( https://github.com/ClickHouse-Extras/librdkafka/archive/$(contrib_mapping librdkafka) )
 		!system-lz4? ( https://github.com/lz4/lz4/archive/$(contrib_mapping lz4) )
 		!system-poco? ( https://github.com/ClickHouse-Extras/poco/archive/$(contrib_mapping poco) )
 		!system-re2? ( https://github.com/google/re2/archive/$(contrib_mapping re2) )
-		!system-ssl? ( https://github.com/ClickHouse-Extras/openssl/archive/$(contrib_mapping openssl) )
 		!system-zstd? ( https://github.com/facebook/zstd/archive/$(contrib_mapping zstd) )
 	"
 	S="${WORKDIR}/${MY_PN}-${PV}-${TYPE}"
@@ -78,7 +88,8 @@ fi
 
 SLOT="0/${TYPE}"
 IUSE="+client doc jemalloc kafka kerberos lld lto mysql orc parquet s3 +server static
-		+system-capnproto +system-double-conversion +system-gtest +system-librdkafka +system-libunwind +system-lz4 +system-poco +system-re2 +system-ssl +system-zstd
+		+system-capnproto +system-double-conversion system-fmt +system-gtest -system-jemalloc +system-librdkafka
+		+system-libunwind +system-lz4 -system-poco +system-re2 +system-zstd
 		test tools unwind cpu_flags_x86_sse4_2"
 KEYWORDS="~amd64"
 
@@ -87,6 +98,9 @@ REQUIRED_USE="
 	s3? ( !system-poco )
 	server? ( cpu_flags_x86_sse4_2 )
 	static? ( client server tools )
+
+	system-poco? ( !system-poco )
+	system-jemalloc? ( !system-jemalloc )
 "
 #	test? ( !system-gtest )
 #"
@@ -104,12 +118,13 @@ RDEPEND="
 		)
 		system-capnproto? ( >=dev-libs/capnproto-0.7.0 )
 		system-double-conversion? ( dev-libs/double-conversion )
+		system-fmt? ( dev-libs/libfmt )
+		jemalloc? ( system-jemalloc? ( dev-libs/jemalloc ) )
 		system-lz4? ( app-arch/lz4 )
 		system-zstd? ( app-arch/zstd )
-		jemalloc? ( dev-libs/jemalloc )
 		kafka? ( system-librdkafka? ( dev-libs/librdkafka:= ) )
 		unwind? ( system-libunwind? ( sys-libs/libunwind:= ) )
-		system-ssl? ( dev-libs/openssl:0= )
+		dev-libs/openssl:0=
 
 		dev-libs/libltdl:0
 		sys-libs/zlib
@@ -119,7 +134,6 @@ RDEPEND="
 		)
 		dev-libs/icu:=
 		dev-libs/glib
-		dev-libs/libfmt
 		>=dev-libs/boost-1.65.0:=
 		mysql? ( dev-db/mysql-connector-c )
 		orc? ( dev-libs/cyrus-sasl:2= )
@@ -139,7 +153,7 @@ DEPEND="${RDEPEND}
 		system-zstd? ( app-arch/zstd[static-libs] )
 		kafka? ( system-librdkafka? ( dev-libs/librdkafka[static-libs] ) )
 		unwind? ( system-libunwind? ( sys-libs/libunwind[static-libs] ) )
-		system-ssl? ( dev-libs/openssl[static-libs] )
+		dev-libs/openssl[static-libs]
 
 		system-capnproto? ( dev-libs/capnproto[static-libs] )
 		dev-libs/libltdl[static-libs]
@@ -167,14 +181,15 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-		"${FILESDIR}/${PN}-20.8-allow-system-flatbuffers.patch"
-		"${FILESDIR}/${PN}-20.8-allow-system-s3.patch"
-		"${FILESDIR}/${PN}-20.8-enforce-static-internal-libs.patch"
-		"${FILESDIR}/${PN}-20.8-allow-system-unwind.patch"
-		"${FILESDIR}/${PN}-20.3-fix-versions.patch"
-		"${FILESDIR}/${PN}-20.8-system-libfmt.patch"
-		"${FILESDIR}/${PN}-20.3-fix-atomic.patch"
-		"${FILESDIR}/${PN}-20.8-fix-clickhouse-server-target.patch"
+		"${FILESDIR}/${PN}-21.3-allow-system-flatbuffers.patch"
+		"${FILESDIR}/${PN}-21.3-allow-system-s3.patch"
+		"${FILESDIR}/${PN}-21.3-enforce-static-internal-libs.patch"
+		"${FILESDIR}/${PN}-21.3-allow-system-unwind.patch"
+		"${FILESDIR}/${PN}-21.3-fix-versions.patch"
+		"${FILESDIR}/${PN}-21.3-fix-clickhouse-server-target.patch"
+		"${FILESDIR}/${PN}-21.3-system-grpc.patch"
+		"${FILESDIR}/${PN}-21.3-system-xz.patch"
+		"${FILESDIR}/${PN}-21.3-fix-compilation.patch"
 )
 
 CHECKREQS_DISK_BUILD="2G"
@@ -193,10 +208,13 @@ src_unpack() {
 	default_src_unpack
 	[[ ${PV} == 9999 ]] && return 0
 	cd "${S}/contrib"
-	rm -rf arrow cctz double-conversion googletest librdkafka lz4 openssl orc poco re2 ryu thrift zstd
-	for comp in cctz ryu; do
+	rm -rf antlr4-runtime arrow cctz croaring double-conversion dragonbox fast_float fmtlib googletest jemalloc librdkafka lz4 miniselect orc poco re2 thrift zstd
+	for comp in antlr4-runtime cctz dragonbox fast_float miniselect; do
 		ln -s "${WORKDIR}/${comp}-"* "$comp" || die
 	done
+
+	ln -s "${WORKDIR}/CRoaring-"* croaring || die
+
 	if use orc; then
 		ln -s "${WORKDIR}/orc-"* orc || die
 	fi
@@ -206,11 +224,14 @@ src_unpack() {
 	fi
 	use system-capnproto || ln -s "${WORKDIR}/capnproto-"* capnproto || die
 	use system-double-conversion || ln -s "${WORKDIR}/double-conversion-"* double-conversion || die
+	use system-fmt || ln -s "${WORKDIR}/fmt-"* fmtlib || die
 	use system-lz4 || ln -s "${WORKDIR}/lz4-"* lz4 || die
 	use system-poco || ln -s "${WORKDIR}/poco-"* poco || die
 	use system-re2 || ln -s "${WORKDIR}/re2-"* re2 || die
-	use system-ssl || ln -s "${WORKDIR}/openssl-"* openssl || die
 	use system-zstd || ln -s "${WORKDIR}/zstd-"* zstd || die
+	if use jemalloc; then
+		use system-jemalloc || ln -s "${WORKDIR}/jemalloc-"* jemalloc || die
+	fi
 	if use kafka; then
 		use system-librdkafka || ln -s "${WORKDIR}/librdkafka-"* librdkafka || die
 	fi
@@ -224,9 +245,10 @@ src_prepare() {
 	#sed -i -r -e "s: -Wno-(for-loop-analysis|unused-local-typedef|unused-private-field): -Wno-unused-variable:g" \
 	#	contrib/libpoco/CMakeLists.txt || die "Cannot patch poco"
 	if use system-poco; then
-		eapply "${FILESDIR}/${PN}-20.8-system-poco.patch" || die "Cannot patch sources for usage with system Poco"
-	else
-	    eapply "${FILESDIR}/${PN}-20.8-fix-bundled-poco.patch" || die "Cannot patch sources for usage with bundled Poco"
+		eapply "${FILESDIR}/${PN}-21.3-system-poco.patch" || die "Cannot patch sources for usage with system Poco"
+	fi
+	if use system-fmt; then
+		eapply "${FILESDIR}/${PN}-21.3-system-libfmt.patch" || die "Cannot patch sources for usage with libfmt"
 	fi
 	if $(tc-getCC) -no-pie -v 2>&1 | grep -q unrecognized; then
 		sed -i -e 's:--no-pie::' -i CMakeLists.txt || die "Cannot patch CMakeLists.txt"
@@ -251,12 +273,15 @@ src_configure() {
 		-DENABLE_H3=OFF
 		-DENABLE_HDFS=OFF
 		-DENABLE_HYPERSCAN=OFF
-		-DENABLE_JEMALLOC="$(usex jemalloc)"
+		-DENABLE_JEMALLOC=$(usex jemalloc)
 		-DENABLE_KRB5="$(usex kerberos)"
 		-DENABLE_LDAP=OFF
 		-DENABLE_MSGPACK=OFF
+		-DENABLE_NURAFT=OFF
 		-DENABLE_PARQUET="$(usex parquet)"
+		-DENABLE_LIBPQXX=OFF
 		-DENABLE_RAPIDJSON=OFF
+		-DENABLE_ROCKSDB=OFF
 		-DUSE_INTERNAL_AWS_S3_LIBRARY=OFF
 		-DUSE_INTERNAL_PARQUET_LIBRARY=$(usex parquet)
 		-DENABLE_RDKAFKA="$(usex kafka)"
@@ -290,13 +315,12 @@ src_configure() {
 		-DUSE_INTERNAL_ORC_LIBRARY="$(usex orc)"
 		-DUSE_INTERNAL_POCO_LIBRARY="$(usex !system-poco)"
 		-DUSE_INTERNAL_RE2_LIBRARY="$(usex !system-re2)"
-		-DUSE_INTERNAL_SSL_LIBRARY="$(usex !system-ssl)"
+		# -DUSE_INTERNAL_SSL_LIBRARY="$(usex !system-ssl)"
 		-DUSE_INTERNAL_UNWIND_LIBRARY="$(usex !system-libunwind)"
 		-DUSE_INTERNAL_ZSTD_LIBRARY="$(usex !system-zstd)"
 		-DUSE_STATIC_LIBRARIES="$(usex static)"
 		-DMAKE_STATIC_LIBRARIES="$(usex static)"
 		-DENABLE_EMBEDDED_COMPILER=OFF
-		-DENABLE_IPO=$(usex lto)
 		-DLINKER_NAME=$(usex lld lld gold)
 		-DCLICKHOUSE_SPLIT_BINARY=OFF
 		# build fails w/o odbc

@@ -1,3 +1,19 @@
+diff --git a/cmake/find/cxx.cmake b/cmake/find/cxx.cmake
+index b1da125e21..33ccf805af 100644
+--- a/cmake/find/cxx.cmake
++++ b/cmake/find/cxx.cmake
+@@ -7,6 +7,9 @@ if (NOT USE_LIBCXX)
+ 
+     target_link_libraries(global-libs INTERFACE -l:libstdc++.a -l:libstdc++fs.a) # Always link these libraries as static
+     target_link_libraries(global-libs INTERFACE ${EXCEPTION_HANDLING_LIBRARY})
++    if(LIBUNWIND_HAS_GCC_S_LIB)
++        target_link_libraries(global-libs INTERFACE gcc_s)
++    endif()
+     return()
+ endif()
+ 
+diff --git a/cmake/find/unwind.cmake b/cmake/find/unwind.cmake
+index c9f5f30a5d..5cea021886 100644
 --- a/cmake/find/unwind.cmake
 +++ b/cmake/find/unwind.cmake
 @@ -1,8 +1,17 @@
@@ -20,15 +36,3 @@
      set (EXCEPTION_HANDLING_LIBRARY ${UNWIND_LIBRARIES})
  
      message (STATUS "Using libunwind: ${UNWIND_LIBRARIES}")
---- a/cmake/find/cxx.cmake
-+++ b/cmake/find/cxx.cmake
-@@ -6,6 +6,9 @@ if (NOT USE_LIBCXX)
-     endif()
-     target_link_libraries(global-libs INTERFACE -l:libstdc++.a -l:libstdc++fs.a) # Always link these libraries as static
-     target_link_libraries(global-libs INTERFACE ${EXCEPTION_HANDLING_LIBRARY})
-+    if(LIBUNWIND_HAS_GCC_S_LIB)
-+        target_link_libraries(global-libs INTERFACE gcc_s)
-+    endif()
-     return()
- endif()
- 

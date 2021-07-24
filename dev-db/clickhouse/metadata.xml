@@ -17,7 +17,9 @@
 		<flag name="server">Build server.</flag>
 		<flag name="system-capnproto">Use system-wide capnproto library.</flag>
 		<flag name="system-double-conversion">Use system-wide double-conversion library.</flag>
+		<flag name="system-fmt">Use system-wide fmt library.</flag>
 		<flag name="system-gtest">Use system-wide Google Test library.</flag>
+		<flag name="system-jemalloc">Use system-wide jemalloc library.</flag>
 		<flag name="system-librdkafka">Use system-wide librdkafka.</flag>
 		<flag name="system-libunwind">Use system-wide libunwind.</flag>
 		<flag name="system-lz4">Use system-wide lz4 library.</flag>

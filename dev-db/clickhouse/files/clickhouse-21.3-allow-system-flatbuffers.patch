@@ -1,6 +1,25 @@
+diff --git a/cmake/find/parquet.cmake b/cmake/find/parquet.cmake
+index eb1b529fbf..4e4de5ced5 100644
+--- a/cmake/find/parquet.cmake
++++ b/cmake/find/parquet.cmake
+@@ -147,7 +147,11 @@ if(NOT EXTERNAL_PARQUET_FOUND AND NOT MISSING_INTERNAL_PARQUET_LIBRARY AND NOT O
+         set(PARQUET_LIBRARY parquet_static)
+         set(THRIFT_LIBRARY thrift_static)
+     else()
+-        set(FLATBUFFERS_LIBRARY flatbuffers_shared)
++        if(USE_FLATBUFFERS_INTERNAL)
++            set(FLATBUFFERS_LIBRARY flatbuffers_shared)
++        else()
++            set(FLATBUFFERS_LIBRARY flatbuffers)
++        endif()
+         set(ARROW_LIBRARY arrow_shared)
+         set(PARQUET_LIBRARY parquet_shared)
+         set(THRIFT_LIBRARY thrift)
+diff --git a/contrib/arrow-cmake/CMakeLists.txt b/contrib/arrow-cmake/CMakeLists.txt
+index 4b402a9db7..4317e47f5f 100644
 --- a/contrib/arrow-cmake/CMakeLists.txt
 +++ b/contrib/arrow-cmake/CMakeLists.txt
-@@ -75,6 +75,9 @@
+@@ -75,6 +75,9 @@ add_custom_command(OUTPUT orc_proto.pb.h orc_proto.pb.cc
  
  
  # === flatbuffers
@@ -10,7 +29,7 @@
  set(FLATBUFFERS_SRC_DIR ${ClickHouse_SOURCE_DIR}/contrib/flatbuffers)
  set(FLATBUFFERS_BINARY_DIR ${ClickHouse_BINARY_DIR}/contrib/flatbuffers)
  set(FLATBUFFERS_INCLUDE_DIR ${FLATBUFFERS_SRC_DIR}/include)
-@@ -91,6 +94,11 @@
+@@ -91,6 +94,11 @@ set(FLATBUFFERS_BUILD_TESTS OFF CACHE BOOL "Skip flatbuffers tests")
  
  add_subdirectory(${FLATBUFFERS_SRC_DIR} "${FLATBUFFERS_BINARY_DIR}")
  
@@ -22,7 +41,7 @@
  message(STATUS "FLATBUFFERS_LIBRARY: ${FLATBUFFERS_LIBRARY}")
  
  # arrow-cmake cmake file calling orc cmake subroutine which detects certain compiler features.
-@@ -281,9 +289,12 @@
+@@ -319,9 +327,12 @@ endif ()
  add_library(${ARROW_LIBRARY} ${ARROW_SRCS})
  
  # Arrow dependencies
@@ -37,18 +56,3 @@
  
  if (USE_INTERNAL_PROTOBUF_LIBRARY)
      add_dependencies(${ARROW_LIBRARY} protoc)
---- a/cmake/find/parquet.cmake
-+++ b/cmake/find/parquet.cmake
-@@ -59,7 +59,11 @@
-         set(PARQUET_LIBRARY parquet_static)
-         set(THRIFT_LIBRARY thrift_static)
-     else()
--        set(FLATBUFFERS_LIBRARY flatbuffers_shared)
-+        if(USE_FLATBUFFERS_INTERNAL)
-+            set(FLATBUFFERS_LIBRARY flatbuffers_shared)
-+        else()
-+            set(FLATBUFFERS_LIBRARY flatbuffers)
-+        endif()
-         set(ARROW_LIBRARY arrow_shared)
-         set(PARQUET_LIBRARY parquet_shared)
-         if(USE_INTERNAL_PARQUET_LIBRARY_NATIVE_CMAKE)
