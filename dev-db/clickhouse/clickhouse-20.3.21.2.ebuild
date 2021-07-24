@@ -1,11 +1,11 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 CMAKE_MAKEFILE_GENERATOR="ninja"
 
-inherit check-reqs cmake-utils flag-o-matic systemd
+inherit check-reqs cmake flag-o-matic systemd
 
 declare -A contrib_versions=(
 	["arrow"]="b789226"
@@ -221,7 +221,7 @@ src_unpack() {
 }
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 	#sed -i -r -e "s: -Wno-(for-loop-analysis|unused-local-typedef|unused-private-field): -Wno-unused-variable:g" \
 	#	contrib/libpoco/CMakeLists.txt || die "Cannot patch poco"
 	if use system-poco; then
@@ -291,13 +291,13 @@ src_configure() {
 		mycmakeargs+=(-DUSE_INTERNAL_GTEST_LIBRARY="$(usex !system-gtest)")
 	fi
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
 	patchelf --remove-rpath src/Server/clickhouse
 
-	cmake-utils_src_install
+	cmake_src_install
 
 	rm -rf "${ED}/usr/cmake"
 
