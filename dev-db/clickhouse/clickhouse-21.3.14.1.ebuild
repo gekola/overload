@@ -139,6 +139,7 @@ RDEPEND="
 		orc? ( dev-libs/cyrus-sasl:2= )
 	)
 	system-poco? ( >=dev-libs/poco-1.10.0[mongodb] )
+	net-libs/grpc:=
 "
 
 DEPEND="${RDEPEND}

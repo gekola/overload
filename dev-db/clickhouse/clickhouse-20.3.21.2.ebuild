@@ -121,6 +121,7 @@ RDEPEND="
 		orc? ( dev-libs/cyrus-sasl:2= )
 	)
 	system-poco? ( >=dev-libs/poco-1.9.0 )
+	net-libs/grpc:=
 "
 
 DEPEND="${RDEPEND}
