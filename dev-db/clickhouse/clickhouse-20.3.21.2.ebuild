@@ -117,6 +117,7 @@ RDEPEND="
 		dev-libs/glib
 		dev-libs/libfmt
 		>=dev-libs/boost-1.65.0:=
+		dev-libs/protobuf:=
 		mysql? ( dev-db/mysql-connector-c )
 		orc? ( dev-libs/cyrus-sasl:2= )
 	)
@@ -148,6 +149,7 @@ DEPEND="${RDEPEND}
 		dev-libs/icu[static-libs]
 		dev-libs/glib[static-libs]
 		>=dev-libs/boost-1.65.0[static-libs]
+		dev-libs/protobuf[static-libs]
 		dev-db/mysql-connector-c[static-libs]
 		orc? ( dev-libs/cyrus-sasl:2[static-libs] )
 	)
