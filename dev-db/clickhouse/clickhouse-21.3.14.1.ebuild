@@ -135,7 +135,7 @@ RDEPEND="
 		dev-libs/icu:=
 		dev-libs/glib
 		>=dev-libs/boost-1.65.0:=
-		dev-libs/protobuf;=
+		dev-libs/protobuf:=
 		mysql? ( dev-db/mysql-connector-c )
 		orc? ( dev-libs/cyrus-sasl:2= )
 	)
