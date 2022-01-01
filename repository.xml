@@ -1,0 +1,13 @@
+<repo quality="experimental" status="unofficial">
+  <name>overlay</name>
+  <description lang="en">gekola's gentoo overlay</description>
+  <homepage>https://github.com/gekola/overload</homepage>
+  <owner type="person">
+    <email>gerkola@gmail.com</email>
+    <name>Nick H</name>
+  </owner>
+  <source type="git">https://github.com/gekola/overload.git</source>
+  <source type="git">git://github.com/gekola/overload.git</source>
+  <source type="git">git@github.com:gekola/overload.git</source>
+  <feed>https://github.com/gekola/overload/commits/main.atom</feed>
+</repo>
