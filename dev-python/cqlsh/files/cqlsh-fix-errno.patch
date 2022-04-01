@@ -1,0 +1,10 @@
+--- a/cqlshlib/copyutil.py
++++ b/cqlshlib/copyutil.py
+@@ -19,6 +19,7 @@
+ from __future__ import unicode_literals
+ import csv
+ import datetime
++import errno
+ import json
+ import glob
+ import multiprocessing as mp
