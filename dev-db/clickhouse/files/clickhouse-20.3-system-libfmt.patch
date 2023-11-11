@@ -1,9 +1,0 @@
---- a/contrib/CMakeLists.txt
-+++ b/contrib/CMakeLists.txt
-@@ -334,6 +334,3 @@
- 
- 
- add_subdirectory(replxx-cmake)
--
--add_subdirectory (fmtlib-cmake)
--
