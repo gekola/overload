@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
+PYTHON_COMPAT=( python3_{10..12} )
 
 PYPI_NO_NORMALIZE=1
 inherit distutils-r1 pypi
@@ -24,3 +24,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
+
+PATCHES=(
+	"${FILESDIR}/0006-relax_vesioned_cython_dependency.patch"
+)
