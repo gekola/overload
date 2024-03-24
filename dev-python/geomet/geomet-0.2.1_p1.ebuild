@@ -3,15 +3,14 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{10..12} )
 
-inherit distutils-r1
+inherit distutils-r1 pypi
 
 MY_PV="${PV/_p/.post}"
 MY_P="${PN}-${MY_PV}"
 DESCRIPTION="Convert GeoJSON to WKT/WKB (Well-Known Text/Binary), and vice versa."
 HOMEPAGE="https://github.com/geomet/geomet"
-SRC_URI="mirror://pypi/${MY_P:0:1}/${PN}/${MY_P}.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT=0
