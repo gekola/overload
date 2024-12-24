@@ -9,15 +9,22 @@ DESCRIPTION="An OSS column-oriented database management system for real-time dat
 HOMEPAGE="https://clickhouse.tech/"
 TYPE="lts"
 SRC_URI="
-	https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-common-static-${PV}-amd64.tgz
-	client? ( https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-client-${PV}-amd64.tgz )
-	server? ( https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-server-${PV}-amd64.tgz )
+	amd64? (
+		https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-common-static-${PV}-amd64.tgz
+		client? ( https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-client-${PV}-amd64.tgz )
+		server? ( https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-server-${PV}-amd64.tgz )
+	)
+	arm64? (
+		https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-common-static-${PV}-arm64.tgz
+		client? ( https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-client-${PV}-arm64.tgz )
+		server? ( https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-server-${PV}-arm64.tgz )
+	)
 "
 
 LICENSE="Apache-2.0"
 SLOT="0/${TYPE}"
 IUSE="+client doc +server"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 DEPEND="
 	server? (
