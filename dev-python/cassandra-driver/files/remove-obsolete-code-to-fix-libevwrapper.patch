@@ -1,0 +1,50 @@
+From: Sophie Brun <sophie@offensive-security.com>
+Date: Thu, 13 Feb 2025 13:47:36 +0100
+Subject: Remove obsolete code to fix ext libevwrapper
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+
+On Python3.13 the build of libevwrapper extension fails with:
+cassandra/ioutils.c:2757:35: warning: comparison of integer expressions of different signedness: ‘Py_ssize_t’ {aka ‘long int’} and ‘size_t’ {aka ‘long unsigned int’} [-Wsign-compare]
+ 2757 |     for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
+      |                                   ^
+cassandra/io/libevwrapper.c: In function ‘PyInit_libevwrapper’:
+cassandra/io/libevwrapper.c:668:10: error: implicit declaration of function ‘PyEval_ThreadsInitialized’ [-Wimplicit-function-declaration]
+  668 |     if (!PyEval_ThreadsInitialized()) {
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+cassandra/io/libevwrapper.c:669:9: warning: ‘PyEval_InitThreads’ is deprecated [-Wdeprecated-declarations]
+  669 |         PyEval_InitThreads();
+      |         ^~~~~~~~~~~~~~~~~~
+In file included from /usr/include/python3.13/Python.h:124,
+                 from cassandra/io/libevwrapper.c:1:
+/usr/include/python3.13/ceval.h:114:37: note: declared here
+  114 | Py_DEPRECATED(3.9) PyAPI_FUNC(void) PyEval_InitThreads(void);
+      |                                     ^~~~~~~~~~~~~~~~~~
+Appending libev extension <setuptools.extension.Extension('cassandra.io.libevwrapper') at 0x7f011a627110>command '/usr/bin/x86_64-linux-gnu-gcc' failed with exit code 1
+/build/python-cassandra-driver-3E8egh/python-cassandra-driver-3.29.2/setup.py:278: UserWarning:
+===============================================================================
+WARNING: could not compile The cassandra.io.libevwrapper extension.
+
+As PyEval_InitThreads is a deprecated function which does nothing since
+Python 3.9, we can remove the code.
+---
+ cassandra/io/libevwrapper.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/cassandra/io/libevwrapper.c b/cassandra/io/libevwrapper.c
+index 99e1df3..bf53862 100644
+--- a/cassandra/io/libevwrapper.c
++++ b/cassandra/io/libevwrapper.c
+@@ -665,10 +665,6 @@ initlibevwrapper(void)
+     if (PyModule_AddObject(module, "Timer", (PyObject *)&libevwrapper_TimerType) == -1)
+         INITERROR;
+ 
+-    if (!PyEval_ThreadsInitialized()) {
+-        PyEval_InitThreads();
+-    }
+-
+ #if PY_MAJOR_VERSION >= 3
+     return module;
+ #endif
