@@ -1,0 +1,9 @@
+#!python
+import sys
+from cqlshlib.cqlshmain import main as cqlsh_main
+
+def main():
+    cqlsh_main(sys.argv[1:], "")
+
+if __name__ == '__main__':
+    sys.exit(main())
