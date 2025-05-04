@@ -19,7 +19,7 @@ KEYWORDS="~amd64 ~x86"
 RDEPEND="
 	dev-libs/libev
 	dev-python/cython[${PYTHON_USEDEP}]
-	<dev-python/geomet-0.3[${PYTHON_USEDEP}]
+	dev-python/geomet[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}"
