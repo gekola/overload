@@ -372,7 +372,7 @@ CRATES="
 	zerovec@0.10.4
 "
 
-inherit cargo
+inherit cargo flag-o-matic
 
 DESCRIPTION="This TUI allows you to list and browse APIs described by the openapi specification."
 HOMEPAGE="https://github.com/zaghaghi/openapi-tui"
@@ -387,3 +387,8 @@ LICENSE+="
 "
 SLOT="0"
 KEYWORDS="~amd64"
+
+src_compile() {
+	append-cflags -std=gnu17
+	default
+}
