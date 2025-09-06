@@ -1,4 +1,4 @@
-# Copyright 2022-2025 Gentoo Authors
+# Copyright 2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -7,7 +7,7 @@ inherit systemd
 
 DESCRIPTION="An OSS column-oriented database management system for real-time data analysis"
 HOMEPAGE="https://clickhouse.tech/"
-TYPE="stable"
+TYPE="lts"
 SRC_URI="
 	amd64? (
 		https://packages.clickhouse.com/tgz/${TYPE}/clickhouse-common-static-${PV}-amd64.tgz
@@ -21,10 +21,12 @@ SRC_URI="
 	)
 "
 
+S="${WORKDIR}/clickhouse-common-static-${PV}"
+
 LICENSE="Apache-2.0"
 SLOT="0/${TYPE}"
-IUSE="+client doc +server"
 KEYWORDS="~amd64 ~arm64"
+IUSE="+client doc +server"
 
 DEPEND="
 	server? (
@@ -35,8 +37,6 @@ DEPEND="
 RDEPEND="${DEPEND}
 	server? ( sys-libs/libcap )
 "
-S="${WORKDIR}/clickhouse-common-static-${PV}"
-
 
 src_install() {
 	cp -r usr "${D}/"
