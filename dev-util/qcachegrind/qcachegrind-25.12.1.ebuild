@@ -3,17 +3,17 @@
 
 EAPI=8
 
-inherit qmake-utils xdg-utils
+inherit qmake-utils xdg-utils desktop
 
 DESCRIPTION="Call graph viewer for callgrind"
 HOMEPAGE="https://kde.org/applications/development/kcachegrind"
-SLOT="0"
 
 BUNDLENAME=kcachegrind
 SRC_URI="https://download.kde.org/stable/release-service/${PV}/src/${BUNDLENAME}-${PV}.tar.xz"
 S="${WORKDIR}/${BUNDLENAME}-${PV}"
 
 LICENSE="GPL-2"
+SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="debug tools"
 
@@ -35,8 +35,7 @@ src_install() {
 		doexe converters/{dprof,memprof,op,pprof}2calltree
 	fi
 
-	insinto /usr/share/applications/
-	doins qcachegrind/qcachegrind.desktop
+	domenu qcachegrind/qcachegrind.desktop
 
 	for px in 32 48 64 128 ; do
 		insinto /usr/share/icons/hicolor/${px}x${px}/apps/
