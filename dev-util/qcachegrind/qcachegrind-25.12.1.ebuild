@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit qmake-utils xdg-utils
 
@@ -18,14 +18,12 @@ KEYWORDS="~amd64 ~x86"
 IUSE="debug tools"
 
 DEPEND="
-dev-qt/qtcore:5=
-dev-qt/qtgui:5=
-dev-qt/qtwidgets:5=
+dev-qt/qtbase:6=[gui,widgets]
 "
 RDEPEND="${DEPEND}"
 
 src_configure() {
-	eqmake5
+	eqmake6
 }
 
 src_install() {
