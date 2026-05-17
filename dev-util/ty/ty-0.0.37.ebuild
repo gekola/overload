@@ -131,6 +131,7 @@ CRATES="
 	flate2@1.1.2
 	fnv@1.0.7
 	foldhash@0.1.5
+	foldhash@0.2.0
 	form_urlencoded@1.2.2
 	fs-err@3.3.0
 	fsevent-sys@4.1.0
@@ -311,9 +312,9 @@ CRATES="
 	rustix@1.1.4
 	rustversion@1.0.22
 	ryu@1.0.20
-	salsa-macro-rules@0.26.1
-	salsa-macros@0.26.1
-	salsa@0.26.1
+	salsa-macro-rules@0.26.2
+	salsa-macros@0.26.2
+	salsa@0.26.2
 	same-file@1.0.6
 	schemars@1.2.1
 	schemars_derive@1.2.1
@@ -329,8 +330,8 @@ CRATES="
 	serde_repr@0.1.20
 	serde_spanned@1.1.1
 	serde_test@1.0.177
-	serde_with@3.18.0
-	serde_with_macros@3.18.0
+	serde_with@3.19.0
+	serde_with_macros@3.19.0
 	sha2@0.10.9
 	sharded-slab@0.1.7
 	shellexpand@3.1.2
