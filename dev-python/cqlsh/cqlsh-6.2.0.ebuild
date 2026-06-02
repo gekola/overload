@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} )
 
 DISTUTILS_USE_PEP517=standalone
 DISTUTILS_EXT=1
@@ -12,7 +12,7 @@ inherit python-single-r1
 
 DESCRIPTION="DataStax Python Driver for Apache Cassandra"
 HOMEPAGE="https://github.com/datastax/python-driver"
-CASS_VER="5.0.4"
+CASS_VER="5.0.8"
 SRC_URI="https://archive.apache.org/dist/cassandra/${CASS_VER}/apache-cassandra-${CASS_VER}-src.tar.gz"
 
 LICENSE="Apache-2.0"
