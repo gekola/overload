@@ -49,7 +49,7 @@ CRATES="
 	cast@0.3.0
 	castaway@0.2.4
 	cc@1.2.38
-	cfg-if@1.0.3
+	cfg-if@1.0.4
 	cfg_aliases@0.2.1
 	chacha20@0.10.0
 	chrono@0.4.44
@@ -101,7 +101,7 @@ CRATES="
 	darling@0.23.0
 	darling_core@0.23.0
 	darling_macro@0.23.0
-	dashmap@6.1.0
+	dashmap@6.2.1
 	datatest-stable@0.3.3
 	derive-where@1.6.0
 	diff@0.1.13
@@ -137,8 +137,8 @@ CRATES="
 	fsevent-sys@4.1.0
 	funty@2.0.0
 	generic-array@0.14.7
-	get-size-derive2@0.8.0
-	get-size2@0.8.0
+	get-size-derive2@0.9.0
+	get-size2@0.9.0
 	getopts@0.2.24
 	getrandom@0.2.16
 	getrandom@0.3.4
@@ -234,7 +234,7 @@ CRATES="
 	num_cpus@1.17.0
 	objc2-encode@4.1.0
 	objc2@0.6.3
-	once_cell@1.21.3
+	once_cell@1.21.4
 	once_cell_polyfill@1.70.1
 	oorandom@11.1.5
 	option-ext@0.2.0
@@ -361,7 +361,7 @@ CRATES="
 	test-case-core@3.3.1
 	test-case-macros@3.3.1
 	test-case@3.3.1
-	thin-vec@0.2.14
+	thin-vec@0.2.18
 	thiserror-impl@1.0.69
 	thiserror-impl@2.0.18
 	thiserror@1.0.69
