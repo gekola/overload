@@ -135,6 +135,7 @@ CRATES="
 	fs-err@3.3.0
 	fsevent-sys@4.1.0
 	funty@2.0.0
+	gen-lsp-types@0.8.0
 	generic-array@0.14.7
 	get-size-derive2@0.9.0
 	get-size2@0.9.0
@@ -327,7 +328,6 @@ CRATES="
 	serde_derive@1.0.228
 	serde_derive_internals@0.29.1
 	serde_json@1.0.150
-	serde_repr@0.1.20
 	serde_spanned@1.1.1
 	serde_test@1.0.177
 	serde_with@3.20.0
@@ -495,10 +495,6 @@ CRATES="
 	zstd-sys@2.0.16+zstd.1.5.7
 	zstd@0.11.2+zstd.1.5.2
 "
-
-declare -A GIT_CRATES=(
-	[lsp-types]='https://github.com/astral-sh/lsp-types;e15db0593f0ecbbd80599c3f5880e4bf5da1ca0c;lsp-types-%commit%'
-)
 
 RUST_MIN_VER="1.90.0"
 
