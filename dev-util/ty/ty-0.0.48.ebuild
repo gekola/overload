@@ -24,6 +24,7 @@ CRATES="
 	anstyle@1.0.14
 	anyhow@1.0.102
 	approx@0.5.1
+	arbitrary@1.4.2
 	arc-swap@1.9.1
 	argfile@1.0.0
 	arrayvec@0.7.6
@@ -36,14 +37,13 @@ CRATES="
 	bit-set@0.8.0
 	bit-vec@0.8.0
 	bitflags@1.3.2
-	bitflags@2.11.1
+	bitflags@2.12.1
 	bitvec@1.0.1
 	block-buffer@0.10.4
 	block2@0.6.2
 	boxcar@0.2.14
 	bstr@1.12.1
 	bumpalo@3.19.0
-	byteorder@1.5.0
 	cachedir@0.3.1
 	camino@1.2.2
 	cast@0.3.0
@@ -104,6 +104,7 @@ CRATES="
 	dashmap@6.2.1
 	datatest-stable@0.3.3
 	derive-where@1.6.0
+	derive_arbitrary@1.4.2
 	diff@0.1.13
 	difflib@0.4.0
 	digest@0.10.7
@@ -188,10 +189,10 @@ CRATES="
 	itertools@0.13.0
 	itertools@0.14.0
 	itoa@1.0.15
-	jiff-static@0.2.27
+	jiff-static@0.2.28
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.4
-	jiff@0.2.27
+	jiff@0.2.28
 	jobserver@0.1.34
 	jod-thread@1.0.0
 	js-sys@0.3.82
@@ -206,10 +207,11 @@ CRATES="
 	libredox@0.1.10
 	libtest-mimic@0.7.3
 	libtest-mimic@0.8.1
+	libz-rs-sys@0.5.5
 	linux-raw-sys@0.12.1
 	litemap@0.8.0
 	lock_api@0.4.13
-	log@0.4.30
+	log@0.4.31
 	lsp-server@0.7.9
 	manyhow-macros@0.11.4
 	manyhow@0.11.4
@@ -408,7 +410,7 @@ CRATES="
 	utf8-width@0.1.7
 	utf8_iter@1.0.4
 	utf8parse@0.2.2
-	uuid@1.23.1
+	uuid@1.23.2
 	valuable@0.1.1
 	version-ranges@0.1.1
 	version_check@0.9.5
@@ -489,11 +491,12 @@ CRATES="
 	zerotrie@0.2.4
 	zerovec-derive@0.11.3
 	zerovec@0.11.6
-	zip@0.6.6
+	zip@5.1.1
+	zlib-rs@0.5.5
 	zmij@1.0.10
-	zstd-safe@5.0.2+zstd.1.5.2
+	zstd-safe@7.2.4
 	zstd-sys@2.0.16+zstd.1.5.7
-	zstd@0.11.2+zstd.1.5.2
+	zstd@0.13.3
 "
 
 RUST_MIN_VER="1.90.0"
