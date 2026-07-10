@@ -22,33 +22,34 @@ CRATES="
 	anstyle-svg@0.1.11
 	anstyle-wincon@3.0.10
 	anstyle@1.0.14
-	anyhow@1.0.102
+	anyhow@1.0.103
 	approx@0.5.1
-	arc-swap@1.9.1
+	arc-swap@1.9.2
 	argfile@1.0.0
-	arrayvec@0.7.6
+	arrayvec@0.7.7
 	assert_fs@1.1.4
 	async-trait@0.1.89
 	attribute-derive-macro@0.10.3
 	attribute-derive@0.10.3
 	autocfg@1.5.0
-	bincode@2.0.1
-	bincode_derive@2.0.1
 	bit-set@0.8.0
 	bit-vec@0.8.0
 	bitflags@1.3.2
 	bitflags@2.13.0
-	bitvec@1.0.1
+	bitvec@1.1.1
 	block-buffer@0.10.4
 	block2@0.6.2
 	boxcar@0.2.14
-	bstr@1.12.1
+	bstr@1.12.3
 	bumpalo@3.19.0
+	bytecheck@0.8.2
+	bytecheck_derive@0.8.2
+	bytes@1.12.0
 	cachedir@0.3.1
-	camino@1.2.2
+	camino@1.2.4
 	cast@0.3.0
 	castaway@0.2.4
-	cc@1.2.38
+	cc@1.2.65
 	cfg-if@1.0.4
 	cfg_aliases@0.2.1
 	chacha20@0.10.0
@@ -64,15 +65,14 @@ CRATES="
 	clap_derive@4.6.1
 	clap_lex@1.0.0
 	clearscreen@4.0.6
-	codspeed-criterion-compat-walltime@4.4.1
-	codspeed-criterion-compat@4.4.1
-	codspeed-divan-compat-macros@4.4.1
-	codspeed-divan-compat-walltime@4.4.1
-	codspeed-divan-compat@4.4.1
-	codspeed@4.4.1
+	codspeed-criterion-compat-walltime@5.0.1
+	codspeed-criterion-compat@5.0.1
+	codspeed-divan-compat-macros@5.0.1
+	codspeed-divan-compat-walltime@5.0.1
+	codspeed-divan-compat@5.0.1
+	codspeed@5.0.1
 	collection_literals@1.0.2
 	colorchoice@1.0.4
-	colored@2.2.0
 	colored@3.1.1
 	compact_str@0.9.1
 	condtype@1.3.0
@@ -98,11 +98,11 @@ CRATES="
 	csv-core@0.1.12
 	csv@1.4.0
 	ctrlc@3.5.2
-	darling@0.23.0
-	darling_core@0.23.0
-	darling_macro@0.23.0
 	dashmap@6.2.1
 	datatest-stable@0.3.3
+	defmt-macros@1.1.0
+	defmt-parser@1.0.0
+	defmt@1.1.0
 	derive-where@1.6.0
 	diff@0.1.13
 	difflib@0.4.0
@@ -126,7 +126,7 @@ CRATES="
 	fastrand@2.3.0
 	fern@0.7.1
 	filetime@0.2.29
-	find-msvc-tools@0.1.2
+	find-msvc-tools@0.1.9
 	flate2@1.1.2
 	fnv@1.0.7
 	foldhash@0.1.5
@@ -138,10 +138,10 @@ CRATES="
 	futures-core@0.3.32
 	futures-task@0.3.32
 	futures-util@0.3.32
-	gen-lsp-types@0.8.0
+	gen-lsp-types@0.9.0
 	generic-array@0.14.7
-	get-size-derive2@0.10.0
-	get-size2@0.10.0
+	get-size-derive2@0.10.1
+	get-size2@0.10.1
 	getopts@0.2.24
 	getrandom@0.2.16
 	getrandom@0.3.4
@@ -152,9 +152,8 @@ CRATES="
 	half@2.6.0
 	hashbrown@0.14.5
 	hashbrown@0.15.5
-	hashbrown@0.16.1
 	hashbrown@0.17.1
-	hashlink@0.11.0
+	hashlink@0.12.0
 	heck@0.5.0
 	hermit-abi@0.5.2
 	html-escape@0.2.13
@@ -168,19 +167,18 @@ CRATES="
 	icu_properties_data@2.2.0
 	icu_provider@2.2.0
 	id-arena@2.3.0
-	ident_case@1.0.1
 	idna@1.1.0
 	idna_adapter@1.2.1
 	ignore@0.4.26
 	imara-diff@0.2.0
 	imperative@1.0.7
 	indexmap@2.14.0
-	indicatif@0.18.4
+	indicatif@0.18.5
 	indoc@2.0.7
 	inotify-sys@0.1.5
 	inotify@0.11.0
-	insta-cmd@0.6.0
-	insta@1.47.2
+	insta-cmd@0.7.0
+	insta@1.48.0
 	interpolator@0.5.0
 	intrusive-collections@0.10.1
 	inventory@0.3.24
@@ -190,11 +188,12 @@ CRATES="
 	itertools@0.10.5
 	itertools@0.13.0
 	itertools@0.14.0
+	itertools@0.15.0
 	itoa@1.0.15
-	jiff-static@0.2.28
+	jiff-static@0.2.31
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.4
-	jiff@0.2.28
+	jiff@0.2.31
 	jobserver@0.1.34
 	jod-thread@1.0.0
 	js-sys@0.3.100
@@ -214,20 +213,22 @@ CRATES="
 	linux-raw-sys@0.12.1
 	litemap@0.8.0
 	lock_api@0.4.13
-	log@0.4.32
-	lsp-server@0.7.9
+	log@0.4.33
+	lsp-server@0.8.0
 	manyhow-macros@0.11.4
 	manyhow@0.11.4
 	markdown@1.0.0
 	matchers@0.2.0
 	matchit@0.9.2
-	memchr@2.8.1
+	memchr@2.8.2
 	memoffset@0.9.1
 	mimalloc@0.1.52
 	minicov@0.3.8
 	minimal-lexical@0.2.1
 	miniz_oxide@0.8.9
 	mio@1.0.4
+	munge@0.4.7
+	munge_macro@0.4.7
 	natord@1.0.9
 	newtype-uuid@1.3.2
 	nix@0.31.2
@@ -282,9 +283,13 @@ CRATES="
 	predicates@3.1.4
 	pretty_assertions@1.4.1
 	prettyplease@0.2.37
-	proc-macro-crate@3.4.0
+	proc-macro-crate@3.5.0
+	proc-macro-error-attr2@2.0.0
+	proc-macro-error2@2.0.1
 	proc-macro-utils@0.10.0
 	proc-macro2@1.0.106
+	ptr_meta@0.3.1
+	ptr_meta_derive@0.3.1
 	pyproject-toml@0.13.7
 	quick-junit@0.6.0
 	quick-xml@0.38.4
@@ -292,10 +297,11 @@ CRATES="
 	quickcheck_macros@1.2.0
 	quote-use-macros@0.8.4
 	quote-use@0.8.4
-	quote@1.0.45
+	quote@1.0.46
 	r-efi@5.3.0
 	r-efi@6.0.0
 	radium@0.7.0
+	rancor@0.1.1
 	rand@0.10.1
 	rand@0.8.5
 	rand_chacha@0.3.1
@@ -311,6 +317,9 @@ CRATES="
 	regex-lite@0.1.7
 	regex-syntax@0.8.11
 	regex@1.12.4
+	rend@0.5.3
+	rkyv@0.8.16
+	rkyv_derive@0.8.16
 	ron@0.12.0
 	rust-stemmers@1.2.0
 	rustc-hash@2.1.2
@@ -318,9 +327,9 @@ CRATES="
 	rustix@1.1.4
 	rustversion@1.0.22
 	ryu@1.0.20
-	salsa-macro-rules@0.27.0
-	salsa-macros@0.27.0
-	salsa@0.27.0
+	salsa-macro-rules@0.27.2
+	salsa-macros@0.27.2
+	salsa@0.27.2
 	same-file@1.0.6
 	schemars@1.2.1
 	schemars_derive@1.2.1
@@ -335,17 +344,16 @@ CRATES="
 	serde_json@1.0.150
 	serde_spanned@1.1.1
 	serde_test@1.0.177
-	serde_with@3.21.0
-	serde_with_macros@3.21.0
 	sha2@0.10.9
 	sharded-slab@0.1.7
 	shellexpand@3.1.2
-	shlex@1.3.0
+	shlex@2.0.1
+	simdutf8@0.1.5
 	similar@2.7.0
 	similar@3.1.1
 	siphasher@1.0.1
 	slab@0.4.12
-	smallvec@1.15.1
+	smallvec@1.15.2
 	snapbox-macros@1.0.0
 	snapbox@1.0.0
 	stable_deref_trait@1.2.0
@@ -356,7 +364,7 @@ CRATES="
 	strum@0.28.0
 	strum_macros@0.28.0
 	supports-hyperlinks@3.2.0
-	syn@2.0.117
+	syn@2.0.118
 	synstructure@0.13.2
 	tap@1.0.1
 	tempfile@3.27.0
@@ -384,7 +392,7 @@ CRATES="
 	toml@1.1.2+spec-1.1.0
 	toml_datetime@0.7.5+spec-1.1.0
 	toml_datetime@1.1.1+spec-1.1.0
-	toml_edit@0.23.6
+	toml_edit@0.25.12+spec-1.1.0
 	toml_parser@1.1.2+spec-1.1.0
 	toml_writer@1.1.1+spec-1.1.0
 	tracing-attributes@0.1.31
@@ -409,17 +417,15 @@ CRATES="
 	unicode_names2_generator@1.3.0
 	unit-prefix@0.5.1
 	unscanny@0.1.0
-	unty@0.0.4
 	url@2.5.8
 	urlencoding@2.1.3
 	utf8-width@0.1.7
 	utf8_iter@1.0.4
 	utf8parse@0.2.2
-	uuid@1.23.3
+	uuid@1.23.4
 	valuable@0.1.1
 	version-ranges@0.1.1
 	version_check@0.9.5
-	virtue@0.0.18
 	vt100@0.16.2
 	vte@0.14.1
 	vte@0.15.0
@@ -441,7 +447,7 @@ CRATES="
 	wasmparser@0.244.0
 	web-sys@0.3.100
 	web-time@1.1.0
-	which@8.0.3
+	which@8.0.4
 	wild@2.2.1
 	winapi-i686-pc-windows-gnu@0.4.0
 	winapi-util@0.1.11
