@@ -26,7 +26,7 @@ CRATES="
 	approx@0.5.1
 	arc-swap@1.9.2
 	argfile@1.0.0
-	arrayvec@0.7.7
+	arrayvec@0.7.8
 	assert_fs@1.1.4
 	async-trait@0.1.89
 	attribute-derive-macro@0.10.3
@@ -53,6 +53,7 @@ CRATES="
 	cfg-if@1.0.4
 	cfg_aliases@0.2.1
 	chacha20@0.10.0
+	char_str@0.0.2
 	chrono@0.4.44
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
@@ -76,7 +77,7 @@ CRATES="
 	colored@3.1.1
 	compact_str@0.9.1
 	condtype@1.3.0
-	console@0.16.1
+	console@0.16.4
 	console_error_panic_hook@0.1.7
 	console_log@1.0.0
 	core-foundation-sys@0.8.7
@@ -169,11 +170,11 @@ CRATES="
 	id-arena@2.3.0
 	idna@1.1.0
 	idna_adapter@1.2.1
-	ignore@0.4.26
+	ignore@0.4.30
 	imara-diff@0.2.0
 	imperative@1.0.7
 	indexmap@2.14.0
-	indicatif@0.18.5
+	indicatif@0.18.6
 	indoc@2.0.7
 	inotify-sys@0.1.5
 	inotify@0.11.0
@@ -220,7 +221,7 @@ CRATES="
 	markdown@1.0.0
 	matchers@0.2.0
 	matchit@0.9.2
-	memchr@2.8.2
+	memchr@2.8.3
 	memoffset@0.9.1
 	mimalloc@0.1.52
 	minicov@0.3.8
@@ -291,8 +292,8 @@ CRATES="
 	ptr_meta@0.3.1
 	ptr_meta_derive@0.3.1
 	pyproject-toml@0.13.7
-	quick-junit@0.6.0
-	quick-xml@0.38.4
+	quick-junit@0.6.1
+	quick-xml@0.41.0
 	quickcheck@1.1.0
 	quickcheck_macros@1.2.0
 	quote-use-macros@0.8.4
@@ -302,7 +303,7 @@ CRATES="
 	r-efi@6.0.0
 	radium@0.7.0
 	rancor@0.1.1
-	rand@0.10.1
+	rand@0.10.2
 	rand@0.8.5
 	rand_chacha@0.3.1
 	rand_core@0.10.0
@@ -318,18 +319,18 @@ CRATES="
 	regex-syntax@0.8.11
 	regex@1.12.4
 	rend@0.5.3
-	rkyv@0.8.16
-	rkyv_derive@0.8.16
+	rkyv@0.8.17
+	rkyv_derive@0.8.17
 	ron@0.12.0
 	rust-stemmers@1.2.0
-	rustc-hash@2.1.2
+	rustc-hash@2.1.3
 	rustc-stable-hash@0.1.2
 	rustix@1.1.4
 	rustversion@1.0.22
 	ryu@1.0.20
-	salsa-macro-rules@0.27.2
-	salsa-macros@0.27.2
-	salsa@0.27.2
+	salsa-macro-rules@0.28.0
+	salsa-macros@0.28.0
+	salsa@0.28.0
 	same-file@1.0.6
 	schemars@1.2.1
 	schemars_derive@1.2.1
