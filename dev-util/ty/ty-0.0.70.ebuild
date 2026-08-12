@@ -46,7 +46,7 @@ CRATES="
 	bytecheck_derive@0.8.2
 	bytes@1.12.0
 	cachedir@0.3.1
-	camino@1.2.4
+	camino@1.2.5
 	cast@0.3.0
 	castaway@0.2.4
 	cc@1.2.65
@@ -192,10 +192,10 @@ CRATES="
 	itertools@0.15.0
 	itoa@1.0.15
 	jiff-core@0.1.0
-	jiff-static@0.2.34
+	jiff-static@0.2.35
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.4
-	jiff@0.2.34
+	jiff@0.2.35
 	jobserver@0.1.34
 	jod-thread@1.0.0
 	js-sys@0.3.100
@@ -327,12 +327,12 @@ CRATES="
 	rustix@1.1.4
 	rustversion@1.0.22
 	ryu@1.0.20
-	salsa-macro-rules@0.28.1
-	salsa-macros@0.28.1
-	salsa@0.28.1
+	salsa-macro-rules@0.28.2
+	salsa-macros@0.28.2
+	salsa@0.28.2
 	same-file@1.0.6
-	schemars@1.2.1
-	schemars_derive@1.2.1
+	schemars@1.2.2
+	schemars_derive@1.2.2
 	scopeguard@1.2.0
 	seahash@4.1.0
 	semver@1.0.27
@@ -340,7 +340,7 @@ CRATES="
 	serde@1.0.229
 	serde_core@1.0.229
 	serde_derive@1.0.229
-	serde_derive_internals@0.29.1
+	serde_derive_internals@0.30.0
 	serde_json@1.0.151
 	serde_spanned@1.1.1
 	serde_test@1.0.177
@@ -375,7 +375,7 @@ CRATES="
 	test-case-core@3.3.1
 	test-case-macros@3.3.1
 	test-case@3.3.1
-	thin-vec@0.2.18
+	thin-vec@0.2.19
 	thiserror-impl@1.0.69
 	thiserror-impl@2.0.19
 	thiserror@1.0.69
@@ -388,11 +388,11 @@ CRATES="
 	tinyvec@1.10.0
 	tinyvec_macros@0.1.1
 	toml@0.9.12+spec-1.1.0
-	toml@1.1.3+spec-1.1.0
+	toml@1.1.4+spec-1.1.0
 	toml_datetime@0.7.5+spec-1.1.0
 	toml_datetime@1.1.1+spec-1.1.0
 	toml_edit@0.25.12+spec-1.1.0
-	toml_parser@1.1.2+spec-1.1.0
+	toml_parser@1.1.3+spec-1.1.0
 	toml_writer@1.1.2+spec-1.1.0
 	tracing-attributes@0.1.31
 	tracing-core@0.1.36
