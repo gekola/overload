@@ -186,7 +186,7 @@ CRATES="
 	syn@2.0.119
 	syn@3.0.4
 	tempfile@3.27.0
-	tera@2.2.0
+	tera@2.3.0
 	termtree@0.5.1
 	thiserror-impl@2.0.20
 	thiserror@2.0.20
@@ -212,7 +212,7 @@ CRATES="
 	unicode-width@0.1.14
 	unicode-width@0.2.2
 	utf8parse@0.2.2
-	uuid@1.25.0
+	uuid@1.26.0
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasip2@1.0.4+wasi-0.2.12
@@ -241,12 +241,13 @@ CRATES="
 	zmij@1.0.23
 "
 
-inherit cargo
+inherit cargo shell-completion
 
 DESCRIPTION="CLI for working with usage-based CLIs"
 HOMEPAGE="https://usage.jdx.dev"
 SRC_URI="
 	${CARGO_CRATE_URIS}
+	https://github.com/jdx/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 "
 
 LICENSE="MIT"
@@ -254,3 +255,11 @@ LICENSE="MIT"
 LICENSE+=" Apache-2.0 MIT Unicode-3.0"
 SLOT="0"
 KEYWORDS="~amd64"
+
+src_install() {
+    cargo_src_install --path cli
+	einstalldocs
+	newbashcomp cli/assets/completions/usage.bash usage
+	newfishcomp cli/assets/completions/usage.fish usage.fish
+	newzshcomp cli/assets/completions/_usage _usage
+}
