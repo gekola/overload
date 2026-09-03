@@ -97,7 +97,7 @@ CRATES="
 	iana-time-zone@0.1.65
 	ident_case@1.0.1
 	indexmap@1.9.3
-	indexmap@2.14.0
+	indexmap@2.14.1
 	insta@1.48.0
 	is_terminal_polyfill@1.70.2
 	itertools@0.13.0
@@ -158,8 +158,8 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.1.4
-	rmcp@3.1.4
+	rmcp-macros@3.2.0
+	rmcp@3.2.0
 	roff@1.1.1
 	rustix@1.1.4
 	rustversion@1.0.23
