@@ -54,7 +54,7 @@ CRATES="
 	cfg-if@1.0.4
 	cfg_aliases@0.2.1
 	chacha20@0.10.0
-	char_str@0.0.2
+	char_str@0.0.4
 	chrono@0.4.44
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
@@ -142,8 +142,8 @@ CRATES="
 	futures-util@0.3.32
 	gen-lsp-types@0.11.0
 	generic-array@0.14.7
-	get-size-derive2@0.10.3
-	get-size2@0.10.3
+	get-size-derive2@0.11.0
+	get-size2@0.11.0
 	getopts@0.2.24
 	getrandom@0.2.16
 	getrandom@0.3.4
@@ -536,7 +536,7 @@ LICENSE+="
 	MPL-2.0 PSF-2 Unicode-3.0 Unicode-DFS-2016 WTFPL-2 ZLIB
 "
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
 	!elibc_musl? ( !elibc_Darwin? ( !elibc_bionic? ( dev-libs/jemalloc:= ) ) )
