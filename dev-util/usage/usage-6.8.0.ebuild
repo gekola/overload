@@ -30,7 +30,7 @@ CRATES="
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.4.4
+	cc@1.4.5
 	cfg-if@1.0.4
 	chrono@0.4.45
 	ciborium-io@0.2.2
@@ -45,9 +45,9 @@ CRATES="
 	core-foundation-sys@0.8.7
 	criterion-plot@0.8.2
 	criterion@0.8.2
-	crossbeam-deque@0.8.7
-	crossbeam-epoch@0.9.20
-	crossbeam-utils@0.8.22
+	crossbeam-deque@0.8.8
+	crossbeam-epoch@0.9.21
+	crossbeam-utils@0.8.23
 	crunchy@0.2.4
 	ctor@1.0.13
 	darling@0.23.0
@@ -74,7 +74,7 @@ CRATES="
 	exec@0.3.1
 	expr-lang@2.1.0
 	fastrand@2.5.0
-	find-msvc-tools@0.1.11
+	find-msvc-tools@0.1.12
 	float-cmp@0.10.0
 	fnv@1.0.7
 	futures-channel@0.3.34
@@ -97,7 +97,7 @@ CRATES="
 	iana-time-zone@0.1.65
 	ident_case@1.0.1
 	indexmap@1.9.3
-	indexmap@2.14.1
+	indexmap@2.14.2
 	insta@1.48.0
 	is_terminal_polyfill@1.70.2
 	itertools@0.13.0
@@ -108,7 +108,7 @@ CRATES="
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.8
 	jiff@0.2.35
-	js-sys@0.3.104
+	js-sys@0.3.105
 	libc@0.2.189
 	libyaml-rs@0.3.0
 	link-section@0.19.3
@@ -125,15 +125,15 @@ CRATES="
 	oorandom@11.1.5
 	page_size@0.6.0
 	pastey@0.2.3
-	pest@2.9.0
-	pest_derive@2.9.0
-	pest_generator@2.9.0
-	pest_meta@2.9.0
+	pest@2.9.1
+	pest_derive@2.9.1
+	pest_generator@2.9.1
+	pest_meta@2.9.1
 	pin-project-lite@0.2.17
 	plotters-backend@0.3.7
 	plotters-svg@0.3.7
 	plotters@0.3.7
-	portable-atomic-util@0.2.7
+	portable-atomic-util@0.2.8
 	portable-atomic@1.15.0
 	powerfmt@0.2.0
 	ppv-lite86@0.2.21
@@ -143,6 +143,7 @@ CRATES="
 	pretty_assertions@1.4.1
 	proc-macro2@1.0.107
 	proptest@1.11.0
+	pulldown-cmark@0.13.4
 	quick-error@1.2.3
 	quote@1.0.47
 	r-efi@5.3.0
@@ -184,7 +185,7 @@ CRATES="
 	slab@0.4.12
 	strsim@0.11.1
 	syn@2.0.119
-	syn@3.0.4
+	syn@3.0.5
 	tempfile@3.27.0
 	tera@2.3.0
 	termtree@0.5.1
@@ -194,12 +195,12 @@ CRATES="
 	time-macros@0.2.32
 	time@0.3.55
 	tinytemplate@1.2.1
-	tinyvec@1.12.0
+	tinyvec@1.13.2
 	tinyvec_macros@0.1.1
 	tokio-macros@2.7.2
 	tokio-util@0.7.19
 	tokio@1.53.1
-	toml@1.1.4+spec-1.1.0
+	toml@1.1.5+spec-1.1.0
 	toml_datetime@1.1.1+spec-1.1.0
 	toml_parser@1.1.3+spec-1.1.0
 	toml_writer@1.1.2+spec-1.1.0
@@ -208,6 +209,7 @@ CRATES="
 	tracing@0.1.44
 	ucd-trie@0.1.7
 	unarray@0.1.4
+	unicase@2.9.0
 	unicode-ident@1.0.24
 	unicode-width@0.1.14
 	unicode-width@0.2.2
@@ -216,11 +218,11 @@ CRATES="
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasip2@1.0.4+wasi-0.2.12
-	wasm-bindgen-macro-support@0.2.127
-	wasm-bindgen-macro@0.2.127
-	wasm-bindgen-shared@0.2.127
-	wasm-bindgen@0.2.127
-	web-sys@0.3.104
+	wasm-bindgen-macro-support@0.2.128
+	wasm-bindgen-macro@0.2.128
+	wasm-bindgen-shared@0.2.128
+	wasm-bindgen@0.2.128
+	web-sys@0.3.105
 	winapi-i686-pc-windows-gnu@0.4.0
 	winapi-util@0.1.11
 	winapi-x86_64-pc-windows-gnu@0.4.0
@@ -254,7 +256,7 @@ LICENSE="MIT"
 # Dependent crate licenses
 LICENSE+=" Apache-2.0 MIT Unicode-3.0"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~aarch64"
 
 src_install() {
     cargo_src_install --path cli
