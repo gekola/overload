@@ -59,8 +59,8 @@ CRATES="
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
 	ciborium@0.2.2
-	clap@4.6.5
-	clap_builder@4.6.5
+	clap@4.6.6
+	clap_builder@4.6.6
 	clap_complete@4.5.58
 	clap_complete_command@0.6.1
 	clap_complete_nushell@4.5.8
@@ -321,8 +321,8 @@ CRATES="
 	regex-syntax@0.8.11
 	regex@1.13.1
 	rend@0.5.3
-	rkyv@0.8.17
-	rkyv_derive@0.8.17
+	rkyv@0.8.18
+	rkyv_derive@0.8.18
 	ron@0.12.0
 	rust-stemmers@1.2.0
 	rustc-hash@2.1.3
@@ -381,9 +381,9 @@ CRATES="
 	test-case@3.3.1
 	thin-vec@0.2.19
 	thiserror-impl@1.0.69
-	thiserror-impl@2.0.19
+	thiserror-impl@2.0.20
 	thiserror@1.0.69
-	thiserror@2.0.19
+	thiserror@2.0.20
 	thread_local@1.1.9
 	tikv-jemalloc-sys@0.6.1+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
 	tikv-jemallocator@0.6.1
