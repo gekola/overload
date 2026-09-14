@@ -17,12 +17,11 @@ CRATES="
 	anstyle@1.0.14
 	assert_cmd@2.2.2
 	autocfg@1.5.1
-	base64@0.22.1
 	base64@0.23.1
 	bit-set@0.8.0
 	bit-vec@0.8.0
 	bitflags@1.3.2
-	bitflags@2.13.1
+	bitflags@2.13.2
 	bpaf@0.9.27
 	bpaf_derive@0.5.26
 	bs58@0.5.1
@@ -30,7 +29,7 @@ CRATES="
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.4.5
+	cc@1.4.6
 	cfg-if@1.0.4
 	chrono@0.4.45
 	ciborium-io@0.2.2
@@ -41,7 +40,7 @@ CRATES="
 	clap_derive@4.6.4
 	clap_lex@1.1.0
 	colorchoice@1.0.5
-	console@0.16.4
+	console@0.16.6
 	core-foundation-sys@0.8.7
 	criterion-plot@0.8.2
 	criterion@0.8.2
@@ -50,11 +49,8 @@ CRATES="
 	crossbeam-utils@0.8.23
 	crunchy@0.2.4
 	ctor@1.0.13
-	darling@0.23.0
 	darling@0.24.1
-	darling_core@0.23.0
 	darling_core@0.24.1
-	darling_macro@0.23.0
 	darling_macro@0.24.1
 	defmt-macros@1.1.1
 	defmt-parser@1.0.0
@@ -103,11 +99,11 @@ CRATES="
 	itertools@0.13.0
 	itertools@0.15.0
 	itoa@1.0.18
-	jiff-core@0.1.0
-	jiff-static@0.2.35
+	jiff-core@0.1.1
+	jiff-static@0.2.37
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.8
-	jiff@0.2.35
+	jiff@0.2.37
 	js-sys@0.3.105
 	libc@0.2.189
 	libyaml-rs@0.3.0
@@ -159,8 +155,8 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.2.0
-	rmcp@3.2.0
+	rmcp-macros@3.3.0
+	rmcp@3.3.0
 	roff@1.1.1
 	rustix@1.1.4
 	rustversion@1.0.23
@@ -177,8 +173,8 @@ CRATES="
 	serde_derive_internals@0.30.0
 	serde_json@1.0.151
 	serde_spanned@1.1.1
-	serde_with@3.22.0
-	serde_with_macros@3.22.0
+	serde_with@3.23.0
+	serde_with_macros@3.23.0
 	shell-words@1.1.1
 	shlex@2.0.1
 	similar@2.7.0
@@ -187,7 +183,7 @@ CRATES="
 	syn@2.0.119
 	syn@3.0.5
 	tempfile@3.27.0
-	tera@2.3.0
+	tera@2.4.0
 	termtree@0.5.1
 	thiserror-impl@2.0.20
 	thiserror@2.0.20
@@ -195,12 +191,11 @@ CRATES="
 	time-macros@0.2.32
 	time@0.3.55
 	tinytemplate@1.2.1
-	tinyvec@1.13.2
-	tinyvec_macros@0.1.1
+	tinyvec@1.13.3
 	tokio-macros@2.7.2
 	tokio-util@0.7.19
 	tokio@1.53.1
-	toml@1.1.5+spec-1.1.0
+	toml@1.1.6+spec-1.1.0
 	toml_datetime@1.1.1+spec-1.1.0
 	toml_parser@1.1.3+spec-1.1.0
 	toml_writer@1.1.2+spec-1.1.0
@@ -214,7 +209,7 @@ CRATES="
 	unicode-width@0.1.14
 	unicode-width@0.2.2
 	utf8parse@0.2.2
-	uuid@1.26.0
+	uuid@1.26.1
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasip2@1.0.4+wasi-0.2.12
@@ -238,8 +233,8 @@ CRATES="
 	wit-bindgen@0.57.1
 	yaml_serde@0.10.7
 	yansi@1.0.1
-	zerocopy-derive@0.8.56
-	zerocopy@0.8.56
+	zerocopy-derive@0.8.57
+	zerocopy@0.8.57
 	zmij@1.0.23
 "
 
