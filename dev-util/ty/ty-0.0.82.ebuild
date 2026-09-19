@@ -41,7 +41,7 @@ CRATES="
 	block-buffer@0.10.4
 	block2@0.6.2
 	boxcar@0.2.14
-	bstr@1.13.0
+	bstr@1.13.1
 	bumpalo@3.19.0
 	bytecheck@0.8.2
 	bytecheck_derive@0.8.2
@@ -424,7 +424,7 @@ CRATES="
 	utf8-width@0.1.7
 	utf8_iter@1.0.4
 	utf8parse@0.2.2
-	uuid@1.24.0
+	uuid@1.24.1
 	valuable@0.1.1
 	version-ranges@0.1.1
 	version_check@0.9.5
