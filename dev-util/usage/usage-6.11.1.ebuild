@@ -22,23 +22,23 @@ CRATES="
 	bit-vec@0.8.0
 	bitflags@1.3.2
 	bitflags@2.13.2
-	bpaf@0.9.27
+	bpaf@0.9.28
 	bpaf_derive@0.5.26
 	bs58@0.5.1
 	bstr@1.13.1
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.4.6
-	cfg-if@1.0.4
+	cc@1.4.7
+	cfg-if@1.0.5
 	chrono@0.4.45
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
 	ciborium@0.2.2
-	clap@4.6.6
-	clap_builder@4.6.6
-	clap_derive@4.6.4
-	clap_lex@1.1.0
+	clap@4.6.7
+	clap_builder@4.6.7
+	clap_derive@4.6.7
+	clap_lex@1.1.1
 	colorchoice@1.0.5
 	console@0.16.6
 	core-foundation-sys@0.8.7
@@ -70,7 +70,7 @@ CRATES="
 	exec@0.3.1
 	expr-lang@2.1.0
 	fastrand@2.5.0
-	find-msvc-tools@0.1.12
+	find-msvc-tools@0.1.13
 	float-cmp@0.10.0
 	fnv@1.0.7
 	futures-channel@0.3.34
@@ -121,10 +121,10 @@ CRATES="
 	oorandom@11.1.5
 	page_size@0.6.0
 	pastey@0.2.3
-	pest@2.9.1
-	pest_derive@2.9.1
-	pest_generator@2.9.1
-	pest_meta@2.9.1
+	pest@2.9.2
+	pest_derive@2.9.2
+	pest_generator@2.9.2
+	pest_meta@2.9.2
 	pin-project-lite@0.2.17
 	plotters-backend@0.3.7
 	plotters-svg@0.3.7
@@ -155,10 +155,10 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.3.0
-	rmcp@3.3.0
+	rmcp-macros@3.4.0
+	rmcp@3.4.0
 	roff@1.1.1
-	rustix@1.1.4
+	rustix@1.1.5
 	rustversion@1.0.23
 	rusty-fork@0.3.1
 	ryu@1.0.23
@@ -181,7 +181,7 @@ CRATES="
 	slab@0.4.12
 	strsim@0.11.1
 	syn@2.0.119
-	syn@3.0.5
+	syn@3.0.6
 	tempfile@3.27.0
 	tera@2.4.0
 	termtree@0.5.1
@@ -205,7 +205,7 @@ CRATES="
 	ucd-trie@0.1.7
 	unarray@0.1.4
 	unicase@2.9.0
-	unicode-ident@1.0.24
+	unicode-ident@1.0.26
 	unicode-width@0.1.14
 	unicode-width@0.2.2
 	utf8parse@0.2.2
