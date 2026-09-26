@@ -184,7 +184,7 @@ CRATES="
 	interpolator@0.5.0
 	intrusive-collections@0.10.1
 	inventory@0.3.24
-	is-macro@0.3.7
+	is-macro@0.3.8
 	is-terminal@0.4.16
 	is_terminal_polyfill@1.70.1
 	itertools@0.10.5
@@ -215,7 +215,7 @@ CRATES="
 	linux-raw-sys@0.12.1
 	litemap@0.8.0
 	lock_api@0.4.14
-	log@0.4.33
+	log@0.4.34
 	lsp-server@0.10.0
 	manyhow-macros@0.11.4
 	manyhow@0.11.4
@@ -330,9 +330,9 @@ CRATES="
 	rustix@1.1.4
 	rustversion@1.0.22
 	ryu@1.0.20
-	salsa-macro-rules@0.28.2
-	salsa-macros@0.28.2
-	salsa@0.28.2
+	salsa-macro-rules@0.28.5
+	salsa-macros@0.28.5
+	salsa@0.28.5
 	same-file@1.0.6
 	schemars@1.2.2
 	schemars_derive@1.2.2
@@ -353,7 +353,7 @@ CRATES="
 	shlex@2.0.1
 	simdutf8@0.1.5
 	similar@2.7.0
-	similar@3.1.2
+	similar@3.2.0
 	siphasher@1.0.1
 	slab@0.4.12
 	smallvec@1.15.2
@@ -424,7 +424,7 @@ CRATES="
 	utf8-width@0.1.7
 	utf8_iter@1.0.4
 	utf8parse@0.2.2
-	uuid@1.24.1
+	uuid@1.25.0
 	valuable@0.1.1
 	version-ranges@0.1.1
 	version_check@0.9.5
