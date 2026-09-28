@@ -29,7 +29,7 @@ CRATES="
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.4.7
+	cc@1.5.1
 	cfg-if@1.0.5
 	chrono@0.4.45
 	ciborium-io@0.2.2
@@ -70,7 +70,7 @@ CRATES="
 	exec@0.3.1
 	expr-lang@2.1.0
 	fastrand@2.5.0
-	find-msvc-tools@0.1.13
+	find-msvc-tools@0.1.14
 	float-cmp@0.10.0
 	fnv@1.0.7
 	futures-channel@0.3.34
@@ -104,7 +104,7 @@ CRATES="
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.8
 	jiff@0.2.37
-	js-sys@0.3.105
+	js-sys@0.3.106
 	libc@0.2.189
 	libyaml-rs@0.3.0
 	link-section@0.19.3
@@ -155,8 +155,8 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.4.0
-	rmcp@3.4.0
+	rmcp-macros@3.5.0
+	rmcp@3.5.0
 	roff@1.1.1
 	rustix@1.1.5
 	rustversion@1.0.23
@@ -173,8 +173,8 @@ CRATES="
 	serde_derive_internals@0.30.0
 	serde_json@1.0.151
 	serde_spanned@1.1.1
-	serde_with@3.23.0
-	serde_with_macros@3.23.0
+	serde_with@3.24.0
+	serde_with_macros@3.24.0
 	shell-words@1.1.1
 	shlex@2.0.1
 	similar@2.7.0
@@ -185,8 +185,8 @@ CRATES="
 	tempfile@3.27.0
 	tera@2.4.0
 	termtree@0.5.1
-	thiserror-impl@2.0.20
-	thiserror@2.0.20
+	thiserror-impl@2.0.21
+	thiserror@2.0.21
 	time-core@0.1.9
 	time-macros@0.2.32
 	time@0.3.55
@@ -213,11 +213,11 @@ CRATES="
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasip2@1.0.4+wasi-0.2.12
-	wasm-bindgen-macro-support@0.2.128
-	wasm-bindgen-macro@0.2.128
-	wasm-bindgen-shared@0.2.128
-	wasm-bindgen@0.2.128
-	web-sys@0.3.105
+	wasm-bindgen-macro-support@0.2.129
+	wasm-bindgen-macro@0.2.129
+	wasm-bindgen-shared@0.2.129
+	wasm-bindgen@0.2.129
+	web-sys@0.3.106
 	winapi-i686-pc-windows-gnu@0.4.0
 	winapi-util@0.1.11
 	winapi-x86_64-pc-windows-gnu@0.4.0
@@ -233,8 +233,8 @@ CRATES="
 	wit-bindgen@0.57.1
 	yaml_serde@0.10.7
 	yansi@1.0.1
-	zerocopy-derive@0.8.57
-	zerocopy@0.8.57
+	zerocopy-derive@0.8.59
+	zerocopy@0.8.59
 	zmij@1.0.23
 "
 
