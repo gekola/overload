@@ -29,7 +29,7 @@ CRATES="
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.5.1
+	cc@1.6.0
 	cfg-if@1.0.5
 	chrono@0.4.45
 	ciborium-io@0.2.2
@@ -94,7 +94,7 @@ CRATES="
 	ident_case@1.0.1
 	indexmap@1.9.3
 	indexmap@2.14.2
-	insta@1.48.0
+	insta@1.49.0
 	is_terminal_polyfill@1.70.2
 	itertools@0.13.0
 	itertools@0.15.0
@@ -105,7 +105,7 @@ CRATES="
 	jiff-tzdb@0.1.8
 	jiff@0.2.37
 	js-sys@0.3.106
-	libc@0.2.189
+	libc@0.2.190
 	libyaml-rs@0.3.0
 	link-section@0.19.3
 	linktime-proc-macro@0.2.3
@@ -131,7 +131,7 @@ CRATES="
 	plotters@0.3.7
 	portable-atomic-util@0.2.8
 	portable-atomic@1.15.0
-	powerfmt@0.2.0
+	powerfmt@0.2.1
 	ppv-lite86@0.2.21
 	predicates-core@1.0.10
 	predicates-tree@1.0.13
@@ -155,8 +155,8 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.5.0
-	rmcp@3.5.0
+	rmcp-macros@3.5.1
+	rmcp@3.5.1
 	roff@1.1.1
 	rustix@1.1.5
 	rustversion@1.0.23
@@ -194,7 +194,7 @@ CRATES="
 	tinyvec@1.13.3
 	tokio-macros@2.7.2
 	tokio-util@0.7.19
-	tokio@1.53.1
+	tokio@1.53.2
 	toml@1.1.6+spec-1.1.0
 	toml_datetime@1.1.1+spec-1.1.0
 	toml_parser@1.1.3+spec-1.1.0
@@ -204,12 +204,12 @@ CRATES="
 	tracing@0.1.44
 	ucd-trie@0.1.7
 	unarray@0.1.4
-	unicase@2.9.0
+	unicase@2.10.0
 	unicode-ident@1.0.26
 	unicode-width@0.1.14
 	unicode-width@0.2.2
 	utf8parse@0.2.2
-	uuid@1.26.1
+	uuid@1.27.0
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasip2@1.0.4+wasi-0.2.12
@@ -233,8 +233,8 @@ CRATES="
 	wit-bindgen@0.57.1
 	yaml_serde@0.10.7
 	yansi@1.0.1
-	zerocopy-derive@0.8.59
-	zerocopy@0.8.59
+	zerocopy-derive@0.8.60
+	zerocopy@0.8.60
 	zmij@1.0.23
 "
 
