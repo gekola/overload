@@ -174,7 +174,7 @@ CRATES="
 	ignore@0.4.33
 	imara-diff@0.2.0
 	imperative@1.0.7
-	indexmap@2.14.0
+	indexmap@2.14.2
 	indicatif@0.18.6
 	indoc@2.0.7
 	inotify-sys@0.1.5
@@ -247,7 +247,7 @@ CRATES="
 	once_cell_polyfill@1.70.1
 	oorandom@11.1.5
 	option-ext@0.2.0
-	ordermap@1.2.0
+	ordermap@1.2.1
 	os_pipe@1.2.2
 	os_str_bytes@7.1.1
 	page_size@0.6.0
@@ -327,7 +327,7 @@ CRATES="
 	rust-stemmers@1.2.0
 	rustc-hash@2.1.3
 	rustc-stable-hash@0.1.2
-	rustix@1.1.4
+	rustix@1.1.5
 	rustversion@1.0.22
 	ryu@1.0.20
 	salsa-macro-rules@0.28.5
@@ -369,7 +369,7 @@ CRATES="
 	strum_macros@0.28.0
 	supports-hyperlinks@3.2.0
 	syn@2.0.119
-	syn@3.0.3
+	syn@3.0.4
 	synstructure@0.13.2
 	tap@1.0.1
 	tempfile@3.27.0
@@ -424,7 +424,7 @@ CRATES="
 	utf8-width@0.1.7
 	utf8_iter@1.0.4
 	utf8parse@0.2.2
-	uuid@1.25.0
+	uuid@1.26.0
 	valuable@0.1.1
 	version-ranges@0.1.1
 	version_check@0.9.5
@@ -449,7 +449,7 @@ CRATES="
 	wasmparser@0.244.0
 	web-sys@0.3.100
 	web-time@1.1.0
-	which@8.0.5
+	which@8.0.6
 	wild@2.2.1
 	winapi-i686-pc-windows-gnu@0.4.0
 	winapi-util@0.1.11
