@@ -55,7 +55,7 @@ CRATES="
 	cfg_aliases@0.2.1
 	chacha20@0.10.0
 	char_str@0.0.4
-	chrono@0.4.44
+	chrono@0.4.45
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
 	ciborium@0.2.2
@@ -94,7 +94,7 @@ CRATES="
 	crossbeam-epoch@0.9.18
 	crossbeam-queue@0.3.12
 	crossbeam-utils@0.8.21
-	crossbeam@0.8.4
+	crossbeam@0.8.5
 	crunchy@0.2.4
 	crypto-common@0.1.6
 	csv-core@0.1.12
@@ -144,7 +144,6 @@ CRATES="
 	generic-array@0.14.7
 	get-size-derive2@0.11.0
 	get-size2@0.11.0
-	getopts@0.2.24
 	getrandom@0.2.16
 	getrandom@0.3.4
 	getrandom@0.4.2
@@ -161,13 +160,13 @@ CRATES="
 	html-escape@0.2.13
 	iana-time-zone-haiku@0.1.2
 	iana-time-zone@0.1.64
-	icu_collections@2.2.0
-	icu_locale_core@2.2.0
-	icu_normalizer@2.2.0
-	icu_normalizer_data@2.2.0
-	icu_properties@2.2.0
-	icu_properties_data@2.2.0
-	icu_provider@2.2.0
+	icu_collections@2.3.0
+	icu_locale_core@2.3.0
+	icu_normalizer@2.3.0
+	icu_normalizer_data@2.3.0
+	icu_properties@2.3.0
+	icu_properties_data@2.3.0
+	icu_provider@2.3.1
 	id-arena@2.3.0
 	idna@1.1.0
 	idna_adapter@1.2.1
@@ -247,7 +246,7 @@ CRATES="
 	once_cell_polyfill@1.70.1
 	oorandom@11.1.5
 	option-ext@0.2.0
-	ordermap@1.2.1
+	ordermap@1.2.2
 	os_pipe@1.2.2
 	os_str_bytes@7.1.1
 	page_size@0.6.0
@@ -294,7 +293,7 @@ CRATES="
 	ptr_meta@0.3.1
 	ptr_meta_derive@0.3.1
 	pyproject-toml@0.13.7
-	quick-junit@0.6.1
+	quick-junit@0.8.0
 	quick-xml@0.41.0
 	quickcheck@1.1.0
 	quickcheck_macros@1.2.0
@@ -356,7 +355,7 @@ CRATES="
 	similar@3.2.0
 	siphasher@1.0.1
 	slab@0.4.12
-	smallvec@1.15.2
+	smallvec@1.16.0
 	snapbox-macros@1.0.0
 	snapbox@1.0.0
 	stable_deref_trait@1.2.0
@@ -369,7 +368,7 @@ CRATES="
 	strum_macros@0.28.0
 	supports-hyperlinks@3.2.0
 	syn@2.0.119
-	syn@3.0.4
+	syn@3.0.5
 	synstructure@0.13.2
 	tap@1.0.1
 	tempfile@3.27.0
@@ -387,12 +386,12 @@ CRATES="
 	thread_local@1.1.9
 	tikv-jemalloc-sys@0.6.1+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
 	tikv-jemallocator@0.6.1
-	tinystr@0.8.3
+	tinystr@0.8.4
 	tinytemplate@1.2.1
 	tinyvec@1.10.0
 	tinyvec_macros@0.1.1
 	toml@0.9.12+spec-1.1.0
-	toml@1.1.4+spec-1.1.0
+	toml@1.1.5+spec-1.1.0
 	toml_datetime@0.7.5+spec-1.1.0
 	toml_datetime@1.1.1+spec-1.1.0
 	toml_edit@0.25.12+spec-1.1.0
@@ -412,11 +411,9 @@ CRATES="
 	ucd-trie@0.1.7
 	unicode-id@0.3.6
 	unicode-ident@1.0.24
-	unicode-normalization@0.1.24
+	unicode-normalization@0.1.25
 	unicode-width@0.2.2
 	unicode-xid@0.2.6
-	unicode_names2@1.3.0
-	unicode_names2_generator@1.3.0
 	unit-prefix@0.5.1
 	unscanny@0.1.0
 	url@2.5.8
@@ -493,18 +490,18 @@ CRATES="
 	wit-bindgen@0.51.0
 	wit-component@0.244.0
 	wit-parser@0.244.0
-	writeable@0.6.2
+	writeable@0.6.4
 	wyz@0.5.1
 	yansi@1.0.1
 	yoke-derive@0.8.2
-	yoke@0.8.2
+	yoke@0.8.3
 	zerocopy-derive@0.8.27
 	zerocopy@0.8.27
 	zerofrom-derive@0.1.6
 	zerofrom@0.1.6
-	zerotrie@0.2.4
-	zerovec-derive@0.11.3
-	zerovec@0.11.6
+	zerotrie@0.2.5
+	zerovec-derive@0.11.6
+	zerovec@0.11.8
 	zip@8.6.0
 	zlib-rs@0.5.5
 	zmij@1.0.10
@@ -533,7 +530,7 @@ LICENSE="MIT"
 # Dependent crate licenses
 LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD CC0-1.0 ISC MIT
-	MPL-2.0 PSF-2 Unicode-3.0 Unicode-DFS-2016 WTFPL-2 ZLIB
+	MPL-2.0 PSF-2 Unicode-3.0 WTFPL-2 ZLIB
 "
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
