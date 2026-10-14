@@ -18,10 +18,12 @@ CRATES="
 	assert_cmd@2.2.2
 	autocfg@1.5.1
 	base64@0.23.1
-	bit-set@0.8.0
-	bit-vec@0.8.0
+	bit-set@0.11.1
+	bit-vec@0.10.1
 	bitflags@1.3.2
 	bitflags@2.13.2
+	borsh-derive@1.8.1
+	borsh@1.8.1
 	bpaf@0.9.28
 	bpaf_derive@0.5.26
 	bs58@0.5.1
@@ -29,8 +31,10 @@ CRATES="
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.6.0
+	cc@1.8.0
 	cfg-if@1.0.5
+	cfg_aliases@0.2.2
+	chacha20@0.10.2
 	chrono@0.4.45
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
@@ -42,6 +46,8 @@ CRATES="
 	colorchoice@1.0.5
 	console@0.16.6
 	core-foundation-sys@0.8.7
+	core_detect@1.0.0
+	cpufeatures@0.3.1
 	criterion-plot@0.8.2
 	criterion@0.8.2
 	crossbeam-deque@0.8.8
@@ -55,15 +61,15 @@ CRATES="
 	defmt-macros@1.1.1
 	defmt-parser@1.0.0
 	defmt@1.1.1
-	deranged@0.5.8
+	deranged@0.5.9
 	diff@0.1.13
 	difflib@0.4.0
 	dyn-clone@1.0.20
-	either@1.18.0
+	either@1.19.0
 	encode_unicode@1.0.0
 	env_filter@2.0.0
 	env_logger@0.11.11
-	equivalent@1.0.2
+	equivalent@1.0.3
 	errno-dragonfly@0.1.2
 	errno@0.2.8
 	errno@0.3.14
@@ -82,7 +88,6 @@ CRATES="
 	futures-task@0.3.34
 	futures-util@0.3.34
 	futures@0.3.34
-	getrandom@0.3.4
 	getrandom@0.4.3
 	half@2.7.1
 	hashbrown@0.12.3
@@ -100,10 +105,10 @@ CRATES="
 	itertools@0.15.0
 	itoa@1.0.18
 	jiff-core@0.1.1
-	jiff-static@0.2.37
+	jiff-static@0.2.38
 	jiff-tzdb-platform@0.1.3
-	jiff-tzdb@0.1.8
-	jiff@0.2.37
+	jiff-tzdb@0.1.9
+	jiff@0.2.38
 	js-sys@0.3.106
 	libc@0.2.190
 	libyaml-rs@0.3.0
@@ -121,10 +126,10 @@ CRATES="
 	oorandom@11.1.5
 	page_size@0.6.0
 	pastey@0.2.3
-	pest@2.9.2
-	pest_derive@2.9.2
-	pest_generator@2.9.2
-	pest_meta@2.9.2
+	pest@2.9.3
+	pest_derive@2.9.3
+	pest_generator@2.9.3
+	pest_meta@2.9.3
 	pin-project-lite@0.2.17
 	plotters-backend@0.3.7
 	plotters-svg@0.3.7
@@ -132,22 +137,21 @@ CRATES="
 	portable-atomic-util@0.2.8
 	portable-atomic@1.15.0
 	powerfmt@0.2.1
-	ppv-lite86@0.2.21
 	predicates-core@1.0.10
 	predicates-tree@1.0.13
 	predicates@3.1.4
 	pretty_assertions@1.4.1
+	proc-macro-crate@3.5.0
 	proc-macro2@1.0.107
-	proptest@1.11.0
+	proptest@1.12.0
+	psm@0.1.24
 	pulldown-cmark@0.13.4
 	quick-error@1.2.3
 	quote@1.0.47
-	r-efi@5.3.0
 	r-efi@6.0.0
-	rand@0.9.5
-	rand_chacha@0.9.0
-	rand_core@0.9.5
-	rand_xorshift@0.4.0
+	rand@0.10.3
+	rand_core@0.10.1
+	rand_xorshift@0.5.0
 	rayon-core@1.13.0
 	rayon@1.12.0
 	ref-cast-impl@1.0.27
@@ -164,24 +168,25 @@ CRATES="
 	ryu@1.0.23
 	same-file@1.0.6
 	schemars@0.9.0
-	schemars@1.2.2
-	schemars_derive@1.2.2
+	schemars@1.2.3
+	schemars_derive@1.2.3
 	semver@1.0.28
 	serde@1.0.229
 	serde_core@1.0.229
 	serde_derive@1.0.229
 	serde_derive_internals@0.30.0
-	serde_json@1.0.151
-	serde_spanned@1.1.1
+	serde_json@1.0.154
+	serde_spanned@1.1.2
 	serde_with@3.24.0
 	serde_with_macros@3.24.0
 	shell-words@1.1.1
 	shlex@2.0.1
 	similar@2.7.0
 	slab@0.4.12
+	stacker@0.1.25
 	strsim@0.11.1
 	syn@2.0.119
-	syn@3.0.6
+	syn@3.0.9
 	tempfile@3.27.0
 	tera@2.4.0
 	termtree@0.5.1
@@ -193,26 +198,26 @@ CRATES="
 	tinytemplate@1.2.1
 	tinyvec@1.13.3
 	tokio-macros@2.7.2
-	tokio-util@0.7.19
-	tokio@1.53.2
-	toml@1.1.6+spec-1.1.0
-	toml_datetime@1.1.1+spec-1.1.0
-	toml_parser@1.1.3+spec-1.1.0
-	toml_writer@1.1.2+spec-1.1.0
+	tokio-util@0.7.20
+	tokio@1.53.3
+	toml@1.1.8+spec-1.1.0
+	toml_datetime@1.1.2+spec-1.1.0
+	toml_edit@0.25.17+spec-1.1.0
+	toml_parser@1.1.5+spec-1.1.0
+	toml_writer@1.1.3+spec-1.1.0
 	tracing-attributes@0.1.31
 	tracing-core@0.1.36
 	tracing@0.1.44
 	ucd-trie@0.1.7
 	unarray@0.1.4
 	unicase@2.10.0
-	unicode-ident@1.0.26
+	unicode-ident@1.0.27
 	unicode-width@0.1.14
 	unicode-width@0.2.2
 	utf8parse@0.2.2
-	uuid@1.27.0
+	uuid@1.28.0
 	wait-timeout@0.2.1
 	walkdir@2.5.0
-	wasip2@1.0.4+wasi-0.2.12
 	wasm-bindgen-macro-support@0.2.129
 	wasm-bindgen-macro@0.2.129
 	wasm-bindgen-shared@0.2.129
@@ -230,11 +235,10 @@ CRATES="
 	windows-strings@0.5.1
 	windows-sys@0.61.2
 	winnow@1.0.4
-	wit-bindgen@0.57.1
 	yaml_serde@0.10.7
 	yansi@1.0.1
-	zerocopy-derive@0.8.60
-	zerocopy@0.8.60
+	zerocopy-derive@0.8.63
+	zerocopy@0.8.63
 	zmij@1.0.23
 "
 
