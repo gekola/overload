@@ -36,7 +36,7 @@ CRATES="
 	bit-set@0.8.0
 	bit-vec@0.8.0
 	bitflags@1.3.2
-	bitflags@2.13.1
+	bitflags@2.13.2
 	bitvec@1.1.1
 	block-buffer@0.10.4
 	block2@0.6.2
@@ -192,10 +192,10 @@ CRATES="
 	itertools@0.15.0
 	itoa@1.0.15
 	jiff-core@0.1.0
-	jiff-static@0.2.35
+	jiff-static@0.2.37
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.4
-	jiff@0.2.35
+	jiff@0.2.37
 	jobserver@0.1.34
 	jod-thread@1.0.0
 	js-sys@0.3.100
@@ -278,7 +278,6 @@ CRATES="
 	portable-atomic-util@0.2.4
 	portable-atomic@1.13.1
 	potential_utf@0.1.3
-	ppv-lite86@0.2.21
 	predicates-core@1.0.10
 	predicates-tree@1.0.13
 	predicates@3.1.4
@@ -306,7 +305,6 @@ CRATES="
 	rancor@0.1.1
 	rand@0.10.2
 	rand@0.8.5
-	rand_chacha@0.3.1
 	rand_core@0.10.0
 	rand_core@0.6.4
 	rayon-core@1.13.0
@@ -355,7 +353,7 @@ CRATES="
 	similar@3.2.0
 	siphasher@1.0.1
 	slab@0.4.12
-	smallvec@1.16.0
+	smallvec@1.16.1
 	snapbox-macros@1.0.0
 	snapbox@1.0.0
 	stable_deref_trait@1.2.0
@@ -391,7 +389,7 @@ CRATES="
 	tinyvec@1.10.0
 	tinyvec_macros@0.1.1
 	toml@0.9.12+spec-1.1.0
-	toml@1.1.5+spec-1.1.0
+	toml@1.1.6+spec-1.1.0
 	toml_datetime@0.7.5+spec-1.1.0
 	toml_datetime@1.1.1+spec-1.1.0
 	toml_edit@0.25.12+spec-1.1.0
@@ -421,7 +419,7 @@ CRATES="
 	utf8-width@0.1.7
 	utf8_iter@1.0.4
 	utf8parse@0.2.2
-	uuid@1.26.0
+	uuid@1.26.1
 	valuable@0.1.1
 	version-ranges@0.1.1
 	version_check@0.9.5
@@ -495,8 +493,6 @@ CRATES="
 	yansi@1.0.1
 	yoke-derive@0.8.2
 	yoke@0.8.3
-	zerocopy-derive@0.8.27
-	zerocopy@0.8.27
 	zerofrom-derive@0.1.6
 	zerofrom@0.1.6
 	zerotrie@0.2.5
