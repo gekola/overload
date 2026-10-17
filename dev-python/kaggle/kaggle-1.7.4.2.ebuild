@@ -28,7 +28,7 @@ RDEPEND="
 	dev-python/text-unidecode[${PYTHON_USEDEP}]
 	dev-python/tqdm[${PYTHON_USEDEP}]
 	dev-python/urllib3[${PYTHON_USEDEP}]
-	dev-pytonn/webencodings[${PYTHON_USEDEP}]
+	dev-python/webencodings[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}"
