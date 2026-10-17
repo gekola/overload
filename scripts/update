@@ -3,7 +3,7 @@
 #
 # Usage: scripts/update [-n] [-c] [category/package...]
 #   -n  dry run: print "OUTDATED <package> <current> <latest>", change nothing
-#   -c  `pkgdev commit` each bumped package
+#   -c  `pkgdev commit --scan` each bumped package (pkgcheck gates the commit)
 # Without arguments every package in PACKAGES is processed.
 # Needs curl, jq, pkgdev, pycargoebuild and portage (see scripts/in-gentoo).
 set -euo pipefail
@@ -184,5 +184,5 @@ cd "$PKGDIR"
 pkgdev manifest -d "$DISTDIR"
 git add -A .
 if [[ -n $COMMIT ]]; then
-	pkgdev commit
+	pkgdev commit --scan
 fi
