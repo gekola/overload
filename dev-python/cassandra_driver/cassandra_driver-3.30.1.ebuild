@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..15} )
 
 DISTUTILS_USE_PEP517="setuptools"
 PYPI_NO_NORMALIZE=1
@@ -19,6 +19,7 @@ KEYWORDS="~amd64 ~x86"
 RDEPEND="
 	dev-libs/libev
 	dev-python/cython[${PYTHON_USEDEP}]
+	dev-python/deprecated[${PYTHON_USEDEP}]
 	dev-python/geomet[${PYTHON_USEDEP}]
 "
 
