@@ -76,7 +76,10 @@ jobs:
           branch="update/${PKG//\//-}"
           title=$(git log -1 --format=%s)
           body="Automated update from ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          git push --force origin "HEAD:refs/heads/$branch"
+          # pkgdev push scans the commits against origin/HEAD, which a shallow
+          # checkout lacks.
+          git remote set-head origin --auto
+          scripts/in-gentoo pkgdev push origin "HEAD:refs/heads/$branch"
           url=$(gh pr create --head "$branch" --title "$title" --body "$body")
           echo "url=$url" >> "$GITHUB_OUTPUT"
       - name: Build
