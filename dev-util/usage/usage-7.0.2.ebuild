@@ -58,9 +58,9 @@ CRATES="
 	darling@0.24.1
 	darling_core@0.24.1
 	darling_macro@0.24.1
-	defmt-macros@1.1.1
-	defmt-parser@1.0.0
-	defmt@1.1.1
+	defmt-macros@1.2.0
+	defmt-parser@1.1.0
+	defmt@1.2.0
 	deranged@0.5.9
 	diff@0.1.13
 	difflib@0.4.0
@@ -110,7 +110,7 @@ CRATES="
 	jiff-tzdb@0.1.9
 	jiff@0.2.38
 	js-sys@0.3.106
-	libc@0.2.190
+	libc@0.2.191
 	libyaml-rs@0.3.0
 	link-section@0.19.3
 	linktime-proc-macro@0.2.3
@@ -126,10 +126,10 @@ CRATES="
 	oorandom@11.1.5
 	page_size@0.6.0
 	pastey@0.2.3
-	pest@2.9.3
-	pest_derive@2.9.3
-	pest_generator@2.9.3
-	pest_meta@2.9.3
+	pest@2.9.4
+	pest_derive@2.9.4
+	pest_generator@2.9.4
+	pest_meta@2.9.4
 	pin-project-lite@0.2.17
 	plotters-backend@0.3.7
 	plotters-svg@0.3.7
