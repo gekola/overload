@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Run a command in a Gentoo container with this overlay mounted at
+# /var/db/repos/overload, e.g. `scripts/in-gentoo scripts/update -n`.
+set -euo pipefail
+
+REPO="$(realpath "$(dirname -- "${BASH_SOURCE[0]}")/..")"
+IMAGE=overload-ci
+
+docker build --pull --quiet --tag "$IMAGE" "$REPO/scripts/docker" >/dev/null
+
+# Files written by root inside the container are handed back to the caller.
+exec docker run --rm \
+	--volume "$REPO:/var/db/repos/overload" \
+	--workdir /var/db/repos/overload \
+	--env GITHUB_TOKEN \
+	--env GIT_AUTHOR_NAME --env GIT_AUTHOR_EMAIL \
+	--env GIT_COMMITTER_NAME --env GIT_COMMITTER_EMAIL \
+	"$IMAGE" bash -c '"$@"; rc=$?; chown -R "'"$(id -u):$(id -g)"'" .; exit $rc' -- "$@"

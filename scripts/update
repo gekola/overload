@@ -1,0 +1,188 @@
+#!/usr/bin/env bash
+# Bump overlay packages to their latest upstream release.
+#
+# Usage: scripts/update [-n] [-c] [category/package...]
+#   -n  dry run: print "OUTDATED <package> <current> <latest>", change nothing
+#   -c  `pkgdev commit` each bumped package
+# Without arguments every package in PACKAGES is processed.
+# Needs curl, jq, pkgdev, pycargoebuild and portage (see scripts/in-gentoo).
+set -euo pipefail
+
+REPO="$(realpath "$(dirname -- "${BASH_SOURCE[0]}")/..")"
+
+PACKAGES=(
+	dev-db/clickhouse-bin
+	dev-python/cassandra_driver
+	dev-python/geomet
+	dev-python/kaggle
+	dev-util/binaryen
+	dev-util/qcachegrind
+	dev-util/ty
+	dev-util/usage
+	dev-util/wasm-pack
+	gui-apps/polycat
+)
+
+update_package() {
+	case $PKG in
+	dev-db/clickhouse-bin)
+		# The track an ebuild follows is declared by its TYPE=, not derivable
+		# from its version: a track moves to a new x.y series over time.
+		local track
+		for track in lts stable; do
+			bump "$(grep -lx "TYPE=\"$track\"" "$PKGDIR"/*.ebuild | sort -V | tail -n1)" \
+				"$(clickhouse_latest "$track")"
+		done ;;
+	dev-python/cassandra_driver)
+		bump "$(latest_ebuild)" "$(pypi_latest cassandra-driver)" ;;
+	dev-python/*)
+		bump "$(latest_ebuild)" "$(pypi_latest "$PN")" ;;
+	dev-util/binaryen)
+		bump "$(latest_ebuild)" "$(github_latest WebAssembly/binaryen)" ;;
+	dev-util/qcachegrind)
+		bump "$(latest_ebuild)" "$(kde_latest)" ;;
+	dev-util/ty)
+		bump "$(latest_ebuild)" "$(github_latest astral-sh/ty)" \
+			"https://github.com/astral-sh/ty/releases/download/@PV@/source.tar.gz" ruff/crates/ty ;;
+	dev-util/usage)
+		bump "$(latest_ebuild)" "$(github_latest jdx/usage)" \
+			"https://github.com/jdx/usage/archive/refs/tags/v@PV@.tar.gz" usage-@PV@/cli ;;
+	dev-util/wasm-pack)
+		bump "$(latest_ebuild)" "$(github_latest rustwasm/wasm-pack)" \
+			"https://github.com/rustwasm/wasm-pack/archive/v@PV@.tar.gz" wasm-pack-@PV@ ;;
+	gui-apps/polycat)
+		bump "$(latest_ebuild)" "$(github_latest 2IMT/polycat)" ;;
+	*)
+		die "no updater defined" ;;
+	esac
+}
+
+log() { echo "[$PKG] $*" >&2; }
+die() { log "ERROR: $*"; exit 1; }
+
+fetch() {
+	# Authenticated GitHub API requests get 5000 instead of 60 requests/hour.
+	local auth=()
+	if [[ $1 == https://api.github.com/* && -n ${GITHUB_TOKEN:-} ]]; then
+		auth=(-H "Authorization: Bearer $GITHUB_TOKEN")
+	fi
+	curl -fsSL "${auth[@]}" "$1"
+}
+
+github_latest() {
+	fetch "https://api.github.com/repos/$1/releases/latest" | jq -r .tag_name | sed -E 's/^[^0-9]*//'
+}
+
+pypi_latest() {
+	local v
+	v=$(fetch "https://pypi.org/pypi/$1/json" | jq -r .info.version)
+	# Only final and post releases map onto Gentoo versions unambiguously.
+	if [[ $v =~ ^[0-9]+(\.[0-9]+)*(\.post[0-9]+)?$ ]]; then
+		echo "${v/.post/_p}"
+	else
+		log "ignoring PyPI version $v"
+	fi
+}
+
+kde_latest() {
+	fetch https://download.kde.org/stable/release-service/ \
+		| grep -oE 'href="[0-9]+\.[0-9]+\.[0-9]+/' | grep -oE '[0-9.]+[0-9]' | sort -V | tail -n1
+}
+
+clickhouse_latest() {
+	# x.y.1.z tags are pre-release builds of a series.
+	fetch "https://api.github.com/repos/ClickHouse/ClickHouse/releases?per_page=100" \
+		| jq -r '.[].tag_name' \
+		| sed -nE "s/^v([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)-$1\$/\1/p" \
+		| grep -vE '^[0-9]+\.[0-9]+\.1\.' | sort -V | tail -n1
+}
+
+latest_ebuild() {
+	printf '%s\n' "$PKGDIR/$PN"-*.ebuild | sort -V | tail -n1
+}
+
+# Succeeds when Gentoo version $1 is newer than $2.
+newer() {
+	python3 -c 'import sys; from portage.versions import vercmp
+r = vercmp(sys.argv[1], sys.argv[2]); sys.exit(0 if r is not None and r > 0 else 1)' "$1" "$2"
+}
+
+# bump <ebuild> <new-version> [<source-url> <crate-dir>]
+# Replaces <ebuild> by a copy for <new-version>. For Rust packages the source
+# tarball is unpacked and CRATES is regenerated from <crate-dir>; @PV@ in the
+# URL and directory stands for <new-version>.
+bump() {
+	local old=$1 new=$2 url=${3:-} crate_dir=${4:-}
+	[[ -f $old ]] || die "no ebuild to bump"
+	[[ -n $new ]] || die "no upstream version found"
+	local cur=${old##*/}
+	cur=${cur%.ebuild}
+	cur=${cur#"$PN"-}
+
+	if ! newer "$new" "$cur"; then
+		log "$cur is up to date (upstream: $new)"
+		return 0
+	fi
+	if [[ -n $DRY ]]; then
+		echo "OUTDATED $PKG $cur $new"
+		return 0
+	fi
+
+	log "bumping $cur -> $new"
+	local dst="$PKGDIR/$PN-$new.ebuild"
+	git -C "$REPO" mv "$old" "$dst"
+	BUMPED=1
+
+	if [[ -n $url ]]; then
+		# Saved under the SRC_URI distfile name (${P}.tar.gz) so that
+		# `pkgdev manifest` reuses it.
+		local tarball="$DISTDIR/$PN-$new.tar.gz"
+		fetch "${url//@PV@/$new}" > "$tarball"
+		mkdir -p "$WORK/src"
+		tar -xzf "$tarball" -C "$WORK/src"
+		pycargoebuild -M -F auto -d "$DISTDIR" -i "$dst" "$WORK/src/${crate_dir//@PV@/$new}"
+	fi
+}
+
+DRY= COMMIT=
+while getopts nc opt; do
+	case $opt in
+	n) DRY=1 ;;
+	c) COMMIT=1 ;;
+	*) exit 2 ;;
+	esac
+done
+shift $((OPTIND - 1))
+(( $# )) || set -- "${PACKAGES[@]}"
+
+# Each package runs in its own process so one failure does not stop the rest.
+if (( $# > 1 )); then
+	rc=0
+	for pkg in "$@"; do
+		"$0" ${DRY:+-n} ${COMMIT:+-c} "$pkg" || { echo "[$pkg] FAILED" >&2; rc=1; }
+	done
+	exit $rc
+fi
+
+PKG=$1 PN=${1#*/} PKGDIR=$REPO/$1
+[[ -d $PKGDIR ]] || die "not in this overlay"
+
+WORK=$(mktemp -d)
+trap 'rm -rf "$WORK"' EXIT
+DISTDIR=$WORK/distfiles
+mkdir "$DISTDIR"
+# As root, pkgdev fetches as the portage user.
+if (( EUID == 0 )); then
+	chown portage:portage "$WORK" "$DISTDIR"
+fi
+
+BUMPED=
+update_package
+[[ -n $BUMPED ]] || exit 0
+
+cd "$PKGDIR"
+pkgdev manifest -d "$DISTDIR"
+git add -A .
+if [[ -n $COMMIT ]]; then
+	pkgdev commit
+fi

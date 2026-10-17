@@ -1,0 +1,92 @@
+name: update
+
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: 'Space-separated category/package list (default: all)'
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.check.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v5
+      - id: check
+        name: Find outdated packages
+        env:
+          PACKAGES: ${{ inputs.packages }}
+        run: |
+          # A failed check fails this job but must not hold back the others.
+          rc=0
+          scripts/in-gentoo scripts/update -n $PACKAGES > outdated || rc=$?
+          cat outdated
+          echo "packages=$(awk '$1 == "OUTDATED" {print $2}' outdated | sort -u | jq -Rcs 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
+          exit $rc
+
+  # Pull requests opened with GITHUB_TOKEN do not trigger build.yml, so each
+  # update is built here and its pull request merged once the build passes.
+  update:
+    needs: check
+    if: ${{ !cancelled() && needs.check.outputs.packages != '' && needs.check.outputs.packages != '[]' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.check.outputs.packages) }}
+    env:
+      PKG: ${{ matrix.package }}
+      GIT_AUTHOR_NAME: github-actions[bot]
+      GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      GIT_COMMITTER_NAME: github-actions[bot]
+      GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+    steps:
+      - uses: actions/checkout@v5
+      - id: bump
+        name: Bump
+        run: |
+          # An open pull request may carry manual fixes; never overwrite it.
+          url=$(gh pr list --head "update/${PKG//\//-}" --state open --json url --jq '.[0].url')
+          if [[ -n $url ]]; then
+            echo "::notice::$PKG: $url is still open, skipping"
+            exit 0
+          fi
+          base=$(git rev-parse HEAD)
+          scripts/in-gentoo scripts/update -c "$PKG"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          if [[ $(git rev-parse HEAD) != "$base" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - id: pr
+        name: Open pull request
+        if: steps.bump.outputs.changed
+        run: |
+          branch="update/${PKG//\//-}"
+          title=$(git log -1 --format=%s)
+          body="Automated update from ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          git push --force origin "HEAD:refs/heads/$branch"
+          url=$(gh pr create --head "$branch" --title "$title" --body "$body")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - name: Build
+        if: steps.bump.outputs.changed
+        run: scripts/in-gentoo scripts/build-changed "${{ steps.bump.outputs.base }}"
+      - name: Merge
+        if: steps.bump.outputs.changed
+        run: gh pr merge "${{ steps.pr.outputs.url }}" --rebase --delete-branch
+      - name: Report build failure
+        if: failure() && steps.pr.outputs.url
+        run: |
+          gh pr comment "${{ steps.pr.outputs.url }}" --body \
+            "Build failed, not merging: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

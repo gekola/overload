@@ -1,0 +1,14 @@
+name: build
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Lint and build changed ebuilds
+        run: scripts/in-gentoo scripts/build-changed "origin/${{ github.base_ref }}"
