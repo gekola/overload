@@ -234,9 +234,9 @@ CRATES="
 inherit cargo
 
 DESCRIPTION="📦✨ your favorite rust -> wasm workflow tool!"
-HOMEPAGE="https://rustwasm.github.io/wasm-pack/"
+HOMEPAGE="https://wasm-bindgen.github.io/wasm-pack/"
 SRC_URI="
-	https://github.com/rustwasm/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/wasm-bindgen/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
 	${CARGO_CRATE_URIS}
 "
 
