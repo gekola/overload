@@ -31,7 +31,7 @@ CRATES="
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.8.0
+	cc@1.9.0
 	cfg-if@1.0.5
 	cfg_aliases@0.2.2
 	chacha20@0.10.2
@@ -76,7 +76,7 @@ CRATES="
 	exec@0.3.1
 	expr-lang@2.1.0
 	fastrand@2.5.0
-	find-msvc-tools@0.1.14
+	find-msvc-tools@0.1.15
 	float-cmp@0.10.0
 	fnv@1.0.7
 	futures-channel@0.3.34
