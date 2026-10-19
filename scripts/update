@@ -3,7 +3,8 @@
 #
 # Usage: scripts/update [-n] [-c] [category/package...]
 #   -n  dry run: print "OUTDATED <package> <current> <latest>", change nothing
-#   -c  `pkgdev commit --scan` each bumped package (pkgcheck gates the commit)
+#   -c  `pkgdev commit --scan` each version bump separately (pkgcheck gates
+#       the commit)
 # Without arguments every package in PACKAGES is processed.
 # Needs curl, jq, pkgdev, pycargoebuild and portage (see scripts/in-gentoo).
 set -euo pipefail
@@ -48,8 +49,8 @@ update_package() {
 		bump "$(latest_ebuild)" "$(github_latest jdx/usage)" \
 			"https://github.com/jdx/usage/archive/refs/tags/v@PV@.tar.gz" usage-@PV@/cli ;;
 	dev-util/wasm-pack)
-		bump "$(latest_ebuild)" "$(github_latest rustwasm/wasm-pack)" \
-			"https://github.com/rustwasm/wasm-pack/archive/v@PV@.tar.gz" wasm-pack-@PV@ ;;
+		bump "$(latest_ebuild)" "$(github_latest wasm-bindgen/wasm-pack)" \
+			"https://github.com/wasm-bindgen/wasm-pack/archive/v@PV@.tar.gz" wasm-pack-@PV@ ;;
 	gui-apps/polycat)
 		bump "$(latest_ebuild)" "$(github_latest 2IMT/polycat)" ;;
 	*)
@@ -131,7 +132,6 @@ bump() {
 	log "bumping $cur -> $new"
 	local dst="$PKGDIR/$PN-$new.ebuild"
 	git -C "$REPO" mv "$old" "$dst"
-	BUMPED=1
 
 	if [[ -n $url ]]; then
 		# Saved under the SRC_URI distfile name (${P}.tar.gz) so that
@@ -140,7 +140,15 @@ bump() {
 		fetch "${url//@PV@/$new}" > "$tarball"
 		mkdir -p "$WORK/src"
 		tar -xzf "$tarball" -C "$WORK/src"
-		pycargoebuild -M -F auto -d "$DISTDIR" -i "$dst" "$WORK/src/${crate_dir//@PV@/$new}"
+		pycargoebuild -C -M -F auto -d "$DISTDIR" -i "$dst" "$WORK/src/${crate_dir//@PV@/$new}"
+	fi
+
+	pkgdev manifest -d "$DISTDIR"
+	git add -A .
+	if [[ -n $COMMIT ]]; then
+		# pkgdev words a version rename this way itself, but cannot tell it is
+		# one once the rewritten CRATES break git's rename detection.
+		pkgdev commit --scan -m "add $new, drop $cur"
 	fi
 }
 
@@ -176,13 +184,5 @@ if (( EUID == 0 )); then
 	chown portage:portage "$WORK" "$DISTDIR"
 fi
 
-BUMPED=
-update_package
-[[ -n $BUMPED ]] || exit 0
-
 cd "$PKGDIR"
-pkgdev manifest -d "$DISTDIR"
-git add -A .
-if [[ -n $COMMIT ]]; then
-	pkgdev commit --scan
-fi
+update_package
