@@ -10,5 +10,12 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+      # Read-only: caches saved from a pull request are not visible to master.
+      - name: Restore distfiles
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/distfiles
+          key: distfiles-
+          restore-keys: distfiles-
       - name: Lint and build changed ebuilds
-        run: scripts/in-gentoo scripts/build-changed "origin/${{ github.base_ref }}"
+        run: scripts/build-changed "origin/${{ github.base_ref }}"

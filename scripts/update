@@ -137,7 +137,10 @@ bump() {
 		# Saved under the SRC_URI distfile name (${P}.tar.gz) so that
 		# `pkgdev manifest` reuses it.
 		local tarball="$DISTDIR/$PN-$new.tar.gz"
-		fetch "${url//@PV@/$new}" > "$tarball"
+		if [[ ! -f $tarball ]]; then
+			fetch "${url//@PV@/$new}" > "$tarball.part"
+			mv "$tarball.part" "$tarball"
+		fi
 		mkdir -p "$WORK/src"
 		tar -xzf "$tarball" -C "$WORK/src"
 		pycargoebuild -C -M -F auto -d "$DISTDIR" -i "$dst" "$WORK/src/${crate_dir//@PV@/$new}"
@@ -177,12 +180,9 @@ PKG=$1 PN=${1#*/} PKGDIR=$REPO/$1
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
-DISTDIR=$WORK/distfiles
-mkdir "$DISTDIR"
-# As root, pkgdev fetches as the portage user.
-if (( EUID == 0 )); then
-	chown portage:portage "$WORK" "$DISTDIR"
-fi
+# Shared with the builds and cached across runs (see scripts/in-gentoo), so
+# that crates already fetched are not fetched again.
+DISTDIR=$(portageq distdir)
 
 cd "$PKGDIR"
 update_package

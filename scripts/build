@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Build one ebuild from source. Meant to run inside scripts/in-gentoo, so that
+# every ebuild starts from a clean container.
+set -euo pipefail
+
+ebuild=${1:?usage: $0 <category>/<package>/<package>-<version>.ebuild}
+pkg=${ebuild%/*}
+file=${ebuild##*/}
+
+# Dependencies missing from ::gentoo keywords or USE are unmasked as needed;
+# the overlay package itself is always built from source.
+emerge --oneshot --verbose --quiet-build=n \
+	--autounmask=y --autounmask-continue=y --autounmask-keep-masks=y \
+	--usepkg-exclude "$pkg" \
+	"=${pkg%/*}/${file%.ebuild}"
+
+# Python packages declare runtime dependencies in their metadata; verify that
+# the ebuild pulled all of them in.
+if [[ $pkg == dev-python/* ]]; then
+	python3 -m pip check
+fi

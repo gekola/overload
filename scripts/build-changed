@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Lint and build every ebuild added or modified since <base-ref>.
-# Meant to run inside scripts/in-gentoo.
+# Lint every ebuild added or modified since <base-ref>, then build each one in
+# its own container (scripts/in-gentoo).
 set -euo pipefail
 
 base=${1:?usage: $0 <base-ref>}
@@ -11,26 +11,18 @@ if (( ${#ebuilds[@]} == 0 )); then
 	echo "No changed ebuilds since $base"
 	exit 0
 fi
-
-atoms=()
-for ebuild in "${ebuilds[@]}"; do
-	pkg=${ebuild%/*}
-	file=${ebuild##*/}
-	atoms+=("=${pkg%/*}/${file%.ebuild}")
-done
 mapfile -t pkgs < <(printf '%s\n' "${ebuilds[@]%/*}" | sort -u)
 
-pkgcheck scan "${pkgs[@]}"
+scripts/in-gentoo pkgcheck scan "${pkgs[@]}"
 
-# Dependencies missing from ::gentoo keywords or USE are unmasked as needed;
-# the overlay packages themselves are always built from source.
-emerge --oneshot --verbose --quiet-build=n \
-	--autounmask=y --autounmask-continue=y --autounmask-keep-masks=y \
-	--usepkg-exclude "${pkgs[*]}" \
-	"${atoms[@]}"
+failed=()
+for ebuild in "${ebuilds[@]}"; do
+	echo "::group::$ebuild"
+	scripts/in-gentoo scripts/build "$ebuild" || failed+=("$ebuild")
+	echo "::endgroup::"
+done
 
-# Python packages declare runtime dependencies in their metadata; verify that
-# the ebuild pulled all of them in.
-if [[ " ${pkgs[*]}" == *" dev-python/"* ]]; then
-	python3 -m pip check
+if (( ${#failed[@]} )); then
+	printf 'FAILED %s\n' "${failed[@]}" >&2
+	exit 1
 fi

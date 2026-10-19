@@ -44,6 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      # One at a time, so that each job restores the distfiles cache the
+      # previous one saved and the shared cache accumulates.
+      max-parallel: 1
       matrix:
         package: ${{ fromJSON(needs.check.outputs.packages) }}
     env:
@@ -54,6 +57,13 @@ jobs:
       GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
     steps:
       - uses: actions/checkout@v5
+      - name: Restore distfiles
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/distfiles
+          # Cache entries are immutable; the newest prefix match is restored.
+          key: distfiles-${{ github.run_id }}-${{ github.run_attempt }}-${{ strategy.job-index }}
+          restore-keys: distfiles-
       - id: bump
         name: Bump
         run: |
@@ -84,7 +94,7 @@ jobs:
           echo "url=$url" >> "$GITHUB_OUTPUT"
       - name: Build
         if: steps.bump.outputs.changed
-        run: scripts/in-gentoo scripts/build-changed "${{ steps.bump.outputs.base }}"
+        run: scripts/build-changed "${{ steps.bump.outputs.base }}"
       - name: Merge
         if: steps.bump.outputs.changed
         run: gh pr merge "${{ steps.pr.outputs.url }}" --rebase --delete-branch
@@ -93,3 +103,19 @@ jobs:
         run: |
           gh pr comment "${{ steps.pr.outputs.url }}" --body \
             "Build failed, not merging: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Prune distfiles
+        if: always() && steps.bump.outputs.changed
+        run: |
+          # Drop what the bump removed from the Manifest, unless another package
+          # still needs it. Dependencies' distfiles (rust-bin and the like) are
+          # kept.
+          dists() { awk '$1 == "DIST" {print $2}' | sort -u; }
+          comm -23 <(git show "${{ steps.bump.outputs.base }}:$PKG/Manifest" | dists) \
+            <(cat */*/Manifest | dists) \
+            | (cd .cache/distfiles && xargs -r rm -f --)
+      - name: Save distfiles
+        if: always() && steps.bump.outputs.changed
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/distfiles
+          key: distfiles-${{ github.run_id }}-${{ github.run_attempt }}-${{ strategy.job-index }}

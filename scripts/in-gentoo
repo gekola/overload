@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
-# Run a command in a Gentoo container with this overlay mounted at
+# Run a command in a fresh Gentoo container with this overlay mounted at
 # /var/db/repos/overload, e.g. `scripts/in-gentoo scripts/update -n`.
+# Distfiles persist across containers in .cache/distfiles.
 set -euo pipefail
 
 REPO="$(realpath "$(dirname -- "${BASH_SOURCE[0]}")/..")"
 IMAGE=overload-ci
 
 docker build --pull --quiet --tag "$IMAGE" "$REPO/scripts/docker" >/dev/null
+mkdir -p "$REPO/.cache/distfiles"
 
-# Files written by root inside the container are handed back to the caller.
+# Portage fetches as the portage user; files written by root inside the
+# container, the distfiles cache included, are handed back to the caller.
 exec docker run --rm \
 	--volume "$REPO:/var/db/repos/overload" \
+	--volume "$REPO/.cache/distfiles:/var/cache/distfiles" \
 	--workdir /var/db/repos/overload \
 	--env GITHUB_TOKEN \
 	--env GIT_AUTHOR_NAME --env GIT_AUTHOR_EMAIL \
 	--env GIT_COMMITTER_NAME --env GIT_COMMITTER_EMAIL \
-	"$IMAGE" bash -c '"$@"; rc=$?; chown -R "'"$(id -u):$(id -g)"'" .; exit $rc' -- "$@"
+	"$IMAGE" bash -c 'chown -R portage:portage /var/cache/distfiles
+"$@"; rc=$?; chown -R "'"$(id -u):$(id -g)"'" .; exit $rc' -- "$@"
