@@ -304,7 +304,7 @@ CRATES="
 	radium@0.7.0
 	rancor@0.1.1
 	rand@0.10.2
-	rand@0.8.5
+	rand@0.8.8
 	rand_core@0.10.0
 	rand_core@0.6.4
 	rayon-core@1.13.0
