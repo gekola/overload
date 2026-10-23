@@ -118,6 +118,7 @@ CRATES="
 	log@0.4.34
 	memchr@2.8.3
 	miette@7.6.0
+	mio@1.2.4
 	normalize-line-endings@0.3.0
 	num-conv@0.2.2
 	num-traits@0.2.19
@@ -145,7 +146,7 @@ CRATES="
 	proc-macro2@1.0.107
 	proptest@1.12.0
 	psm@0.1.24
-	pulldown-cmark@0.13.4
+	pulldown-cmark@0.13.5
 	quick-error@1.2.3
 	quote@1.0.47
 	r-efi@6.0.0
@@ -159,8 +160,8 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.5.1
-	rmcp@3.5.1
+	rmcp-macros@3.6.0
+	rmcp@3.6.0
 	roff@1.1.1
 	rustix@1.1.5
 	rustversion@1.0.23
@@ -183,6 +184,7 @@ CRATES="
 	shlex@2.0.1
 	similar@2.7.0
 	slab@0.4.12
+	socket2@0.6.5
 	stacker@0.1.25
 	strsim@0.11.1
 	syn@2.0.119
@@ -199,7 +201,7 @@ CRATES="
 	tinyvec@1.13.3
 	tokio-macros@2.7.2
 	tokio-util@0.7.20
-	tokio@1.53.3
+	tokio@1.54.1
 	toml@1.1.8+spec-1.1.0
 	toml_datetime@1.1.2+spec-1.1.0
 	toml_edit@0.25.17+spec-1.1.0
@@ -218,6 +220,7 @@ CRATES="
 	uuid@1.28.0
 	wait-timeout@0.2.1
 	walkdir@2.5.0
+	wasi@0.11.1+wasi-snapshot-preview1
 	wasm-bindgen-macro-support@0.2.129
 	wasm-bindgen-macro@0.2.129
 	wasm-bindgen-shared@0.2.129
