@@ -31,7 +31,7 @@ CRATES="
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.9.0
+	cc@1.10.0
 	cfg-if@1.0.5
 	cfg_aliases@0.2.2
 	chacha20@0.10.2
@@ -160,8 +160,8 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.6.0
-	rmcp@3.6.0
+	rmcp-macros@3.7.0
+	rmcp@3.7.0
 	roff@1.1.1
 	rustix@1.1.5
 	rustversion@1.0.23
@@ -217,7 +217,7 @@ CRATES="
 	unicode-width@0.1.14
 	unicode-width@0.2.2
 	utf8parse@0.2.2
-	uuid@1.28.0
+	uuid@1.29.0
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasi@0.11.1+wasi-snapshot-preview1
