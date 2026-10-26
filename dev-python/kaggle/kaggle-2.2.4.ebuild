@@ -14,7 +14,6 @@ HOMEPAGE="https://github.com/Kaggle/kaggle-api"
 LICENSE="Apache-2.0"
 SLOT=0
 KEYWORDS="~amd64"
-IUSE="test"
 
 RDEPEND="
 	dev-python/bleach[${PYTHON_USEDEP}]
@@ -31,21 +30,17 @@ RDEPEND="
 	>=dev-python/urllib3-1.15.1[${PYTHON_USEDEP}]
 "
 
-DEPEND="${RDEPEND}"
-
-BDEPEND="test? (
-	${RDEPEND}
-	dev-python/pytest[${PYTHON_USEDEP}]
-)"
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
 
 python_test() {
 	export KAGGLE_API_ENDPOINT=http://localhost
 	export KAGGLE_API_ENVIRONMENT=LOCALHOST
 	export KAGGLE_CONFIG_DIR="${PWD}"
+	export KAGGLE_USERNAME=joe
 	export KAGGLE_KEY=local_api_token
-	export KAGGLE_USERNAME="joe"
-	export KAGGLE_KEY="local_api_token"
-	echo "{\"username\":\"$KAGGLE_USERNAME\",\"key\":\"$KAGGLE_KEY\"}" > kaggle.json || die "Cannot generate test credentials."
+	printf '{"username":"%s","key":"%s"}' "${KAGGLE_USERNAME}" "${KAGGLE_KEY}" \
+		> kaggle.json || die "Cannot generate test credentials."
 	chmod 600 kaggle.json
 	epytest --import-mode=importlib
 }
