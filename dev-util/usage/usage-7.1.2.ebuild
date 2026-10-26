@@ -261,7 +261,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 src_install() {
-    cargo_src_install --path cli
+	cargo_src_install --path cli
 	einstalldocs
 	newbashcomp cli/assets/completions/usage.bash usage
 	newfishcomp cli/assets/completions/usage.fish usage.fish
