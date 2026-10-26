@@ -374,7 +374,7 @@ CRATES="
 
 inherit cargo flag-o-matic
 
-DESCRIPTION="This TUI allows you to list and browse APIs described by the openapi specification."
+DESCRIPTION="TUI to list and browse APIs described by an OpenAPI specification"
 HOMEPAGE="https://github.com/zaghaghi/openapi-tui"
 SRC_URI="
 	${CARGO_CRATE_URIS}
