@@ -16,6 +16,9 @@ KEYWORDS="~amd64 ~x86"
 
 BDEPEND="app-arch/unzip"
 
+# The documentation ships prebuilt as SIstyle-2.3a.pdf.
+LATEX_PACKAGE_SKIP="sistyle.dtx"
+
 src_unpack() {
 	unpack ${A}
 	cd "${S}/figs"
@@ -23,7 +26,6 @@ src_unpack() {
 }
 
 src_install() {
-	latex-package_src_install
 	latex-package_src_install
 
 	insinto "${TEXMF}/SIstyle"
