@@ -3,7 +3,7 @@
 
 EAPI=8
 
-DESCRIPTION=" runcat module for polybar (or waybar) written in C++ "
+DESCRIPTION="runcat module for polybar (or waybar) written in C++"
 HOMEPAGE="https://github.com/2IMT/polycat"
 SRC_URI="https://github.com/2IMT/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
@@ -11,10 +11,6 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 RESTRICT="test"
-
-RDEPEND=""
-DEPEND="${RDEPEND}"
-BDEPEND=""
 
 src_compile() {
 	emake PREFIX="${EPREFIX}/usr" || die "emake failed"
