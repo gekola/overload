@@ -3,15 +3,16 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
+PYTHON_COMPAT=( python3_{11..15} )
 
 DISTUTILS_USE_PEP517="setuptools"
 inherit distutils-r1 pypi
 
 MY_PV="${PV/_p/.post}"
 MY_P="${PN}-${MY_PV}"
-DESCRIPTION="Convert GeoJSON to WKT/WKB (Well-Known Text/Binary), and vice versa."
+DESCRIPTION="Convert GeoJSON to WKT/WKB (Well-Known Text/Binary), and vice versa"
 HOMEPAGE="https://github.com/geomet/geomet"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="Apache-2.0"
 SLOT=0
@@ -22,5 +23,3 @@ RDEPEND="
 "
 
 DEPEND="${RDEPEND}"
-
-S="${WORKDIR}/${MY_P}"
