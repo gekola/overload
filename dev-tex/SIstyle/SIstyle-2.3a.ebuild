@@ -5,19 +5,16 @@ EAPI=7
 
 inherit latex-package
 
-DESCRIPTION="LaTeX package to typeset SI units, numbers and angles."
-HOMEPAGE="http://www.ctan.org/tex-archive/macros/latex/contrib/SIstyle/"
-SRC_URI="http://mirrors.ctan.org/macros/latex/contrib/${PN}.zip"
+DESCRIPTION="LaTeX package to typeset SI units, numbers and angles"
+HOMEPAGE="https://ctan.org/pkg/sistyle"
+SRC_URI="https://mirrors.ctan.org/macros/latex/contrib/sistyle.zip -> ${P}.zip"
+S="${WORKDIR}/${PN}"
 
 LICENSE="LPPL-1.3b"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 
-DEPEND="app-arch/unzip"
-RDEPEND=""
-
-S="${WORKDIR}/${PN}"
+BDEPEND="app-arch/unzip"
 
 src_unpack() {
 	unpack ${A}
