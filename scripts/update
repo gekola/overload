@@ -16,6 +16,7 @@ PACKAGES=(
 	dev-python/cassandra_driver
 	dev-python/geomet
 	dev-python/kaggle
+	dev-python/kagglesdk
 	dev-util/binaryen
 	dev-util/qcachegrind
 	dev-util/ty
