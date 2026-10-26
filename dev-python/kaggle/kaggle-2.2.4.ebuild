@@ -36,11 +36,13 @@ distutils_enable_tests pytest
 python_test() {
 	export KAGGLE_API_ENDPOINT=http://localhost
 	export KAGGLE_API_ENVIRONMENT=LOCALHOST
-	export KAGGLE_CONFIG_DIR="${PWD}"
+	# test_config_actions expects the directory to be named "kaggle".
+	export KAGGLE_CONFIG_DIR="${T}/kaggle"
+	mkdir -p "${KAGGLE_CONFIG_DIR}" || die
 	export KAGGLE_USERNAME=joe
 	export KAGGLE_KEY=local_api_token
 	printf '{"username":"%s","key":"%s"}' "${KAGGLE_USERNAME}" "${KAGGLE_KEY}" \
-		> kaggle.json || die "Cannot generate test credentials."
-	chmod 600 kaggle.json
+		> "${KAGGLE_CONFIG_DIR}"/kaggle.json || die "Cannot generate test credentials."
+	chmod 600 "${KAGGLE_CONFIG_DIR}"/kaggle.json || die
 	epytest --import-mode=importlib
 }
