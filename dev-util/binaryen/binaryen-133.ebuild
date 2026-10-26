@@ -5,7 +5,7 @@ EAPI=8
 
 inherit flag-o-matic cmake
 
-DESCRIPTION=""
+DESCRIPTION="Compiler infrastructure and toolchain library for WebAssembly"
 HOMEPAGE="https://github.com/WebAssembly/binaryen"
 SRC_URI="https://github.com/WebAssembly/${PN}/archive/version_${PV}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-version_${PV}"
