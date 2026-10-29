@@ -357,7 +357,7 @@ CRATES="
 	similar@3.2.0
 	siphasher@1.0.1
 	slab@0.4.12
-	smallvec@1.16.1
+	smallvec@1.16.2
 	snapbox-macros@1.0.0
 	snapbox@1.0.0
 	stable_deref_trait@1.2.0
@@ -377,14 +377,14 @@ CRATES="
 	terminal_size@0.4.4
 	terminfo@0.9.0
 	termtree@0.5.1
-	test-case-core@3.3.1
-	test-case-macros@3.3.1
-	test-case@3.3.1
+	test-case-core@3.4.0
+	test-case-macros@3.4.0
+	test-case@3.4.0
 	thin-vec@0.2.20
 	thiserror-impl@1.0.69
-	thiserror-impl@2.0.20
+	thiserror-impl@2.0.21
 	thiserror@1.0.69
-	thiserror@2.0.20
+	thiserror@2.0.21
 	thread_local@1.1.9
 	tikv-jemalloc-sys@0.6.1+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
 	tikv-jemallocator@0.6.1
