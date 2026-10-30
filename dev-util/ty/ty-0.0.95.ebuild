@@ -232,7 +232,7 @@ CRATES="
 	munge_macro@0.4.7
 	natord@1.0.9
 	newtype-uuid@1.3.2
-	nix@0.31.2
+	nix@0.31.3
 	nom@7.1.3
 	normalize-line-endings@0.3.0
 	notify-types@2.0.0
@@ -502,12 +502,12 @@ CRATES="
 	zerotrie@0.2.5
 	zerovec-derive@0.11.6
 	zerovec@0.11.8
-	zip@8.6.0
+	zip@9.0.5
 	zlib-rs@0.5.5
 	zmij@1.0.10
-	zstd-safe@7.2.4
-	zstd-sys@2.0.16+zstd.1.5.7
-	zstd@0.13.3
+	zstd-safe@8.2.0
+	zstd-sys@2.1.2+zstd.1.5.7
+	zstd@0.14.3
 "
 
 RUST_MIN_VER="1.90.0"
