@@ -127,10 +127,11 @@ CRATES="
 	oorandom@11.1.5
 	page_size@0.6.0
 	pastey@0.2.3
-	pest@2.9.4
-	pest_derive@2.9.4
-	pest_generator@2.9.4
-	pest_meta@2.9.4
+	pest@2.9.5
+	pest_derive@2.9.5
+	pest_generator@2.9.5
+	pest_meta@2.9.5
+	pest_stack_guard@1.0.0
 	pin-project-lite@0.2.17
 	plotters-backend@0.3.7
 	plotters-svg@0.3.7
@@ -160,10 +161,10 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.7.0
-	rmcp@3.7.0
+	rmcp-macros@3.8.0
+	rmcp@3.8.0
 	roff@1.1.1
-	rustix@1.1.5
+	rustix@1.1.6
 	rustversion@1.0.23
 	rusty-fork@0.3.1
 	ryu@1.0.23
@@ -215,7 +216,7 @@ CRATES="
 	unicase@2.10.0
 	unicode-ident@1.0.27
 	unicode-width@0.1.14
-	unicode-width@0.2.2
+	unicode-width@0.2.3
 	utf8parse@0.2.2
 	uuid@1.29.0
 	wait-timeout@0.2.1
