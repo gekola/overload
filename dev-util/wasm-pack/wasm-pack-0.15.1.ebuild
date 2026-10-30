@@ -59,6 +59,8 @@ CRATES="
 	digest@0.10.7
 	dirs-next@2.0.0
 	dirs-sys-next@0.1.2
+	dirs-sys@0.5.0
+	dirs@6.0.0
 	displaydoc@0.2.5
 	encode_unicode@1.0.0
 	env_filter@1.0.1
@@ -130,6 +132,7 @@ CRATES="
 	object@0.37.3
 	once_cell@1.21.4
 	once_cell_polyfill@1.70.2
+	option-ext@0.2.0
 	parking_lot@0.12.5
 	parking_lot_core@0.9.12
 	path-clean@1.0.1
@@ -149,6 +152,7 @@ CRATES="
 	r-efi@6.0.0
 	redox_syscall@0.5.18
 	redox_users@0.4.6
+	redox_users@0.5.2
 	regex-automata@0.4.14
 	regex-syntax@0.8.10
 	regex@1.12.3
@@ -157,8 +161,8 @@ CRATES="
 	rustix@0.38.44
 	rustix@1.1.4
 	rustls-pki-types@1.14.1
-	rustls-webpki@0.103.13
-	rustls@0.23.40
+	rustls-webpki@0.103.15
+	rustls@0.23.46
 	rustversion@1.0.22
 	same-file@1.0.6
 	scc@2.4.0
@@ -188,7 +192,7 @@ CRATES="
 	syn@2.0.117
 	synstructure@0.13.2
 	sysinfo@0.38.4
-	tar@0.4.45
+	tar@0.4.46
 	tempfile@3.27.0
 	termtree@0.5.1
 	thiserror-impl@1.0.69
@@ -306,6 +310,8 @@ SRC_URI="
 
 LICENSE="|| ( Apache-2.0 MIT )"
 # Dependent crate licenses
-LICENSE+=" Apache-2.0 BSD CDLA-Permissive-2.0 ISC MIT Unicode-3.0 ZLIB"
+LICENSE+="
+	Apache-2.0 BSD CDLA-Permissive-2.0 ISC MIT MPL-2.0 Unicode-3.0 ZLIB
+"
 SLOT="0"
 KEYWORDS="~amd64"
