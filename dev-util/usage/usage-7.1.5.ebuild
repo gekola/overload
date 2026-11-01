@@ -109,13 +109,13 @@ CRATES="
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.9
 	jiff@0.2.38
-	js-sys@0.3.106
+	js-sys@0.3.107
 	libc@0.2.191
 	libyaml-rs@0.3.0
 	link-section@0.19.3
 	linktime-proc-macro@0.2.3
 	linux-raw-sys@0.12.1
-	log@0.4.34
+	log@0.4.35
 	memchr@2.8.3
 	miette@7.6.0
 	mio@1.2.4
@@ -147,7 +147,7 @@ CRATES="
 	proc-macro2@1.0.107
 	proptest@1.12.0
 	psm@0.1.24
-	pulldown-cmark@0.13.5
+	pulldown-cmark@0.13.6
 	quick-error@1.2.3
 	quote@1.0.47
 	r-efi@6.0.0
@@ -222,11 +222,11 @@ CRATES="
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasi@0.11.1+wasi-snapshot-preview1
-	wasm-bindgen-macro-support@0.2.129
-	wasm-bindgen-macro@0.2.129
-	wasm-bindgen-shared@0.2.129
-	wasm-bindgen@0.2.129
-	web-sys@0.3.106
+	wasm-bindgen-macro-support@0.2.130
+	wasm-bindgen-macro@0.2.130
+	wasm-bindgen-shared@0.2.130
+	wasm-bindgen@0.2.130
+	web-sys@0.3.107
 	winapi-i686-pc-windows-gnu@0.4.0
 	winapi-util@0.1.11
 	winapi-x86_64-pc-windows-gnu@0.4.0
