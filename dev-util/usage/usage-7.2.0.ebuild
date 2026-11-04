@@ -15,6 +15,7 @@ CRATES="
 	anstyle-query@1.1.5
 	anstyle-wincon@3.0.11
 	anstyle@1.0.14
+	ar_archive_writer@0.5.3
 	assert_cmd@2.2.2
 	autocfg@1.5.1
 	base64@0.23.1
@@ -31,7 +32,7 @@ CRATES="
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.10.0
+	cc@1.11.0
 	cfg-if@1.0.5
 	cfg_aliases@0.2.2
 	chacha20@0.10.2
@@ -104,11 +105,11 @@ CRATES="
 	itertools@0.13.0
 	itertools@0.15.0
 	itoa@1.0.18
-	jiff-core@0.1.1
-	jiff-static@0.2.38
+	jiff-core@0.1.2
+	jiff-static@0.2.39
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.9
-	jiff@0.2.38
+	jiff@0.2.39
 	js-sys@0.3.107
 	libc@0.2.191
 	libyaml-rs@0.3.0
@@ -122,6 +123,7 @@ CRATES="
 	normalize-line-endings@0.3.0
 	num-conv@0.2.2
 	num-traits@0.2.19
+	object@0.39.1
 	once_cell@1.21.4
 	once_cell_polyfill@1.70.2
 	oorandom@11.1.5
@@ -131,7 +133,7 @@ CRATES="
 	pest_derive@2.9.5
 	pest_generator@2.9.5
 	pest_meta@2.9.5
-	pest_stack_guard@1.0.0
+	pest_stack_guard@1.0.1
 	pin-project-lite@0.2.17
 	plotters-backend@0.3.7
 	plotters-svg@0.3.7
@@ -146,7 +148,7 @@ CRATES="
 	proc-macro-crate@3.5.0
 	proc-macro2@1.0.107
 	proptest@1.12.0
-	psm@0.1.24
+	psm@0.1.32
 	pulldown-cmark@0.13.6
 	quick-error@1.2.3
 	quote@1.0.47
@@ -257,7 +259,7 @@ SRC_URI="
 
 LICENSE="MIT"
 # Dependent crate licenses
-LICENSE+=" Apache-2.0 MIT Unicode-3.0"
+LICENSE+=" Apache-2.0 Apache-2.0-with-LLVM-exceptions MIT Unicode-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
