@@ -66,7 +66,7 @@ CRATES="
 	clap_complete_nushell@4.5.8
 	clap_derive@4.6.7
 	clap_lex@1.0.0
-	clearscreen@4.0.6
+	clearscreen@5.0.0
 	codspeed-criterion-compat-walltime@5.0.1
 	codspeed-criterion-compat@5.0.1
 	codspeed-divan-compat-macros@5.0.1
@@ -78,7 +78,7 @@ CRATES="
 	colored@3.1.1
 	compact_str@0.10.0
 	condtype@1.3.0
-	console@0.16.4
+	console@0.16.6
 	console_error_panic_hook@0.1.7
 	console_log@1.1.0
 	core-foundation-sys@0.8.7
@@ -179,7 +179,7 @@ CRATES="
 	inotify-sys@0.1.5
 	inotify@0.11.0
 	insta-cmd@0.7.0
-	insta@1.48.0
+	insta@1.49.0
 	interpolator@0.5.0
 	intrusive-collections@0.10.1
 	inventory@0.3.24
@@ -203,7 +203,7 @@ CRATES="
 	kqueue@1.1.1
 	lazy_static@1.5.0
 	leb128fmt@0.1.0
-	libc@0.2.189
+	libc@0.2.190
 	libcst@1.9.0
 	libcst_derive@1.9.0
 	libm@0.2.16
@@ -423,7 +423,7 @@ CRATES="
 	utf8-width@0.1.7
 	utf8_iter@1.0.4
 	utf8parse@0.2.2
-	uuid@1.26.1
+	uuid@1.27.0
 	valuable@0.1.1
 	version-ranges@0.1.1
 	version_check@0.9.5
