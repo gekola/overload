@@ -23,6 +23,7 @@ CRATES="
 	bit-vec@0.10.1
 	bitflags@1.3.2
 	bitflags@2.13.2
+	block-buffer@0.12.1
 	borsh-derive@1.8.1
 	borsh@1.8.1
 	bpaf@0.9.28
@@ -46,6 +47,7 @@ CRATES="
 	clap_lex@1.1.1
 	colorchoice@1.0.5
 	console@0.16.6
+	const-oid@0.10.2
 	core-foundation-sys@0.8.7
 	core_detect@1.0.0
 	cpufeatures@0.3.1
@@ -55,6 +57,7 @@ CRATES="
 	crossbeam-epoch@0.9.21
 	crossbeam-utils@0.8.23
 	crunchy@0.2.4
+	crypto-common@0.2.2
 	ctor@1.0.13
 	darling@0.24.1
 	darling_core@0.24.1
@@ -65,6 +68,7 @@ CRATES="
 	deranged@0.5.9
 	diff@0.1.13
 	difflib@0.4.0
+	digest@0.11.3
 	dyn-clone@1.0.20
 	either@1.19.0
 	encode_unicode@1.0.0
@@ -95,6 +99,7 @@ CRATES="
 	hashbrown@0.17.1
 	heck@0.5.0
 	hex@0.4.3
+	hybrid-array@0.4.15
 	iana-time-zone-haiku@0.1.2
 	iana-time-zone@0.1.65
 	ident_case@1.0.1
@@ -163,8 +168,8 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.8.0
-	rmcp@3.8.0
+	rmcp-macros@3.9.0
+	rmcp@3.9.0
 	roff@1.1.1
 	rustix@1.1.6
 	rustversion@1.0.23
@@ -183,6 +188,7 @@ CRATES="
 	serde_spanned@1.1.2
 	serde_with@3.24.0
 	serde_with_macros@3.24.0
+	sha2@0.11.1
 	shell-words@1.1.1
 	shlex@2.0.1
 	similar@2.7.0
@@ -205,14 +211,15 @@ CRATES="
 	tokio-macros@2.7.2
 	tokio-util@0.7.20
 	tokio@1.54.1
-	toml@1.1.8+spec-1.1.0
+	toml@1.2.0+spec-1.1.0
 	toml_datetime@1.1.2+spec-1.1.0
-	toml_edit@0.25.17+spec-1.1.0
+	toml_edit@0.25.18+spec-1.1.0
 	toml_parser@1.1.5+spec-1.1.0
-	toml_writer@1.1.3+spec-1.1.0
+	toml_writer@1.2.0+spec-1.1.0
 	tracing-attributes@0.1.31
 	tracing-core@0.1.36
 	tracing@0.1.44
+	typenum@1.20.1
 	ucd-trie@0.1.7
 	unarray@0.1.4
 	unicase@2.10.0
