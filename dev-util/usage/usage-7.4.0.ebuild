@@ -15,25 +15,24 @@ CRATES="
 	anstyle-query@1.1.5
 	anstyle-wincon@3.0.11
 	anstyle@1.0.14
-	ar_archive_writer@0.5.3
+	ar_archive_writer@0.5.5
 	assert_cmd@2.2.2
 	autocfg@1.5.1
 	base64@0.23.1
 	bit-set@0.11.1
-	bit-vec@0.10.1
-	bitflags@1.3.2
+	bit-vec@0.10.2
 	bitflags@2.13.2
 	block-buffer@0.12.1
 	borsh-derive@1.8.1
 	borsh@1.8.1
-	bpaf@0.9.28
+	bpaf@0.9.29
 	bpaf_derive@0.5.26
 	bs58@0.5.1
 	bstr@1.13.1
 	bumpalo@3.20.3
 	bytes@1.12.1
 	cast@0.3.0
-	cc@1.11.0
+	cc@1.11.1
 	cfg-if@1.0.5
 	cfg_aliases@0.2.2
 	chacha20@0.10.2
@@ -47,7 +46,7 @@ CRATES="
 	clap_lex@1.1.1
 	colorchoice@1.0.5
 	console@0.16.6
-	const-oid@0.10.2
+	const-oid@0.10.3
 	core-foundation-sys@0.8.7
 	core_detect@1.0.0
 	cpufeatures@0.3.1
@@ -62,9 +61,6 @@ CRATES="
 	darling@0.24.1
 	darling_core@0.24.1
 	darling_macro@0.24.1
-	defmt-macros@1.2.0
-	defmt-parser@1.1.0
-	defmt@1.2.0
 	deranged@0.5.9
 	diff@0.1.13
 	difflib@0.4.0
@@ -77,7 +73,7 @@ CRATES="
 	equivalent@1.0.3
 	errno-dragonfly@0.1.2
 	errno@0.2.8
-	errno@0.3.14
+	errno@0.3.15
 	exec@0.3.1
 	expr-lang@2.1.0
 	fastrand@2.5.0
@@ -109,12 +105,12 @@ CRATES="
 	is_terminal_polyfill@1.70.2
 	itertools@0.13.0
 	itertools@0.15.0
-	itoa@1.0.18
-	jiff-core@0.1.2
-	jiff-static@0.2.39
+	itoa@1.0.19
+	jiff-core@0.1.5
+	jiff-static@0.2.43
 	jiff-tzdb-platform@0.1.3
 	jiff-tzdb@0.1.9
-	jiff@0.2.39
+	jiff@0.2.43
 	js-sys@0.3.107
 	libc@0.2.191
 	libyaml-rs@0.3.0
@@ -134,10 +130,10 @@ CRATES="
 	oorandom@11.1.5
 	page_size@0.6.0
 	pastey@0.2.3
-	pest@2.9.5
-	pest_derive@2.9.5
-	pest_generator@2.9.5
-	pest_meta@2.9.5
+	pest@2.9.6
+	pest_derive@2.9.6
+	pest_generator@2.9.6
+	pest_meta@2.9.6
 	pest_stack_guard@1.0.1
 	pin-project-lite@0.2.17
 	plotters-backend@0.3.7
@@ -168,8 +164,8 @@ CRATES="
 	regex-automata@0.4.18
 	regex-syntax@0.8.11
 	regex@1.13.1
-	rmcp-macros@3.9.0
-	rmcp@3.9.0
+	rmcp-macros@3.10.0
+	rmcp@3.10.0
 	roff@1.1.1
 	rustix@1.1.6
 	rustversion@1.0.23
@@ -185,7 +181,7 @@ CRATES="
 	serde_derive@1.0.229
 	serde_derive_internals@0.30.0
 	serde_json@1.0.154
-	serde_spanned@1.1.2
+	serde_spanned@1.1.3
 	serde_with@3.24.0
 	serde_with_macros@3.24.0
 	sha2@0.11.1
@@ -197,7 +193,7 @@ CRATES="
 	stacker@0.1.25
 	strsim@0.11.1
 	syn@2.0.119
-	syn@3.0.9
+	syn@3.0.10
 	tempfile@3.27.0
 	tera@2.4.0
 	termtree@0.5.1
@@ -211,9 +207,9 @@ CRATES="
 	tokio-macros@2.7.2
 	tokio-util@0.7.20
 	tokio@1.54.1
-	toml@1.2.0+spec-1.1.0
-	toml_datetime@1.1.2+spec-1.1.0
-	toml_edit@0.25.18+spec-1.1.0
+	toml@1.2.1+spec-1.1.0
+	toml_datetime@1.1.3+spec-1.1.0
+	toml_edit@0.25.19+spec-1.1.0
 	toml_parser@1.1.5+spec-1.1.0
 	toml_writer@1.2.0+spec-1.1.0
 	tracing-attributes@0.1.31
@@ -227,7 +223,7 @@ CRATES="
 	unicode-width@0.1.14
 	unicode-width@0.2.3
 	utf8parse@0.2.2
-	uuid@1.29.0
+	uuid@1.29.2
 	wait-timeout@0.2.1
 	walkdir@2.5.0
 	wasi@0.11.1+wasi-snapshot-preview1
@@ -247,7 +243,7 @@ CRATES="
 	windows-result@0.4.1
 	windows-strings@0.5.1
 	windows-sys@0.61.2
-	winnow@1.0.4
+	winnow@1.0.5
 	yaml_serde@0.10.7
 	yansi@1.0.1
 	zerocopy-derive@0.8.63
