@@ -25,7 +25,7 @@ CRATES="
 	anyhow@1.0.104
 	approx@0.5.1
 	ar_archive_writer@0.5.3
-	arc-swap@1.9.2
+	arc-swap@1.9.3
 	argfile@1.0.0
 	arrayvec@0.7.8
 	assert_fs@1.1.4
@@ -202,7 +202,7 @@ CRATES="
 	kqueue@1.1.1
 	lazy_static@1.5.0
 	leb128fmt@0.1.0
-	libc@0.2.190
+	libc@0.2.191
 	libcst@1.9.0
 	libcst_derive@1.9.0
 	libm@0.2.16
@@ -334,8 +334,8 @@ CRATES="
 	salsa-macros@0.28.5
 	salsa@0.28.5
 	same-file@1.0.6
-	schemars@1.2.2
-	schemars_derive@1.2.2
+	schemars@1.2.3
+	schemars_derive@1.2.3
 	scopeguard@1.2.0
 	seahash@4.1.0
 	semver@1.0.27
@@ -369,7 +369,7 @@ CRATES="
 	strum_macros@0.28.0
 	supports-hyperlinks@3.2.0
 	syn@2.0.119
-	syn@3.0.8
+	syn@3.0.9
 	synstructure@0.13.2
 	tap@1.0.1
 	tempfile@3.27.0
