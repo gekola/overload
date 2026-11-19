@@ -10,7 +10,6 @@ CRATES="
 	aho-corasick@1.1.5
 	alloca@0.4.0
 	allocator-api2@0.2.21
-	android_system_properties@0.1.5
 	anes@0.1.6
 	annotate-snippets@0.11.5
 	anstream@0.6.21
@@ -55,7 +54,6 @@ CRATES="
 	cfg_aliases@0.2.1
 	chacha20@0.10.0
 	char_str@0.0.4
-	chrono@0.4.45
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
 	ciborium@0.2.2
@@ -81,7 +79,7 @@ CRATES="
 	console@0.16.6
 	console_error_panic_hook@0.1.7
 	console_log@1.1.0
-	core-foundation-sys@0.8.7
+	constant_time_eq@0.6.1
 	countme@3.0.1
 	cpufeatures@0.2.17
 	cpufeatures@0.3.0
@@ -157,8 +155,6 @@ CRATES="
 	heck@0.5.0
 	hermit-abi@0.5.2
 	html-escape@0.2.13
-	iana-time-zone-haiku@0.1.2
-	iana-time-zone@0.1.64
 	icu_collections@2.3.0
 	icu_locale_core@2.3.0
 	icu_normalizer@2.3.0
@@ -230,7 +226,6 @@ CRATES="
 	munge@0.4.7
 	munge_macro@0.4.7
 	natord@1.0.9
-	newtype-uuid@1.3.2
 	nix@0.31.3
 	nom@7.1.3
 	normalize-line-endings@0.3.0
@@ -295,7 +290,6 @@ CRATES="
 	ptr_meta@0.3.1
 	ptr_meta_derive@0.3.1
 	pyproject-toml@0.13.7
-	quick-junit@0.8.0
 	quick-xml@0.41.0
 	quickcheck@1.1.0
 	quickcheck_macros@1.2.0
@@ -406,7 +400,7 @@ CRATES="
 	tracing-subscriber@0.3.23
 	tracing@0.1.44
 	typed-arena@2.0.2
-	typed-path@0.12.3
+	typed-path@0.13.0
 	typeid@1.0.3
 	typenum@1.18.0
 	ucd-trie@0.1.7
@@ -453,17 +447,12 @@ CRATES="
 	winapi-util@0.1.11
 	winapi-x86_64-pc-windows-gnu@0.4.0
 	winapi@0.3.9
-	windows-core@0.62.0
-	windows-implement@0.60.0
-	windows-interface@0.59.1
 	windows-link@0.1.3
 	windows-link@0.2.1
-	windows-result@0.4.0
-	windows-strings@0.5.0
 	windows-sys@0.52.0
 	windows-sys@0.59.0
 	windows-sys@0.60.2
-	windows-sys@0.61.0
+	windows-sys@0.61.2
 	windows-targets@0.52.6
 	windows-targets@0.53.3
 	windows_aarch64_gnullvm@0.52.6
@@ -498,10 +487,12 @@ CRATES="
 	yoke@0.8.3
 	zerofrom-derive@0.1.6
 	zerofrom@0.1.6
+	zeroize@1.9.1
+	zeroize_derive@1.5.0
 	zerotrie@0.2.5
 	zerovec-derive@0.11.6
 	zerovec@0.11.8
-	zip@9.0.5
+	zip@9.5.1
 	zlib-rs@0.5.5
 	zmij@1.0.10
 	zstd-safe@8.2.0
