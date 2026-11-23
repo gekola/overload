@@ -209,6 +209,7 @@ CRATES="
 	linux-raw-sys@0.12.1
 	litemap@0.8.0
 	lock_api@0.4.14
+	lock_api@0.5.0
 	log@0.4.34
 	lsp-server@0.10.0
 	manyhow-macros@0.14.1
@@ -245,6 +246,8 @@ CRATES="
 	os_str_bytes@7.1.1
 	page_size@0.6.0
 	parking_lot@0.12.5
+	parking_lot@0.13.0
+	parking_lot_core@0.10.0
 	parking_lot_core@0.9.12
 	paste@1.0.15
 	path-absolutize@4.0.1
@@ -307,6 +310,7 @@ CRATES="
 	rayon-core@1.13.0
 	rayon@1.12.0
 	redox_syscall@0.5.17
+	redox_syscall@0.9.5
 	redox_users@0.5.2
 	ref-cast-impl@1.0.25
 	ref-cast@1.0.25
@@ -324,9 +328,9 @@ CRATES="
 	rustix@1.1.5
 	rustversion@1.0.22
 	ryu@1.0.20
-	salsa-macro-rules@0.28.5
-	salsa-macros@0.28.5
-	salsa@0.28.5
+	salsa-macro-rules@0.28.6
+	salsa-macros@0.28.6
+	salsa@0.28.6
 	same-file@1.0.6
 	schemars@1.2.3
 	schemars_derive@1.2.3
