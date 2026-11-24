@@ -28,11 +28,11 @@ CRATES="
 	bpaf@0.9.29
 	bpaf_derive@0.5.26
 	bs58@0.5.1
-	bstr@1.13.1
-	bumpalo@3.20.3
-	bytes@1.12.1
+	bstr@1.14.0
+	bumpalo@3.20.4
+	bytes@1.12.2
 	cast@0.3.0
-	cc@1.11.1
+	cc@1.11.3
 	cfg-if@1.0.5
 	cfg_aliases@0.2.2
 	chacha20@0.10.2
@@ -40,10 +40,10 @@ CRATES="
 	ciborium-io@0.2.2
 	ciborium-ll@0.2.2
 	ciborium@0.2.2
-	clap@4.6.7
+	clap@4.6.9
 	clap_builder@4.6.7
-	clap_derive@4.6.7
-	clap_lex@1.1.1
+	clap_derive@4.6.9
+	clap_lex@1.1.2
 	colorchoice@1.0.5
 	console@0.16.6
 	const-oid@0.10.3
@@ -57,7 +57,7 @@ CRATES="
 	crossbeam-utils@0.8.23
 	crunchy@0.2.4
 	crypto-common@0.2.2
-	ctor@1.0.13
+	ctor@1.0.14
 	darling@0.24.1
 	darling_core@0.24.1
 	darling_macro@0.24.1
@@ -68,8 +68,8 @@ CRATES="
 	dyn-clone@1.0.20
 	either@1.19.0
 	encode_unicode@1.0.0
-	env_filter@2.0.0
-	env_logger@0.11.11
+	env_filter@2.1.0
+	env_logger@0.11.12
 	equivalent@1.0.3
 	errno-dragonfly@0.1.2
 	errno@0.2.8
@@ -92,7 +92,7 @@ CRATES="
 	getrandom@0.4.3
 	half@2.7.1
 	hashbrown@0.12.3
-	hashbrown@0.17.1
+	hashbrown@0.17.2
 	heck@0.5.0
 	hex@0.4.3
 	hybrid-array@0.4.15
@@ -106,21 +106,26 @@ CRATES="
 	itertools@0.13.0
 	itertools@0.15.0
 	itoa@1.0.19
-	jiff-core@0.1.5
-	jiff-static@0.2.43
+	jiff-core@0.1.8
+	jiff-core@1.0.1
+	jiff-static@0.2.46
+	jiff-static@1.0.2
 	jiff-tzdb-platform@0.1.3
-	jiff-tzdb@0.1.9
-	jiff@0.2.43
+	jiff-tzdb-platform@1.0.0
+	jiff-tzdb@0.1.10
+	jiff-tzdb@1.0.0
+	jiff@0.2.46
+	jiff@1.0.2
 	js-sys@0.3.107
 	libc@0.2.191
 	libyaml-rs@0.3.0
-	link-section@0.19.3
+	link-section@0.19.4
 	linktime-proc-macro@0.2.3
 	linux-raw-sys@0.12.1
 	log@0.4.35
 	memchr@2.8.3
 	miette@7.6.0
-	mio@1.2.4
+	mio@1.2.5
 	normalize-line-endings@0.3.0
 	num-conv@0.2.2
 	num-traits@0.2.19
@@ -130,12 +135,13 @@ CRATES="
 	oorandom@11.1.5
 	page_size@0.6.0
 	pastey@0.2.3
+	percent-encoding@2.3.2
 	pest@2.9.6
 	pest_derive@2.9.6
 	pest_generator@2.9.6
 	pest_meta@2.9.6
 	pest_stack_guard@1.0.1
-	pin-project-lite@0.2.17
+	pin-project-lite@0.2.18
 	plotters-backend@0.3.7
 	plotters-svg@0.3.7
 	plotters@0.3.7
@@ -154,18 +160,18 @@ CRATES="
 	quick-error@1.2.3
 	quote@1.0.47
 	r-efi@6.0.0
-	rand@0.10.3
+	rand@0.10.4
 	rand_core@0.10.1
 	rand_xorshift@0.5.0
 	rayon-core@1.13.0
 	rayon@1.12.0
 	ref-cast-impl@1.0.27
 	ref-cast@1.0.27
-	regex-automata@0.4.18
-	regex-syntax@0.8.11
-	regex@1.13.1
-	rmcp-macros@3.10.0
-	rmcp@3.10.0
+	regex-automata@0.4.19
+	regex-syntax@0.8.12
+	regex@1.13.2
+	rmcp-macros@3.11.0
+	rmcp@3.11.0
 	roff@1.1.1
 	rustix@1.1.6
 	rustversion@1.0.23
@@ -182,8 +188,8 @@ CRATES="
 	serde_derive_internals@0.30.0
 	serde_json@1.0.154
 	serde_spanned@1.1.3
-	serde_with@3.24.0
-	serde_with_macros@3.24.0
+	serde_with@3.25.0
+	serde_with_macros@3.25.0
 	sha2@0.11.1
 	shell-words@1.1.1
 	shlex@2.0.1
@@ -207,25 +213,27 @@ CRATES="
 	tokio-macros@2.7.2
 	tokio-util@0.7.20
 	tokio@1.54.1
-	toml@1.2.1+spec-1.1.0
+	toml@1.2.2+spec-1.1.0
 	toml_datetime@1.1.3+spec-1.1.0
-	toml_edit@0.25.19+spec-1.1.0
-	toml_parser@1.1.5+spec-1.1.0
+	toml_edit@0.25.20+spec-1.1.0
+	toml_parser@1.1.6+spec-1.1.0
 	toml_writer@1.2.0+spec-1.1.0
 	tracing-attributes@0.1.31
 	tracing-core@0.1.36
 	tracing@0.1.44
 	typenum@1.20.1
-	ucd-trie@0.1.7
+	ucd-trie@0.1.8
 	unarray@0.1.4
 	unicase@2.10.0
+	unicode-general-category@1.1.0
 	unicode-ident@1.0.27
+	unicode-normalization@0.1.26
 	unicode-width@0.1.14
 	unicode-width@0.2.3
 	utf8parse@0.2.2
-	uuid@1.29.2
+	uuid@1.29.3
 	wait-timeout@0.2.1
-	walkdir@2.5.0
+	walkdir@2.5.1
 	wasi@0.11.1+wasi-snapshot-preview1
 	wasm-bindgen-macro-support@0.2.130
 	wasm-bindgen-macro@0.2.130
@@ -246,8 +254,8 @@ CRATES="
 	winnow@1.0.5
 	yaml_serde@0.10.7
 	yansi@1.0.1
-	zerocopy-derive@0.8.63
-	zerocopy@0.8.63
+	zerocopy-derive@0.8.64
+	zerocopy@0.8.64
 	zmij@1.0.23
 "
 
