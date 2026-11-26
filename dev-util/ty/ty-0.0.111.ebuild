@@ -18,7 +18,7 @@ CRATES="
 	anstyle-parse@0.2.7
 	anstyle-parse@1.0.0
 	anstyle-query@1.1.4
-	anstyle-svg@0.1.11
+	anstyle-svg@1.1.1
 	anstyle-wincon@3.0.10
 	anstyle@1.0.14
 	anyhow@1.0.104
@@ -132,7 +132,6 @@ CRATES="
 	foldhash@0.2.0
 	form_urlencoded@1.2.2
 	fs-err@3.3.0
-	fsevent-sys@4.1.0
 	funty@2.0.0
 	futures-core@0.3.32
 	futures-task@0.3.32
@@ -155,13 +154,13 @@ CRATES="
 	heck@0.5.0
 	hermit-abi@0.5.2
 	html-escape@0.2.13
-	icu_collections@2.3.0
-	icu_locale_core@2.3.0
-	icu_normalizer@2.3.0
-	icu_normalizer_data@2.3.0
-	icu_properties@2.3.0
-	icu_properties_data@2.3.0
-	icu_provider@2.3.1
+	icu_collections@2.4.0
+	icu_locale_core@2.4.0
+	icu_normalizer@2.4.0
+	icu_normalizer_data@2.4.0
+	icu_properties@2.4.0
+	icu_properties_data@2.4.0
+	icu_provider@2.4.0
 	id-arena@2.3.0
 	idna@1.1.0
 	idna_adapter@1.2.1
@@ -231,9 +230,11 @@ CRATES="
 	nom@7.1.3
 	normalize-line-endings@0.3.0
 	notify-types@2.0.0
-	notify@8.2.0
+	notify@8.2.1
 	nu-ansi-term@0.50.1
 	num-traits@0.2.19
+	objc2-core-foundation@0.3.2
+	objc2-core-services@0.3.2
 	objc2-encode@4.1.0
 	objc2@0.6.3
 	object@0.39.1
@@ -245,7 +246,6 @@ CRATES="
 	os_pipe@1.2.2
 	os_str_bytes@7.1.1
 	page_size@0.6.0
-	parking_lot@0.12.5
 	parking_lot@0.13.0
 	parking_lot_core@0.10.0
 	parking_lot_core@0.9.12
@@ -293,7 +293,7 @@ CRATES="
 	ptr_meta@0.3.1
 	ptr_meta_derive@0.3.1
 	pyproject-toml@0.13.7
-	quick-xml@0.41.0
+	quick-xml@0.42.0
 	quickcheck@1.1.0
 	quickcheck_macros@1.2.0
 	quote-use-macros@0.9.0
@@ -351,12 +351,12 @@ CRATES="
 	shlex@2.0.1
 	simdutf8@0.1.5
 	similar@2.7.0
-	similar@3.2.0
+	similar@3.2.1
 	siphasher@1.0.1
 	slab@0.4.12
-	smallvec@1.16.3
-	snapbox-macros@1.0.0
-	snapbox@1.0.0
+	smallvec@1.16.4
+	snapbox-macros@1.1.0
+	snapbox@1.2.2
 	stable_deref_trait@1.2.0
 	stacker@0.1.25
 	static_assertions@1.1.0
@@ -369,6 +369,7 @@ CRATES="
 	syn@2.0.119
 	syn@3.0.9
 	synstructure@0.13.2
+	synstructure@0.14.0
 	tap@1.0.1
 	tempfile@3.27.0
 	terminal_size@0.4.4
@@ -385,7 +386,7 @@ CRATES="
 	thread_local@1.1.9
 	tikv-jemalloc-sys@0.6.1+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
 	tikv-jemallocator@0.6.1
-	tinystr@0.8.4
+	tinystr@0.8.5
 	tinytemplate@1.2.1
 	tinyvec@1.10.0
 	tinyvec_macros@0.1.1
@@ -420,7 +421,7 @@ CRATES="
 	utf8-width@0.1.7
 	utf8_iter@1.0.4
 	utf8parse@0.2.2
-	uuid@1.28.0
+	uuid@1.29.0
 	valuable@0.1.1
 	version-ranges@0.1.1
 	version_check@0.9.5
@@ -487,15 +488,15 @@ CRATES="
 	writeable@0.6.4
 	wyz@0.5.1
 	yansi@1.0.1
-	yoke-derive@0.8.2
-	yoke@0.8.3
+	yoke-derive@0.8.4
+	yoke@0.8.4
 	zerofrom-derive@0.1.6
 	zerofrom@0.1.6
 	zeroize@1.9.1
 	zeroize_derive@1.5.0
 	zerotrie@0.2.5
-	zerovec-derive@0.11.6
-	zerovec@0.11.8
+	zerovec-derive@0.11.7
+	zerovec@0.11.9
 	zip@9.5.1
 	zlib-rs@0.5.5
 	zmij@1.0.10
